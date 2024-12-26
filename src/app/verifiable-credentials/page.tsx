@@ -5,12 +5,12 @@ const useCases = [
   {
     title: "Receive a credential",
     description: "Request and receive a verifiable credential.",
-    link: "/verifiable-credentials/request-vc",
+    link: "/verifiable-credentials/obtain",
   },
   {
     title: "Prove it digitally",
     description: "Prove identity and information securely.",
-    link: "/use-cases/present-vc",
+    link: "/verifiable-credentials/prove",
   },
 ];
 
