@@ -13,7 +13,7 @@ export default function Home() {
       name: "Tokenized Ownership",
       description:
         "Represent company shares as blockchain tokens, making ownership transparent, transferable, and efficient.",
-      link: "#",
+      link: "/dashboard",
     },
     {
       name: "Smart Governance",
