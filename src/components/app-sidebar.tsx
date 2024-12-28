@@ -1,5 +1,7 @@
 import * as React from "react";
 import { Icons } from "@/components/icons";
+import { navMain } from "@/data/navigation";
+import { usePathname } from "next/navigation";
 
 import {
   Sidebar,
@@ -16,41 +18,16 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 
-const data = {
-  navMain: [
-    {
-      title: "Download the Wallet",
-      url: "#",
-      items: [
-        {
-          title: "App Store",
-          url: "#",
-        },
-        {
-          title: "Google Play",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Verifiable Credentials",
-      url: "#",
-      items: [
-        {
-          title: "Receive a credential",
-          url: "#",
-        },
-        {
-          title: "Prove it digitally",
-          url: "#",
-          isActive: true,
-        },
-      ],
-    },
-  ],
-};
-
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const pathname = usePathname();
+
+  // Function to check if the current path matches the item's URL
+  const isActive = (url: string) => pathname === url;
+
+  // Function to check if any sub-item is active
+  const isSubActive = (items: (typeof navMain)[0]["items"]) =>
+    items?.some((sub) => isActive(sub.url)) ?? false;
+
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -73,19 +50,25 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
-            {data.navMain.map((item) => (
+            {navMain.map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild>
-                  <a href={item.url} className="font-medium">
+                <SidebarMenuButton
+                  asChild
+                  isActive={isActive(item.url) || isSubActive(item.items)}
+                >
+                  <Link href={item.url} className="font-medium">
                     {item.title}
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
                 {item.items?.length ? (
                   <SidebarMenuSub>
-                    {item.items.map((item) => (
-                      <SidebarMenuSubItem key={item.title}>
-                        <SidebarMenuSubButton asChild isActive={item.isActive}>
-                          <a href={item.url}>{item.title}</a>
+                    {item.items.map((subItem) => (
+                      <SidebarMenuSubItem key={subItem.title}>
+                        <SidebarMenuSubButton
+                          asChild
+                          isActive={isActive(subItem.url)}
+                        >
+                          <Link href={subItem.url}>{subItem.title}</Link>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                     ))}
