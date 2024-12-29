@@ -98,7 +98,7 @@ export default function PlaygroundLayout({ children }: PlaygroundLayoutProps) {
             <ThemeToggle />
           </div>
         </header>
-        <main className="flex flex-1 ">{children}</main>
+        <div className="flex-1">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );

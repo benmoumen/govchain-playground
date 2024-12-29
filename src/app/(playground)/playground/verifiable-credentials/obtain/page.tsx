@@ -1,21 +1,47 @@
-import { Button } from "@/components/ui/button";
+"use client";
+import { Card, Carousel } from "@/components/ui/apple-cards-carousel";
+import VerifiableCredentialIssuance, {
+  VCUseCase,
+} from "@/components/VerifiableCredentialIssuance";
 
 export default function RequestVCPage() {
+  const cards = data.map((card, index) => (
+    <Card key={card.src} card={card} index={index} />
+  ));
+
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold text-blue-600">
-        Request Verifiable Credentials
-      </h1>
-      <p className="text-gray-700 mt-4">
-        Discover how digital wallets request Verifiable Credentials securely
-        across sectors.
-      </p>
-      <ol className="list-decimal mt-6 pl-8">
-        <li>Open your wallet application.</li>
-        <li>Navigate to `Request Credentials`.</li>
-        <li>Provide the necessary details and submit your request.</li>
-      </ol>
-      <Button className="mt-6">Simulate Interaction</Button>
+    <div className="w-full h-full py-20">
+      <h2 className="max-w-7xl pl-4 mx-auto text-xl md:text-5xl font-bold text-neutral-800 dark:text-neutral-200 font-sans">
+        Get your verifiable credentials.
+      </h2>
+      <Carousel items={cards} />
     </div>
   );
 }
+
+const data = [
+  {
+    category: "Identity",
+    title: "Get your Digital ID.",
+    src: "https://images.unsplash.com/photo-1626423962491-eb76bdc2e0be?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    content: <VerifiableCredentialIssuance type={VCUseCase.Identity} />,
+  },
+  {
+    category: "Business",
+    title: "Get your Shareholder Certificate. (requires a digital ID)",
+    src: "https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=4000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    content: <VerifiableCredentialIssuance type={VCUseCase.Business} />,
+  },
+  {
+    category: "Education",
+    title: "Receive your Diploma.",
+    src: "https://images.unsplash.com/photo-1627556704263-b486db44a463?q=80&w=2496&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    content: <VerifiableCredentialIssuance type={VCUseCase.Education} />,
+  },
+  {
+    category: "Health",
+    title: "Get your Vaccination Pass.",
+    src: "https://images.unsplash.com/photo-1623964783162-8fc658548501?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    content: <VerifiableCredentialIssuance type={VCUseCase.Health} />,
+  },
+];
