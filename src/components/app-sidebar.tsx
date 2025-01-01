@@ -24,10 +24,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   // Function to check if the current path matches the item's URL
   const isActive = (url: string) => pathname === url;
 
-  // Function to check if any sub-item is active
-  const isSubActive = (items: (typeof navMain)[0]["items"]) =>
-    items?.some((sub) => isActive(sub.url)) ?? false;
-
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -39,8 +35,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <Icons.logo className="h-5" />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-semibold">Digital Wallet</span>
-                  <span className="">Playground</span>
+                  <span className="font-bold font-grotesk">Digital Wallet</span>
+                  <span className="font-light font-grotesk">Playground</span>
                 </div>
               </Link>
             </SidebarMenuButton>
@@ -52,10 +48,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenu>
             {navMain.map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton
-                  asChild
-                  isActive={isActive(item.url) || isSubActive(item.items)}
-                >
+                <SidebarMenuButton asChild isActive={isActive(item.url)}>
                   <Link href={item.url} className="font-medium">
                     {item.title}
                   </Link>

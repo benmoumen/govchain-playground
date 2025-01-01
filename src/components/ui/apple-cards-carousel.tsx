@@ -16,7 +16,7 @@ import {
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import Image, { ImageProps } from "next/image";
-import { useOutsideClick } from "@/hooks/use-outside-click";
+//import { useOutsideClick } from "@/hooks/use-outside-click";
 
 interface CarouselProps {
   items: JSX.Element[];
@@ -190,7 +190,19 @@ export const Card = ({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [handleClose, open]);
 
-  useOutsideClick(containerRef, () => handleClose());
+  /*   useOutsideClick(containerRef, (event) => {
+    // Close the modal when clicking outside of it
+    if (
+      // For dialogs, select elements and options, don't close the card
+      (event.target instanceof HTMLElement ||
+        event.target instanceof SVGElement) &&
+      (event.target.closest("[role='dialog']") ||
+        event.target.closest("[role='option']"))
+    ) {
+      return;
+    }
+    handleClose();
+  }); */
 
   const handleOpen = () => {
     setOpen(true);
@@ -262,6 +274,7 @@ export const Card = ({
           src={card.src}
           alt={card.title}
           fill
+          sizes="(min-width: 768px) 50vw, 100vw"
           className="object-cover absolute z-10 inset-0"
         />
       </motion.button>
