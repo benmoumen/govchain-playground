@@ -30,7 +30,7 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon, Loader2, ShieldCheck } from "lucide-react";
 import { format } from "date-fns";
-import { cn } from "@/lib/utils";
+import { cn, formatDateToYYYYMMDD, formatYYYYMMDDToDate } from "@/lib/utils";
 
 export enum VCUseCase {
   Identity = "Identity",
@@ -64,7 +64,7 @@ export interface VCFormFieldDefinition {
 // Generic CredentialForm component
 const CredentialForm: React.FC<{
   schema: z.ZodSchema;
-  defaultValues: { [key: string]: string };
+  defaultValues: { [key: string]: string | undefined };
   formFields: VCFormFieldDefinition[];
 }> = ({ schema, defaultValues, formFields: formFields }) => {
   const [showHiddenFields, setShowHiddenFields] = useState(false);
@@ -120,7 +120,10 @@ const CredentialForm: React.FC<{
                                 )}
                               >
                                 {field.value ? (
-                                  format(new Date(field.value), "PPP")
+                                  format(
+                                    formatYYYYMMDDToDate(field.value),
+                                    "PPP"
+                                  )
                                 ) : (
                                   <span>
                                     {formField.placeholder || "Pick a date"}
@@ -142,7 +145,11 @@ const CredentialForm: React.FC<{
                                     : undefined
                                 }
                                 onSelect={(date) =>
-                                  field.onChange(date?.toISOString())
+                                  field.onChange(
+                                    date
+                                      ? formatDateToYYYYMMDD(date)
+                                      : undefined
+                                  )
                                 }
                                 fromDate={formField.fromDate}
                                 toDate={formField.toDate}
