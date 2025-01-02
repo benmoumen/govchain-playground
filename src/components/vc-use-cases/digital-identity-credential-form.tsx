@@ -110,9 +110,13 @@ const DigitalIdentityCredentialForm: React.FC = () => {
     {
       name: "Marital Status",
       label: "Marital Status",
-
       type: VCFormFieldEnum.Enum,
       options: MaritalStatusEnum.options,
+      hidden: true,
+    },
+    {
+      name: "Nationality",
+      label: "Nationality",
       hidden: true,
     },
     {

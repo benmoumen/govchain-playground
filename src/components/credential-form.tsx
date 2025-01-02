@@ -85,15 +85,6 @@ const CredentialForm: React.FC<{
 
   return (
     <div className="bg-[#F5F5F7] dark:bg-black p-8 md:p-14 rounded-3xl mb-4">
-      {form.formState.isSubmitSuccessful && (
-        <div className="bg-green-100 p-4 rounded-md">
-          <h3 className="text-green-800">Form Submitted Successfully!</h3>
-          <pre className="text-green-800">
-            {JSON.stringify(form.getValues(), null, 2)}
-          </pre>
-        </div>
-      )}
-
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
