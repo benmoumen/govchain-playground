@@ -31,6 +31,14 @@ import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon, Loader2, ShieldCheck } from "lucide-react";
 import { format } from "date-fns";
 import { cn, formatDateToYYYYMMDD, formatYYYYMMDDToDate } from "@/lib/utils";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
 
 export enum VCUseCase {
   Identity = "Identity",
@@ -84,10 +92,18 @@ const CredentialForm: React.FC<{
   };
 
   return (
-    <div className="bg-[#F5F5F7] dark:bg-black p-8 md:p-14 rounded-3xl mb-4">
-      <FormProvider {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <FormProvider {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <Card>
+          <CardHeader>
+            <CardTitle>Account</CardTitle>
+            <CardDescription>
+              Request your verifiable credential by filling out the form below.
+              <br />
+              The Issuer will send you the credential directly to your wallet.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {formFields.map((formField: VCFormFieldDefinition) => (
               <FormField
                 key={formField.name}
@@ -206,9 +222,8 @@ const CredentialForm: React.FC<{
                 }}
               />
             ))}
-          </div>
-
-          <div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+          </CardContent>
+          <CardFooter className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center space-y-4 sm:space-y-0">
             <Button type="submit" disabled={form.formState.isSubmitting}>
               {form.formState.isSubmitting ? (
                 <>
@@ -233,10 +248,10 @@ const CredentialForm: React.FC<{
                 Customize all credential fields
               </Label>
             </div>
-          </div>
-        </form>
-      </FormProvider>
-    </div>
+          </CardFooter>
+        </Card>
+      </form>
+    </FormProvider>
   );
 };
 
