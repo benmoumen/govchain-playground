@@ -158,8 +158,24 @@ const CredentialForm: React.FC<{
                                       : undefined
                                   )
                                 }
-                                fromDate={formField.fromDate}
-                                toDate={formField.toDate}
+                                hidden={[
+                                  formField.fromDate
+                                    ? { before: new Date(formField.fromDate) }
+                                    : false,
+                                  formField.toDate
+                                    ? { after: new Date(formField.toDate) }
+                                    : false,
+                                ]}
+                                startMonth={
+                                  formField.fromDate
+                                    ? new Date(formField.fromDate)
+                                    : undefined
+                                }
+                                endMonth={
+                                  formField.toDate
+                                    ? new Date(formField.toDate)
+                                    : undefined
+                                }
                                 disabled={(date) =>
                                   (formField.fromDate &&
                                     date < new Date(formField.fromDate)) ||
@@ -167,7 +183,6 @@ const CredentialForm: React.FC<{
                                     date > new Date(formField.toDate)) ||
                                   false
                                 }
-                                initialFocus
                               />
                             </PopoverContent>
                           </Popover>
