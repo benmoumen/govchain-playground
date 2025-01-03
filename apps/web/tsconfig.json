@@ -24,6 +24,14 @@
     },
     "strictNullChecks": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "../../packages/vc-client/src/use-acapy.tsx",
+    "../../packages/vc-client/src/use-config.tsx",
+    "../../packages/vc-client/src/use-token.tsx"
+, "../../packages/vc-client/src/constants.ts"  ],
   "exclude": ["node_modules"]
 }
