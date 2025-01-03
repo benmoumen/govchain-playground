@@ -96,7 +96,7 @@ const CredentialForm: React.FC<{
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <Card>
           <CardHeader>
-            <CardTitle>Account</CardTitle>
+            <CardTitle>Credential Request Form</CardTitle>
             <CardDescription>
               Request your verifiable credential by filling out the form below.
               <br />

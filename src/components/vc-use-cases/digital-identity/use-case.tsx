@@ -14,45 +14,40 @@ import { StepForward } from "lucide-react";
 
 const UseCase: React.FC = () => {
   return (
-    <div className="bg-[#F5F5F7] dark:bg-black p-8 md:p-14 rounded-3xl mb-4">
-      <Tabs defaultValue="connect" className="w-full">
-        <TabsList>
-          <TabsTrigger value="connect">Connect with the Issuer</TabsTrigger>
-          <TabsTrigger value="data">Credential Data</TabsTrigger>
-          <TabsTrigger value="request" disabled>
-            Request Credential
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="connect">
-          <Card>
-            <CardHeader>
-              <CardTitle></CardTitle>
-              <CardDescription>
-                When you connect with the issuer, you can:
-                <ul className="list-disc list-inside">
-                  <li>Obtain credentials</li>
-                  <li>Send inquiries</li>
-                </ul>
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <p>Connect with the Issuer content goes here.</p>
-            </CardContent>
-            <CardFooter>
-              <Button>
-                <StepForward></StepForward> Next
-              </Button>
-            </CardFooter>
-          </Card>
-        </TabsContent>
-        <TabsContent value="data">
-          <DigitalIdentityCredentialForm />
-        </TabsContent>
-        <TabsContent value="request">
-          <p>Request Credential content goes here.</p>
-        </TabsContent>
-      </Tabs>
-    </div>
+    <Tabs defaultValue="connect" className="w-full">
+      <TabsList>
+        <TabsTrigger value="connect">Connect with the Issuer</TabsTrigger>
+        <TabsTrigger value="data">Credential Data</TabsTrigger>
+        <TabsTrigger value="request" disabled>
+          Request Credential
+        </TabsTrigger>
+      </TabsList>
+      <TabsContent value="connect">
+        <Card>
+          <CardHeader>
+            <CardTitle>Scan the QR code using your Wallet</CardTitle>
+            <CardDescription>
+              When you connect with the issuer, you will be able to obtain
+              credentials and send inquiries.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <p>Connect with the Issuer content goes here.</p>
+          </CardContent>
+          <CardFooter>
+            <Button size={"sm"} variant={"outline"}>
+              <StepForward></StepForward>Next
+            </Button>
+          </CardFooter>
+        </Card>
+      </TabsContent>
+      <TabsContent value="data">
+        <DigitalIdentityCredentialForm />
+      </TabsContent>
+      <TabsContent value="request">
+        <p>Request Credential content goes here.</p>
+      </TabsContent>
+    </Tabs>
   );
 };
 
