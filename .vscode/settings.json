@@ -1,5 +1,12 @@
 {
   "files.associations": {
     "*.css": "tailwindcss"
-  }
+  },
+  "eslint.workingDirectories": [
+    {
+      "mode": "auto"
+    }
+  ],
+  "eslint.format.enable": false,
+  "eslint.useFlatConfig": true
 }
