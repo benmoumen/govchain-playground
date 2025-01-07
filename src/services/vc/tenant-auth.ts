@@ -75,7 +75,9 @@ async function login(
     body: JSON.stringify(payload),
   });
 
-  const response = await fetch(request);
+  const response = await fetch(request, {
+    cache: "no-store",
+  });
   if (!response.ok) {
     throw new Error(`Failed to request access token: ${response.statusText}`);
   }

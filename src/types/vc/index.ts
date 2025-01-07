@@ -4,3 +4,15 @@ export interface VCIssuer {
   shortName: string;
   apiKeyVar: string;
 }
+
+export interface InitConnectionResponse {
+  connection_id: string;
+  invitation_url: string | undefined;
+}
+
+export interface ConnectionStateResponse {
+  state: string;
+}
+export interface ErrorResponse {
+  error_message: string;
+}
