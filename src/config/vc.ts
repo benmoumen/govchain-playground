@@ -1,3 +1,4 @@
+import { InvalidParameterError } from "@/lib/errors";
 import type { VCIssuer } from "@/types/vc";
 
 export const config = {
@@ -15,3 +16,13 @@ export const config = {
     },
   } as { [useCase: string]: VCIssuer },
 };
+
+/**
+ * @throws {InvalidParameterError} - If the useCase is not found in the config.
+ */
+export function getTenantByCase(useCase: string): VCIssuer {
+  if (!config.issuers[useCase]) {
+    throw new InvalidParameterError("Invalid [case] parameter");
+  }
+  return config.issuers[useCase];
+}

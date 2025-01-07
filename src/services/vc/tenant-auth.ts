@@ -7,7 +7,42 @@ import "server-cli-only";
 import { API_PATH } from "./utils/constants";
 import { proxyPath } from "./utils/fetch";
 
-export async function requestAccessToken(
+export async function getAccessToken(
+  tenant: VCIssuer,
+  isApiKey: boolean
+): Promise<{ token: string | null; isNewToken: boolean } | null> {
+  // Check if the access token already exists in the database
+  const existingToken = await prisma.tenantAuth.findUnique({
+    where: { tenantId: tenant.tenantId },
+  });
+
+  if (existingToken) {
+    return { token: existingToken.accessToken, isNewToken: false };
+  }
+
+  // If the token does not exist, request a new one
+  const newToken = await login(tenant, isApiKey);
+  if (newToken) {
+    // Save the new token to the database
+    await prisma.tenantAuth.create({
+      data: {
+        tenantId: tenant.tenantId,
+        accessToken: newToken,
+      },
+    });
+
+    return { token: newToken, isNewToken: true };
+  }
+  return null;
+}
+
+export async function clearTenantToken(tenantId: string): Promise<void> {
+  await prisma.tenantAuth.delete({
+    where: { tenantId },
+  });
+}
+
+async function login(
   tenant: VCIssuer,
   isApiKey: boolean
 ): Promise<string | null> {
@@ -47,32 +82,5 @@ export async function requestAccessToken(
 
   const data = await response.json();
   const newToken = data.token as string;
-  return newToken;
-}
-export async function getAccessToken(
-  tenant: VCIssuer,
-  isApiKey: boolean
-): Promise<string | null> {
-  // Check if the access token already exists in the database
-  const existingToken = await prisma.tenantAuth.findUnique({
-    where: { tenantId: tenant.tenantId },
-  });
-
-  if (existingToken) {
-    return existingToken.accessToken;
-  }
-
-  // If the token does not exist, request a new one
-  const newToken = await requestAccessToken(tenant, isApiKey);
-  if (newToken) {
-    // Save the new token to the database
-    await prisma.tenantAuth.create({
-      data: {
-        tenantId: tenant.tenantId,
-        accessToken: newToken,
-      },
-    });
-  }
-
   return newToken;
 }
