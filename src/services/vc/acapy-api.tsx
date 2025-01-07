@@ -1,7 +1,7 @@
 "server-cli-only";
 
+import { config } from "@/config/vc";
 import { NextResponse } from "next/server";
-import { config } from "./utils/config";
 
 export interface AcapyApiClient {
   getHttp: <T>(

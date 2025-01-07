@@ -1,8 +1,8 @@
 "server-cli-only";
 
+import { config } from "@/config/vc";
 import { NextResponse } from "next/server";
 import { type AcapyApiClient } from "../acapy-api";
-import { config } from "./config";
 
 export async function fetchItem<T>(
   acapyApi: AcapyApiClient,
