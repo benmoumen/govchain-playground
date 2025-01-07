@@ -1,6 +1,7 @@
 "server-cli-only";
 
 import type { VCIssuer } from "@/types/vc";
+import prisma from "@myprisma/client";
 import { NextRequest } from "next/server";
 import "server-cli-only";
 import { API_PATH } from "./utils/constants";
@@ -11,23 +12,19 @@ export async function requestAccessToken(
   isApiKey: boolean
 ): Promise<string | null> {
   // Load the Tenant Password from the .env file
-  const passwordVar = tenant.passwordVar;
-  const password = process.env[passwordVar];
-  if (password) {
-    console.log("TenantAuthProvider.useEffect: password", password);
+  const apiKeyVar = tenant.apiKeyVar;
+  const apiKey = process.env[apiKeyVar];
+  if (apiKey) {
+    console.log("TenantAuthProvider.useEffect: password", apiKey);
     console.log("TenantAuthProvider.useEffect: login");
   } else {
-    console.error(
-      "TenantAuthProvider.useEffect:",
-      `Missing tenant password [${passwordVar}] in .env`,
-      process.env
-    );
+    console.error(`Missing Tenant API Key [${apiKeyVar}] in .env`, process.env);
     return null;
   }
 
   const payload: { api_key?: string; wallet_key?: string } = isApiKey
-    ? { api_key: password }
-    : { wallet_key: password };
+    ? { api_key: apiKey }
+    : { wallet_key: apiKey };
 
   const url = proxyPath(
     isApiKey
@@ -50,5 +47,32 @@ export async function requestAccessToken(
 
   const data = await response.json();
   const newToken = data.token as string;
+  return newToken;
+}
+export async function getAccessToken(
+  tenant: VCIssuer,
+  isApiKey: boolean
+): Promise<string | null> {
+  // Check if the access token already exists in the database
+  const existingToken = await prisma.tenantAuth.findUnique({
+    where: { tenantId: tenant.tenantId },
+  });
+
+  if (existingToken) {
+    return existingToken.accessToken;
+  }
+
+  // If the token does not exist, request a new one
+  const newToken = await requestAccessToken(tenant, isApiKey);
+  if (newToken) {
+    // Save the new token to the database
+    await prisma.tenantAuth.create({
+      data: {
+        tenantId: tenant.tenantId,
+        accessToken: newToken,
+      },
+    });
+  }
+
   return newToken;
 }
