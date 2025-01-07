@@ -1,77 +1,115 @@
-import type { ConnectionStateResponse } from "@/types/vc";
+import type {
+  ConnectionStateResponse,
+  ErrorResponse,
+  InitConnectionResponse,
+} from "@/types/vc";
+import type { NextResponse } from "next/server";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import useSWR from "swr";
 
+const maxPolls = 50;
+const pollInterval = 3000;
+
 const useConnection = (caseParam: string) => {
-  const [connectionId, setConnectionId] = useState<string | null>(null);
-  const [invitationUrl, setInvitationUrl] = useState<string | null>(null);
-  const [shouldPoll, setShouldPoll] = useState<boolean>(false);
   const cookieName = `conn_id_${caseParam}`;
   const [cookies] = useCookies([cookieName]);
+  const [generatingInvitation, setGeneratingInvitation] =
+    useState<boolean>(false);
+  const [connectionId, setConnectionId] = useState<string | null>(null);
+  const [invitationUrl, setInvitationUrl] = useState<string | null>(null);
+  const [isActiveConnection, setIsActiveConnection] = useState<boolean>(false);
+  const [shouldPoll, setShouldPoll] = useState<boolean>(false);
+  const [pollCount, setPollCount] = useState<number>(0);
 
   const fetcher = async (url: string) => {
+    setPollCount((prevCount) => prevCount + 1);
     const resp = await fetch(url);
-    if (resp.ok) {
-      const data = await resp.json();
-      setInvitationUrl(data.invitation_url || null);
-      const connId = cookies[cookieName];
-      if (connId) {
-        setConnectionId(connId);
-      }
-    }
+    return await resp.json();
   };
 
+  // poll connection state
   const { data, error } = useSWR(
-    shouldPoll && connectionId
+    connectionId && shouldPoll && pollCount < maxPolls
       ? `/api/vc/${caseParam}/connection/${connectionId}`
       : null,
     fetcher,
-    { refreshInterval: 3000 }
+    { refreshInterval: pollInterval }
   ) as {
     data: ConnectionStateResponse | undefined;
     error: string | undefined;
   };
 
+  // initiate connection
+  const initiateConnection = async (force = false) => {
+    if (!force) {
+      console.info("Checking for existing connection...");
+      const existingConnId = cookies[cookieName];
+      if (existingConnId) {
+        setConnectionId(existingConnId);
+        return;
+      }
+    }
+    console.info("Initiating connection...");
+
+    setGeneratingInvitation(true);
+    // reset state
+    resetState();
+    // initiate connection
+    const resp = (await fetch(`/api/vc/${caseParam}/connection`, {
+      method: "POST",
+      cache: "no-store",
+    })) as NextResponse<InitConnectionResponse> | NextResponse<ErrorResponse>;
+    if (resp.ok) {
+      const res = (await resp.json()) as InitConnectionResponse;
+      setInvitationUrl(res.invitation_url);
+      setConnectionId(res.connection_id);
+      setShouldPoll(true);
+    } else {
+      console.error("Failed to initiate connection:", await resp.text());
+    }
+    setGeneratingInvitation(false);
+  };
+
+  const resetState = () => {
+    setConnectionId(null);
+    setInvitationUrl(null);
+    setIsActiveConnection(false);
+    setShouldPoll(false);
+    setPollCount(0);
+  };
+
   useEffect(() => {
-    if (connectionId) {
+    // init polling
+    if (connectionId && !isActiveConnection) {
       setShouldPoll(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connectionId]);
 
   useEffect(() => {
-    if (data?.state === "active") {
+    // stop polling after max polls
+    if (pollCount >= maxPolls) {
+      setShouldPoll(false);
+    }
+  }, [pollCount]);
+
+  useEffect(() => {
+    // update state when connection is active
+    if (data?.state === "active" || data?.state === "response") {
+      setIsActiveConnection(true);
       setShouldPoll(false);
     }
   }, [data]);
 
-  const stopPolling = () => {
-    setShouldPoll(false);
-  };
-
-  const initiateConnection = async () => {
-    const resp = await fetch(`/api/vc/${caseParam}/connection`, {
-      method: "POST",
-      cache: "no-store",
-    });
-    if (resp.ok) {
-      const data = await resp.json();
-      setInvitationUrl(data.invitation_url || null);
-      const connId = cookies[cookieName];
-      if (connId) {
-        setConnectionId(connId);
-      }
-    }
-  };
-
   return {
-    isActiveConnection: data?.state === "active",
+    isActiveConnection,
     isLoading: !error && !data && !!connectionId,
     error: !!error,
     initiateConnection,
     connectionId,
     invitationUrl,
-    stopPolling,
+    generatingInvitation,
   };
 };
 

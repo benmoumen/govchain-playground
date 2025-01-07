@@ -7,7 +7,7 @@ export interface VCIssuer {
 
 export interface InitConnectionResponse {
   connection_id: string;
-  invitation_url: string | undefined;
+  invitation_url: string;
 }
 
 export interface ConnectionStateResponse {

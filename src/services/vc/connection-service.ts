@@ -3,11 +3,10 @@
 import {
   ConnRecord,
   type InvitationRecord,
-  type InvitationResult,
 } from "@/types/vc/acapyApi/acapyInterface";
 import type { AcapyApiClient } from "./acapy-api";
 import { API_PATH } from "./utils/constants";
-import { fetchItem } from "./utils/fetch";
+import { fetchItem, fetchList } from "./utils/fetch";
 
 export const getConnection = async (
   acapyApi: AcapyApiClient,
@@ -15,6 +14,19 @@ export const getConnection = async (
   params: Record<string, string> = {}
 ): Promise<ConnRecord | null> => {
   return fetchItem(acapyApi, API_PATH.CONNECTIONS, id, params);
+};
+
+export const getConnectionsByInvitationMsgId = async (
+  acapyApi: AcapyApiClient,
+  id: string,
+  params: Record<string, string> = {}
+): Promise<ConnRecord[]> => {
+  return fetchList(
+    acapyApi,
+    API_PATH.CONNECTIONS,
+    { invitation_msg_id: id },
+    params
+  );
 };
 
 export const getInvitation = async (
@@ -36,7 +48,7 @@ export const getInvitation = async (
  * @param params.my_label - The label for the invitation (only OOB invitations).
  * @param params.goal - (Optional) The goal of the invitation.
  * @param params.goal_code - (Optional) The goal code object containing a code string.
- * @returns A promise that resolves to an `InvitationResult` object or null.
+ * @returns A promise that resolves to an `InvitationRecord` object or null.
  */
 export async function createInvitation(
   acapyApi: AcapyApiClient,
@@ -50,7 +62,7 @@ export async function createInvitation(
       code: string;
     };
   }
-): Promise<InvitationResult | null> {
+): Promise<InvitationRecord | null> {
   const code = params.goal_code ? params.goal_code.code : "";
   const result = params.isOob
     ? await createOobInvitation(acapyApi, params.multi, {
@@ -75,8 +87,8 @@ const createConnectionInvitation = async (
   acapyApi: AcapyApiClient,
   alias: string,
   multiUse: boolean
-): Promise<InvitationResult> => {
-  const response = await acapyApi.postHttp<InvitationResult | null>(
+): Promise<InvitationRecord> => {
+  const response = await acapyApi.postHttp<InvitationRecord | null>(
     API_PATH.CONNECTIONS_CREATE_INVITATION,
     {},
     { alias, multi_use: multiUse ? "1" : "0" }
@@ -93,8 +105,8 @@ const createOobInvitation = async (
   acapyApi: AcapyApiClient,
   multiUse: boolean,
   payload = {}
-): Promise<InvitationResult | null> => {
-  const response = await acapyApi.postHttp<InvitationResult | null>(
+): Promise<InvitationRecord | null> => {
+  const response = await acapyApi.postHttp<InvitationRecord | null>(
     API_PATH.OUT_OF_BAND_CREATE,
     payload,
     { multi_use: multiUse ? "1" : "0" }

@@ -1,5 +1,4 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -9,7 +8,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { StepForward } from "lucide-react";
 import React, { Suspense } from "react";
 import DigitalIdentityCredentialForm from "./digital-identity/form";
 import VCConnectionCard from "./vc-connection-card";
@@ -38,15 +36,11 @@ const UseCasePage: React.FC<UseCasePageProps> = ({ useCase }) => {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-2">
-            <Suspense fallback={<p>Initializing connection...</p>}>
+            <Suspense fallback={<p>Loading...</p>}>
               <VCConnectionCard useCase={useCase} />
             </Suspense>
           </CardContent>
-          <CardFooter>
-            <Button size={"sm"} variant={"outline"}>
-              <StepForward></StepForward>Next
-            </Button>
-          </CardFooter>
+          <CardFooter>Footer</CardFooter>
         </Card>
       </TabsContent>
       <TabsContent value="data">

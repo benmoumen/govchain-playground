@@ -1,12 +1,15 @@
 import { getTenantByCase } from "@/config/vc";
 import { createAcapyApi } from "@/services/vc/acapy-api";
-import { createInvitation } from "@/services/vc/connection-service";
+import {
+  createInvitation,
+  getConnectionsByInvitationMsgId,
+} from "@/services/vc/connection-service";
 import type {
   ErrorResponse,
   InitConnectionResponse,
   VCIssuer,
 } from "@/types/vc";
-import { InvitationResult } from "@/types/vc/acapyApi/acapyInterface";
+import { InvitationRecord } from "@/types/vc/acapyApi/acapyInterface";
 import { NextRequest, NextResponse } from "next/server";
 
 async function handleInvitation(
@@ -16,24 +19,47 @@ async function handleInvitation(
   const acapyApi = createAcapyApi(tenant);
   const cookieName = `conn_id_${caseParam}`;
 
-  const result: InvitationResult | null = await createInvitation(acapyApi, {
+  const conn_alias = `${caseParam}_connection_${Date.now()}`;
+  // create an invitation
+  const result: InvitationRecord | null = await createInvitation(acapyApi, {
     isOob: true,
     multi: false,
-    alias: `${caseParam}_invitation_${Date.now()}`,
+    alias: conn_alias,
     my_label: tenant.shortName,
   });
 
-  if (result?.connection_id && result.invitation_url) {
+  if (result?.invitation_url && result.invi_msg_id) {
+    // fetch the connection by the invitation message id
+    // this is necessary to get the connection_id
+    const connections = await getConnectionsByInvitationMsgId(
+      acapyApi,
+      result.invi_msg_id
+    );
+    // pick the last connection (normally there should be only one)
+    const connection = connections[connections.length - 1];
+    if (!connection || !connection.connection_id) {
+      return NextResponse.json(
+        {
+          error_message: "Failed to get connection by invitation message id",
+        },
+        { status: 400 }
+      );
+    }
+
     const response = NextResponse.json({
-      connection_id: result.connection_id,
       invitation_url: result.invitation_url,
+      connection_id: connection.connection_id,
     });
-    response.cookies.set(cookieName, result.connection_id, { path: "/" });
+
+    response.cookies.set(cookieName, connection.connection_id, { path: "/" });
     return response;
   }
 
   return NextResponse.json(
-    { error_message: "Failed to create invitation" },
+    {
+      error_message:
+        "Failed to create invitation. Result was:" + JSON.stringify(result),
+    },
     { status: 400 }
   );
 }
