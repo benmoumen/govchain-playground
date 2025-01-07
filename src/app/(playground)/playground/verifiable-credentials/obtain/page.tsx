@@ -1,5 +1,5 @@
 import { Card, Carousel } from "@/components/ui/apple-cards-carousel";
-import UseCasePage from "@/components/vc/use-case-page";
+import UseCasePage from "@/components/vc/usecase-page";
 
 export default function RequestVCPage() {
   const cards = data.map((card, index) => (
