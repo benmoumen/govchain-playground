@@ -40,8 +40,9 @@ async function handleInvitation(
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { case: string } }
+  props: { params: Promise<{ case: string }> }
 ): Promise<NextResponse<InitConnectionResponse> | NextResponse<ErrorResponse>> {
+  const params = await props.params;
   try {
     const tenant = getTenantByCase(params.case);
     return await handleInvitation(tenant, params.case);

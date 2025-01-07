@@ -38,10 +38,11 @@ async function handleConnection(
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { case: string; id: string } }
+  props: { params: Promise<{ case: string; id: string }> }
 ): Promise<
   NextResponse<ConnectionStateResponse> | NextResponse<ErrorResponse>
 > {
+  const params = await props.params;
   try {
     const tenant = getTenantByCase(params.case);
     return await handleConnection(request, tenant, params.id);
