@@ -1,74 +1,24 @@
-import * as motion from "motion/react-client";
-import { PinContainer } from "@/components/ui/3d-pin";
+import { Hero } from "@/components/blocks/hero-with-orb-effect";
+import { BackgroundBeams } from "@/components/ui/background-beams";
 
 export default function Home() {
-  const experiments = [
-    {
-      name: "Prove It Digitally",
-      description:
-        "Use verifiable credentials to securely prove your identity or qualifications online, instantly and tamper-proof.",
-      link: "/verifiable-credentials",
-    },
-    {
-      name: "Tokenized Ownership",
-      description:
-        "Represent company shares as blockchain tokens, making ownership transparent, transferable, and efficient.",
-      link: "/playground",
-    },
-    {
-      name: "Smart Governance",
-      description:
-        "Enable shareholders to vote on proposals directly through their wallets, automating governance processes.",
-      link: "#",
-    },
-    {
-      name: "Effortless Transfers",
-      description:
-        "Seamlessly transfer ownership of shares or assets between wallets with blockchain’s security.",
-      link: "#",
-    },
-    {
-      name: "Digital Identity for Transactions",
-      description:
-        "Link your blockchain wallet to your verified identity, enabling trusted and authenticated digital interactions.",
-      link: "#",
-    },
-    {
-      name: "On-Chain Records",
-      description:
-        "Store company registration and updates directly on the blockchain for transparency and auditability.",
-      link: "#",
-    },
-    {
-      name: "Decentralized Incentives",
-      description:
-        "Create and distribute token-based rewards to drive engagement and innovation in your ecosystem.",
-      link: "#",
-    },
-    {
-      name: "Credential-Backed Access",
-      description:
-        "Use verifiable credentials to grant or restrict access to services or platforms, ensuring trust and compliance.",
-      link: "#",
-    },
-  ];
   return (
     <main>
-      <section className="container grid items-center gap-6 py-20 md:py-104">
-        <div className="flex max-w-[980px] flex-col items-start gap-2">
-          <h1 className="text-4xl font-extrabold leading-tight tracking-tighter text-primary">
-            Unlock new possibilities <br className="hidden sm:inline" />
-            with verifiable credentials and NFT tokens
-          </h1>
-          <p className="max-w-[700px] text-lg text-muted-foreground">
-            See how digital wallets make proving your credentials online and
-            trading company shares as tokens secure, seamless, and possible for
-            the first time.
-          </p>
-        </div>
-      </section>
+      <Hero
+        mainHeading={
+          <>
+            The Digital Wallet: <br className="sm:hidden block" />A New Era of
+            Trust
+          </>
+        }
+        tagline="For the first time, use verifiable credentials to obtain documents from government agencies, prove your identity, tokenize your company, and unlock trustworthy interactions online."
+        buttonLabel="Let's Explore"
+        buttonHref="/playground"
+        caption=""
+      />
+      <BackgroundBeams />
 
-      <motion.section
+      {/* <motion.section
         initial={{ opacity: 0.0, x: 40 }}
         whileInView={{ opacity: 1, x: 0 }}
         transition={{
@@ -99,7 +49,7 @@ export default function Home() {
             </PinContainer>
           ))}
         </div>
-      </motion.section>
+      </motion.section> */}
     </main>
   );
 }

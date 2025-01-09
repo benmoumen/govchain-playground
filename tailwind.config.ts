@@ -52,6 +52,8 @@ export default {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
+        brand: "hsl(var(--brand))",
+        "brand-foreground": "hsl(var(--brand-foreground))",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -79,16 +81,23 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       animation: {
-        aurora: "aurora 60s linear infinite",
+        "fade-in": "fade-in 0.6s ease-out forwards",
+        "pulse-hover": "pulse-hover 8s ease-in-out infinite",
+        shine: "shine 3s ease-out infinite",
       },
       keyframes: {
-        aurora: {
-          from: {
-            backgroundPosition: "50% 50%, 50% 50%",
-          },
-          to: {
-            backgroundPosition: "350% 50%, 350% 50%",
-          },
+        "fade-in": {
+          "0%": { opacity: "0", transform: "translateY(12px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        "pulse-hover": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-2%)" },
+        },
+        shine: {
+          "0%": { backgroundPosition: "200% 0" },
+          "25%": { backgroundPosition: "-200% 0" },
+          "100%": { backgroundPosition: "-200% 0" },
         },
       },
     },
