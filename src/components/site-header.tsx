@@ -1,10 +1,7 @@
-import Link from "next/link";
-
-import { siteConfig } from "@/config/site";
-import { buttonVariants } from "@/components/ui/button";
-import { Icons } from "@/components/icons";
 import { MainNav } from "@/components/main-nav";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { siteConfig } from "@/config/site";
+import { Button } from "./ui/button";
 
 export function SiteHeader() {
   return (
@@ -13,36 +10,12 @@ export function SiteHeader() {
         <MainNav items={siteConfig.mainNav} />
         <div className="flex flex-1 items-center justify-end space-x-4">
           <nav className="flex items-center space-x-1">
-            <Link
-              href={siteConfig.links.github}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <div
-                className={buttonVariants({
-                  size: "icon",
-                  variant: "ghost",
-                })}
-              >
-                <Icons.gitHub className="h-5 w-5" />
-                <span className="sr-only">GitHub</span>
-              </div>
-            </Link>
-            <Link
-              href={siteConfig.links.walletApple}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <div
-                className={buttonVariants({
-                  size: "icon",
-                  variant: "ghost",
-                })}
-              >
-                <Icons.download className="h-5 w-5 fill-current" />
-                <span className="sr-only">Download</span>
-              </div>
-            </Link>
+            <span className="text-xs text-muted-foreground/80">
+              Made by
+              <Button variant={"link"} size={"sm"} effect={"hoverUnderline"}>
+                UNCTAD Digital Government
+              </Button>
+            </span>
             <ThemeToggle />
           </nav>
         </div>
