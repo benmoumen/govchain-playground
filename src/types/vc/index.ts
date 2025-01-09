@@ -4,6 +4,26 @@ export interface VCIssuer {
   shortName: string;
   apiKeyVar: string;
 }
+export interface UCMetadata {
+  category: string;
+  title: string;
+  src: string;
+}
+
+export interface UCConfig {
+  acapy: {
+    tenantProxyPath: string;
+    apiPath: string;
+    basePath: string;
+  };
+  useCases: Record<
+    string,
+    {
+      issuer: VCIssuer;
+      metadata: UCMetadata;
+    }
+  >;
+}
 
 export interface InitConnectionResponse {
   connection_id: string;

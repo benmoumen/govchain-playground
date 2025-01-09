@@ -1,6 +1,6 @@
 "server-cli-only";
 
-import { config } from "@/config/vc";
+import { useCaseConfig } from "@/config/vc";
 import { NextResponse } from "next/server";
 import { type AcapyApiClient } from "../acapy-api";
 
@@ -62,7 +62,7 @@ export async function fetchListFromAPI<T>(
 }
 
 export function proxyPath(p: string) {
-  let pp = config.acapy.tenantProxyPath;
+  let pp = useCaseConfig.acapy.tenantProxyPath;
   if (pp.endsWith("/")) {
     pp = pp.slice(0, -1);
   }

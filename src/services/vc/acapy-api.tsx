@@ -1,6 +1,6 @@
 "server-cli-only";
 
-import { config } from "@/config/vc";
+import { useCaseConfig } from "@/config/vc";
 import { FailedRequestError, UnauthorizedAccessError } from "@/lib/errors";
 import type { VCIssuer } from "@/types/vc";
 import { NextResponse } from "next/server";
@@ -51,7 +51,7 @@ export interface AcapyApiClient {
  * @returns {AcapyApiClient} - An object containing methods to make HTTP requests to the ACAPY service.
  */
 export const createAcapyApi = (tenant: VCIssuer): AcapyApiClient => {
-  const baseUrl = config.acapy.tenantProxyPath;
+  const baseUrl = useCaseConfig.acapy.tenantProxyPath;
 
   /**
    * Makes an API call to the ACAPY service.
