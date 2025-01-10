@@ -119,6 +119,11 @@
   @apply hidden;
 }
 
+.button-store-name,
+.button-title {
+  line-height: 1.2 !important;
+}
+
 @layer utilities {
   .step {
     counter-increment: step;
