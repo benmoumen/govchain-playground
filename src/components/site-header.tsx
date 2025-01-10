@@ -11,7 +11,7 @@ export function SiteHeader() {
         <div className="flex flex-1 items-center justify-end space-x-4">
           <nav className="flex items-center space-x-1">
             <span className="text-xs text-muted-foreground/80">
-              Made by
+              <span className="hidden md:inline-block">Made by</span>
               <Button variant={"link"} size={"sm"} effect={"hoverUnderline"}>
                 UNCTAD Digital Government
               </Button>

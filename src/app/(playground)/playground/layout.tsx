@@ -16,8 +16,8 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { usePathname } from "next/navigation";
 import { navMain } from "@/data/navigation";
+import { usePathname } from "next/navigation";
 import React from "react";
 
 interface PlaygroundLayoutProps {
