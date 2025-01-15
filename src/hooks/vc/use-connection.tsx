@@ -1,8 +1,10 @@
+import { getActiveConnectionCookieName } from "@/lib/vc";
 import type {
   ConnectionStateResponse,
   ErrorResponse,
   InitConnectionResponse,
 } from "@/types/vc";
+import type { ConnRecord } from "@/types/vc/acapyApi/acapyInterface";
 import type { NextResponse } from "next/server";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
@@ -12,13 +14,17 @@ const maxPolls = 50;
 const pollInterval = 3000;
 
 const useConnection = (caseParam: string) => {
-  const cookieName = `conn_id_${caseParam}`;
+  const cookieName = getActiveConnectionCookieName(caseParam);
   const [cookies] = useCookies([cookieName]);
   const [generatingInvitation, setGeneratingInvitation] =
     useState<boolean>(false);
-  const [connectionId, setConnectionId] = useState<string | null>(null);
+  const [connectionId, setConnectionId] = useState<string | null | undefined>(
+    undefined
+  );
   const [invitationUrl, setInvitationUrl] = useState<string | null>(null);
-  const [isActiveConnection, setIsActiveConnection] = useState<boolean>(false);
+  const [activeConnection, setActiveConnection] = useState<ConnRecord | null>(
+    null
+  );
   const [shouldPoll, setShouldPoll] = useState<boolean>(false);
   const [pollCount, setPollCount] = useState<number>(0);
 
@@ -30,9 +36,7 @@ const useConnection = (caseParam: string) => {
 
   // poll connection state
   const { data, error } = useSWR(
-    connectionId && shouldPoll && pollCount < maxPolls
-      ? `/api/vc/${caseParam}/connection/${connectionId}`
-      : null,
+    shouldPoll ? `/api/vc/${caseParam}/connection/${connectionId}` : null,
     fetcher,
     { refreshInterval: pollInterval }
   ) as {
@@ -43,18 +47,41 @@ const useConnection = (caseParam: string) => {
   // initiate connection
   const initiateConnection = async (force = false) => {
     if (!force) {
-      console.info("Checking for existing connection...");
-      const existingConnId = cookies[cookieName];
-      if (existingConnId) {
-        setConnectionId(existingConnId);
-        return;
+      console.info("Checking for active connection...");
+      const activeConnId = cookies[cookieName];
+      if (activeConnId) {
+        // check if connection is active (one time check, no polling)
+        console.info("Active connection found:", activeConnId);
+        console.info("Fetching connection...");
+        const resp = (await fetch(
+          `/api/vc/${caseParam}/connection/${activeConnId}`
+        )) as
+          | NextResponse<ConnectionStateResponse>
+          | NextResponse<ErrorResponse>;
+        if (resp.ok) {
+          const res = (await resp.json()) as ConnectionStateResponse;
+          if (isConnectionActive(res.state)) {
+            console.info("Connection loaded!");
+            updateActiveConnection(res.connection);
+            return;
+          }
+          console.info("Connection is not active.");
+          // connection is not active => generate new invitation
+        } else {
+          console.error(
+            "Connection not found or Error occured:",
+            await resp.text()
+          );
+        }
       }
+      // no existing connection
+      setConnectionId(null);
     }
-    console.info("Initiating connection...");
+    console.info("Generating new invitation...");
 
     setGeneratingInvitation(true);
-    // reset state
-    resetState();
+    setShouldPoll(false);
+    setPollCount(0);
     // initiate connection
     const resp = (await fetch(`/api/vc/${caseParam}/connection`, {
       method: "POST",
@@ -71,21 +98,21 @@ const useConnection = (caseParam: string) => {
     setGeneratingInvitation(false);
   };
 
-  const resetState = () => {
-    setConnectionId(null);
-    setInvitationUrl(null);
-    setIsActiveConnection(false);
+  const isConnectionActive = (state?: string) => {
+    return state === "active" || state === "response";
+  };
+
+  const updateActiveConnection = (connection: ConnRecord) => {
+    setActiveConnection(connection);
     setShouldPoll(false);
-    setPollCount(0);
   };
 
   useEffect(() => {
     // init polling
-    if (connectionId && !isActiveConnection) {
+    if (connectionId && activeConnection === null) {
       setShouldPoll(true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [connectionId]);
+  }, [connectionId, activeConnection]);
 
   useEffect(() => {
     // stop polling after max polls
@@ -96,15 +123,14 @@ const useConnection = (caseParam: string) => {
 
   useEffect(() => {
     // update state when connection is active
-    if (data?.state === "active" || data?.state === "response") {
-      setIsActiveConnection(true);
-      setShouldPoll(false);
+    if (data && isConnectionActive(data.state)) {
+      updateActiveConnection(data.connection);
     }
   }, [data]);
 
   return {
-    isActiveConnection,
-    isLoading: !error && !data && !!connectionId,
+    activeConnection,
+    isPolling: shouldPoll,
     error: !!error,
     initiateConnection,
     connectionId,
