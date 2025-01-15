@@ -1,4 +1,5 @@
 import { getTenantByCase } from "@/config/vc";
+import { createLongLivingCookieOptions } from "@/lib/utils";
 import { createAcapyApi } from "@/services/vc/acapy-api";
 import { getConnection } from "@/services/vc/connection-service";
 import type {
@@ -10,6 +11,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 async function handleConnection(
   request: NextRequest,
+  caseParam: string,
   tenant: VCIssuer,
   id: string
 ): Promise<
@@ -17,6 +19,8 @@ async function handleConnection(
 > {
   const acapyApi = createAcapyApi(tenant);
   const connection = await getConnection(acapyApi, id);
+  // cookie to store the connection id if it is active
+  const cookieName = `active_conn_id_${caseParam}`;
 
   if (connection === null) {
     return NextResponse.json(
@@ -31,9 +35,16 @@ async function handleConnection(
     );
   }
 
-  return NextResponse.json({
+  const response = NextResponse.json({
     state: connection.state,
+    connection: connection,
   });
+
+  if (connection.state === "active" || connection.state === "response") {
+    response.cookies.set(createLongLivingCookieOptions(cookieName, id));
+  }
+
+  return response;
 }
 
 export async function GET(
@@ -45,7 +56,7 @@ export async function GET(
   const params = await props.params;
   try {
     const tenant = getTenantByCase(params.case);
-    return await handleConnection(request, tenant, params.id);
+    return await handleConnection(request, params.case, tenant, params.id);
   } catch {
     return NextResponse.json(
       { error_message: "Invalid [case] parameter" },
