@@ -1,11 +1,14 @@
-import React, { useState } from "react";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
-import { useForm, FormProvider } from "react-hook-form";
+"use client";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   FormControl,
   FormDescription,
@@ -15,6 +18,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -22,30 +31,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import { CalendarIcon, Loader2, ShieldCheck } from "lucide-react";
-import { format } from "date-fns";
+import { Switch } from "@/components/ui/switch";
 import { cn, formatDateToYYYYMMDD, formatYYYYMMDDToDate } from "@/lib/utils";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
-
-export enum VCUseCase {
-  Identity = "Identity",
-  Business = "Business",
-  Education = "Education",
-  Health = "Health",
-}
+import { zodResolver } from "@hookform/resolvers/zod";
+import { format } from "date-fns";
+import { CalendarIcon, Loader2, ShieldCheck } from "lucide-react";
+import React, { useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
 export enum VCFormFieldEnum {
   Text = "text",
@@ -100,7 +94,7 @@ const CredentialForm: React.FC<{
             <CardDescription>
               Request your verifiable credential by filling out the form below.
               <br />
-              The Issuer will send you the credential directly to your wallet.
+              The Issuer will send the credential directly to your wallet.
             </CardDescription>
           </CardHeader>
           <CardContent className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -260,7 +254,7 @@ const CredentialForm: React.FC<{
                 checked={showHiddenFields}
               />
               <Label htmlFor="toggle-hidden-fields" className="cursor-pointer">
-                Customize all credential fields
+                Show all fields
               </Label>
             </div>
           </CardFooter>
