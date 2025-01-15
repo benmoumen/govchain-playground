@@ -94,7 +94,7 @@ export interface AttachDecorator {
    * Attachment identifier
    * @example "3fa85f64-5717-4562-b3fc-2c963f66afa6"
    */
-  '@id'?: string;
+  "@id"?: string;
   /**
    * Byte count of data included by reference
    * @format int32
@@ -122,7 +122,7 @@ export interface AttachDecorator {
    * MIME type
    * @example "image/png"
    */
-  'mime-type'?: string;
+  "mime-type"?: string;
 }
 
 export interface AttachDecoratorData {
@@ -202,7 +202,7 @@ export interface AttachmentDef {
    * Attachment type
    * @example "present-proof"
    */
-  type?: 'credential-offer' | 'present-proof';
+  type?: "credential-offer" | "present-proof";
 }
 
 export interface AttributeMimeTypesResult {
@@ -295,7 +295,7 @@ export interface ConnRecord {
    * Connection acceptance: manual or auto
    * @example "auto"
    */
-  accept?: 'manual' | 'auto';
+  accept?: "manual" | "auto";
   /**
    * Optional alias to apply to connection for later use
    * @example "Bob, providing quotes"
@@ -310,7 +310,7 @@ export interface ConnRecord {
    * Connection protocol used
    * @example "connections/1.0"
    */
-  connection_protocol?: 'connections/1.0' | 'didexchange/1.0';
+  connection_protocol?: "connections/1.0" | "didexchange/1.0";
   /**
    * Time of record creation
    * @pattern ^\d{4}-\d\d-\d\d[T ]\d\d:\d\d(?:\:(?:\d\d(?:\.\d{1,6})?))?(?:[+-]\d\d:?\d\d|Z|)$
@@ -337,7 +337,7 @@ export interface ConnRecord {
    * Invitation mode
    * @example "once"
    */
-  invitation_mode?: 'once' | 'multi' | 'static';
+  invitation_mode?: "once" | "multi" | "static";
   /**
    * ID of out-of-band invitation message
    * @example "3fa85f64-5717-4562-b3fc-2c963f66afa6"
@@ -363,7 +363,7 @@ export interface ConnRecord {
    * Routing state of connection
    * @example "active"
    */
-  routing_state?: 'none' | 'request' | 'active' | 'error';
+  routing_state?: "none" | "request" | "active" | "error";
   /**
    * Current record state
    * @example "active"
@@ -389,7 +389,7 @@ export interface ConnRecord {
    * Their role in the connection protocol
    * @example "requester"
    */
-  their_role?: 'invitee' | 'requester' | 'inviter' | 'responder';
+  their_role?: "invitee" | "requester" | "inviter" | "responder";
   /**
    * Time of last record update
    * @pattern ^\d{4}-\d\d-\d\d[T ]\d\d:\d\d(?:\:(?:\d\d(?:\.\d{1,6})?))?(?:[+-]\d\d:?\d\d|Z|)$
@@ -403,12 +403,12 @@ export interface ConnectionInvitation {
    * Message identifier
    * @example "3fa85f64-5717-4562-b3fc-2c963f66afa6"
    */
-  '@id'?: string;
+  "@id"?: string;
   /**
    * Message type
    * @example "https://didcomm.org/my-family/1.0/my-message-type"
    */
-  '@type'?: string;
+  "@type"?: string;
   /**
    * DID for connection invitation
    * @pattern ^(did:sov:)?[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{21,22}$|^did:([a-zA-Z0-9_]+):([a-zA-Z0-9_.%-]+(:[a-zA-Z0-9_.%-]+)*)((;[a-zA-Z0-9_.:%-]+=[a-zA-Z0-9_.:%-]*)*)(\/[^#?]*)?([?][^#]*)?(\#.*)?$$
@@ -524,11 +524,11 @@ export interface Constraints {
   is_holder?: DIFHolder[];
   /** LimitDisclosure */
   limit_disclosure?: string;
-  status_active?: 'required' | 'allowed' | 'disallowed';
-  status_revoked?: 'required' | 'allowed' | 'disallowed';
-  status_suspended?: 'required' | 'allowed' | 'disallowed';
+  status_active?: "required" | "allowed" | "disallowed";
+  status_revoked?: "required" | "allowed" | "disallowed";
+  status_suspended?: "required" | "allowed" | "disallowed";
   /** SubjectIsIssuer */
-  subject_is_issuer?: 'required' | 'preferred';
+  subject_is_issuer?: "required" | "preferred";
 }
 
 export interface CreateInvitationRequest {
@@ -564,7 +564,7 @@ export interface CreateWalletResponse {
    */
   created_at?: string;
   /** Mode regarding management of wallet key */
-  key_management_mode: 'managed' | 'unmanaged';
+  key_management_mode: "managed" | "unmanaged";
   /** Settings for this wallet. */
   settings?: object;
   /**
@@ -611,7 +611,7 @@ export interface CredAttrSpec {
    * MIME type: omit for (null) default
    * @example "image/jpeg"
    */
-  'mime-type'?: string | null;
+  "mime-type"?: string | null;
   /**
    * Attribute name
    * @example "favourite_drink"
@@ -764,7 +764,7 @@ export interface Credential {
    * The JSON-LD context of the credential
    * @example ["https://www.w3.org/2018/credentials/v1","https://www.w3.org/2018/credentials/examples/v1"]
    */
-  '@context': any[];
+  "@context": any[];
   /** @example {"alumniOf":{"id":"did:example:c276e12ec21ebfeb1f712ebc6f1"},"id":"did:example:ebfeb1f712ebc6f1c276e12ec21"} */
   credentialSubject: any;
   /**
@@ -880,16 +880,16 @@ export interface CredentialOffer {
    * Message identifier
    * @example "3fa85f64-5717-4562-b3fc-2c963f66afa6"
    */
-  '@id'?: string;
+  "@id"?: string;
   /**
    * Message type
    * @example "https://didcomm.org/my-family/1.0/my-message-type"
    */
-  '@type'?: string;
+  "@type"?: string;
   /** Human-readable comment */
   comment?: string | null;
   credential_preview?: CredentialPreview;
-  'offers~attach': AttachDecorator[];
+  "offers~attach": AttachDecorator[];
 }
 
 export interface CredentialPreview {
@@ -897,7 +897,7 @@ export interface CredentialPreview {
    * Message type identifier
    * @example "issue-credential/1.0/credential-preview"
    */
-  '@type'?: string;
+  "@type"?: string;
   attributes: CredAttrSpec[];
 }
 
@@ -906,12 +906,12 @@ export interface CredentialProposal {
    * Message identifier
    * @example "3fa85f64-5717-4562-b3fc-2c963f66afa6"
    */
-  '@id'?: string;
+  "@id"?: string;
   /**
    * Message type
    * @example "https://didcomm.org/my-family/1.0/my-message-type"
    */
-  '@type'?: string;
+  "@type"?: string;
   /** Human-readable comment */
   comment?: string | null;
   /**
@@ -981,7 +981,7 @@ export interface CustomUpdateWalletRequest {
    * Webhook target dispatch type for this wallet.         default - Dispatch only to webhooks associated with this wallet.         base - Dispatch only to webhooks associated with the base wallet.         both - Dispatch to both webhook targets.
    * @example "default"
    */
-  wallet_dispatch_type?: 'default' | 'both' | 'base';
+  wallet_dispatch_type?: "default" | "both" | "base";
   /** List of Webhook URLs associated with this subwallet */
   wallet_webhook_urls?: string[];
 }
@@ -997,7 +997,7 @@ export interface DID {
    * Key type associated with the DID
    * @example "ed25519"
    */
-  key_type?: 'ed25519' | 'bls12381g2';
+  key_type?: "ed25519" | "bls12381g2";
   /**
    * Did method associated with the DID
    * @example "sov"
@@ -1007,7 +1007,7 @@ export interface DID {
    * Whether DID is current public DID, posted to ledger but not current public DID, or local to the wallet
    * @example "wallet_only"
    */
-  posture?: 'public' | 'posted' | 'wallet_only';
+  posture?: "public" | "posted" | "wallet_only";
   /**
    * Public verification key
    * @pattern ^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{43,44}$
@@ -1042,7 +1042,7 @@ export interface DIDCreateOptions {
    * Key type to use for the DID keypair. Validated with the chosen DID method's supported key types.
    * @example "ed25519"
    */
-  key_type: 'ed25519' | 'bls12381g2';
+  key_type: "ed25519" | "bls12381g2";
 }
 
 export interface DIDEndpoint {
@@ -1077,7 +1077,7 @@ export interface DIDEndpointWithType {
    * Endpoint type to set (default 'Endpoint'); affects only public or posted DIDs
    * @example "Endpoint"
    */
-  endpoint_type?: 'Endpoint' | 'Profile' | 'LinkedDomains';
+  endpoint_type?: "Endpoint" | "Profile" | "LinkedDomains";
 }
 
 export interface DIDList {
@@ -1102,12 +1102,12 @@ export interface DIDXRequest {
    * Message identifier
    * @example "3fa85f64-5717-4562-b3fc-2c963f66afa6"
    */
-  '@id'?: string;
+  "@id"?: string;
   /**
    * Message type
    * @example "https://didcomm.org/my-family/1.0/my-message-type"
    */
-  '@type'?: string;
+  "@type"?: string;
   /**
    * DID of exchange
    * @pattern ^(did:sov:)?[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{21,22}$|^did:([a-zA-Z0-9_]+):([a-zA-Z0-9_.%-]+(:[a-zA-Z0-9_.%-]+)*)((;[a-zA-Z0-9_.:%-]+=[a-zA-Z0-9_.:%-]*)*)(\/[^#?]*)?([?][^#]*)?(\#.*)?$$
@@ -1115,7 +1115,7 @@ export interface DIDXRequest {
    */
   did?: string;
   /** As signed attachment, DID Doc associated with DID */
-  'did_doc~attach'?: AttachDecorator;
+  "did_doc~attach"?: AttachDecorator;
   /**
    * A self-attested string that the receiver may want to display to the user about the context-specific goal of the out-of-band message
    * @example "To issue a Faber College Graduate credential"
@@ -1139,14 +1139,14 @@ export interface DIFField {
   id?: string;
   path?: string[];
   /** Preference */
-  predicate?: 'required' | 'preferred';
+  predicate?: "required" | "preferred";
   /** Purpose */
   purpose?: string;
 }
 
 export interface DIFHolder {
   /** Preference */
-  directive?: 'required' | 'preferred';
+  directive?: "required" | "preferred";
   field_id?: string[];
 }
 
@@ -1211,12 +1211,12 @@ export interface Disclose {
    * Message identifier
    * @example "3fa85f64-5717-4562-b3fc-2c963f66afa6"
    */
-  '@id'?: string;
+  "@id"?: string;
   /**
    * Message type
    * @example "https://didcomm.org/my-family/1.0/my-message-type"
    */
-  '@type'?: string;
+  "@type"?: string;
   /** List of protocol descriptors */
   protocols: ProtocolDescriptor[];
 }
@@ -1226,12 +1226,12 @@ export interface Disclosures {
    * Message identifier
    * @example "3fa85f64-5717-4562-b3fc-2c963f66afa6"
    */
-  '@id'?: string;
+  "@id"?: string;
   /**
    * Message type
    * @example "https://didcomm.org/my-family/1.0/my-message-type"
    */
-  '@type'?: string;
+  "@type"?: string;
   /** List of protocol or goal_code descriptors */
   disclosures: any[];
 }
@@ -1351,12 +1351,12 @@ export interface GetNymRoleResponse {
    * @example "ENDORSER"
    */
   role?:
-    | 'STEWARD'
-    | 'TRUSTEE'
-    | 'ENDORSER'
-    | 'NETWORK_MONITOR'
-    | 'USER'
-    | 'ROLE_REMOVE';
+    | "STEWARD"
+    | "TRUSTEE"
+    | "ENDORSER"
+    | "NETWORK_MONITOR"
+    | "USER"
+    | "ROLE_REMOVE";
 }
 
 export type HolderModuleResponse = object;
@@ -1539,7 +1539,7 @@ export interface IndyGEProofPred {
   /** Attribute name, indy-canonicalized */
   attr_name?: string;
   /** Predicate type */
-  p_type?: 'LT' | 'LE' | 'GE' | 'GT';
+  p_type?: "LT" | "LE" | "GE" | "GT";
   /**
    * Predicate threshold value
    * @format int32
@@ -1598,7 +1598,7 @@ export interface IndyPresAttrSpec {
    * MIME type (default null)
    * @example "image/jpeg"
    */
-  'mime-type'?: string;
+  "mime-type"?: string;
   /**
    * Attribute name
    * @example "favourite_drink"
@@ -1632,7 +1632,7 @@ export interface IndyPresPredSpec {
    * Predicate type ('<', '<=', '>=', or '>')
    * @example ">="
    */
-  predicate: '<' | '<=' | '>=' | '>';
+  predicate: "<" | "<=" | ">=" | ">";
   /**
    * Threshold value
    * @format int32
@@ -1645,7 +1645,7 @@ export interface IndyPresPreview {
    * Message type identifier
    * @example "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/present-proof/1.0/presentation-preview"
    */
-  '@type'?: string;
+  "@type"?: string;
   attributes: IndyPresAttrSpec[];
   predicates: IndyPresPredSpec[];
 }
@@ -1773,7 +1773,7 @@ export interface IndyProofReqPredSpec {
    * Predicate type ('<', '<=', '>=', or '>')
    * @example ">="
    */
-  p_type: '<' | '<=' | '>=' | '>';
+  p_type: "<" | "<=" | ">=" | ">";
   /**
    * Threshold value
    * @format int32
@@ -1939,7 +1939,7 @@ export interface IndyRevRegDef {
    * Revocation registry type (specify CL_ACCUM)
    * @example "CL_ACCUM"
    */
-  revocDefType?: 'CL_ACCUM';
+  revocDefType?: "CL_ACCUM";
   /** Revocation registry tag */
   tag?: string;
   /** Revocation registry definition value */
@@ -1954,7 +1954,7 @@ export interface IndyRevRegDef {
 
 export interface IndyRevRegDefValue {
   /** Issuance type */
-  issuanceType?: 'ISSUANCE_ON_DEMAND' | 'ISSUANCE_BY_DEFAULT';
+  issuanceType?: "ISSUANCE_ON_DEMAND" | "ISSUANCE_BY_DEFAULT";
   /**
    * Maximum number of credentials; registry size
    * @format int32
@@ -2086,12 +2086,12 @@ export interface InvitationMessage {
    * Message identifier
    * @example "3fa85f64-5717-4562-b3fc-2c963f66afa6"
    */
-  '@id'?: string;
+  "@id"?: string;
   /**
    * Message type
    * @example "https://didcomm.org/my-family/1.0/my-message-type"
    */
-  '@type'?: string;
+  "@type"?: string;
   /**
    * List of mime type in order of preference
    * @example ["didcomm/aip1","didcomm/aip2;env=rfc19"]
@@ -2120,7 +2120,7 @@ export interface InvitationMessage {
    */
   label?: string;
   /** Optional request attachment */
-  'requests~attach'?: AttachDecorator[];
+  "requests~attach"?: AttachDecorator[];
   /** @example [{"did":"WgWxqztrNooG92RXvxSTWv","id":"string","recipientKeys":["did:key:z6MkpTHR8VNsBxYAAWHut2Geadd9jSwuBV8xRoAnwWsdvktH"],"routingKeys":["did:key:z6MkpTHR8VNsBxYAAWHut2Geadd9jSwuBV8xRoAnwWsdvktH"],"serviceEndpoint":"http://192.168.56.101:8020","type":"string"},"did:sov:WgWxqztrNooG92RXvxSTWv"] */
   services?: any[];
 }
@@ -2276,7 +2276,7 @@ export interface IssuerRevRegRecord {
    * Revocation registry type (specify CL_ACCUM)
    * @example "CL_ACCUM"
    */
-  revoc_def_type?: 'CL_ACCUM';
+  revoc_def_type?: "CL_ACCUM";
   /** Revocation registry definition */
   revoc_reg_def?: IndyRevRegDef;
   /** Revocation registry entry */
@@ -2359,12 +2359,12 @@ export interface KeylistQuery {
    * Message identifier
    * @example "3fa85f64-5717-4562-b3fc-2c963f66afa6"
    */
-  '@id'?: string;
+  "@id"?: string;
   /**
    * Message type
    * @example "https://didcomm.org/my-family/1.0/my-message-type"
    */
-  '@type'?: string;
+  "@type"?: string;
   /**
    * Query dictionary object
    * @example {"filter":{}}
@@ -2399,12 +2399,12 @@ export interface KeylistUpdate {
    * Message identifier
    * @example "3fa85f64-5717-4562-b3fc-2c963f66afa6"
    */
-  '@id'?: string;
+  "@id"?: string;
   /**
    * Message type
    * @example "https://didcomm.org/my-family/1.0/my-message-type"
    */
-  '@type'?: string;
+  "@type"?: string;
   /** List of update rules */
   updates?: KeylistUpdateRule[];
 }
@@ -2418,7 +2418,7 @@ export interface KeylistUpdateRule {
    * Action for specific key
    * @example "add"
    */
-  action: 'add' | 'remove';
+  action: "add" | "remove";
   /**
    * Key to remove or add
    * @pattern ^did:key:z[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]+$|^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{43,44}$
@@ -2553,12 +2553,12 @@ export interface MediationDeny {
    * Message identifier
    * @example "3fa85f64-5717-4562-b3fc-2c963f66afa6"
    */
-  '@id'?: string;
+  "@id"?: string;
   /**
    * Message type
    * @example "https://didcomm.org/my-family/1.0/my-message-type"
    */
-  '@type'?: string;
+  "@type"?: string;
   mediator_terms?: string[];
   recipient_terms?: string[];
 }
@@ -2568,12 +2568,12 @@ export interface MediationGrant {
    * Message identifier
    * @example "3fa85f64-5717-4562-b3fc-2c963f66afa6"
    */
-  '@id'?: string;
+  "@id"?: string;
   /**
    * Message type
    * @example "https://didcomm.org/my-family/1.0/my-message-type"
    */
-  '@type'?: string;
+  "@type"?: string;
   /**
    * endpoint on which messages destined for the recipient are received.
    * @example "http://192.168.56.102:8020/"
@@ -2628,12 +2628,12 @@ export interface Menu {
    * Message identifier
    * @example "3fa85f64-5717-4562-b3fc-2c963f66afa6"
    */
-  '@id'?: string;
+  "@id"?: string;
   /**
    * Message type
    * @example "https://didcomm.org/my-family/1.0/my-message-type"
    */
-  '@type'?: string;
+  "@type"?: string;
   /**
    * Introductory text for the menu
    * @example "This menu presents options"
@@ -2665,7 +2665,7 @@ export interface MenuForm {
    * Alternative label for form submit button
    * @example "Send"
    */
-  'submit-label'?: string;
+  "submit-label"?: string;
   /**
    * Menu form title
    * @example "Preferences"
@@ -2843,19 +2843,19 @@ export interface OobRecord {
    * OOB Role
    * @example "receiver"
    */
-  role?: 'sender' | 'receiver';
+  role?: "sender" | "receiver";
   /**
    * Out of band message exchange state
    * @example "await-response"
    */
   state:
-    | 'initial'
-    | 'prepare-response'
-    | 'await-response'
-    | 'reuse-not-accepted'
-    | 'reuse-accepted'
-    | 'done'
-    | 'deleted';
+    | "initial"
+    | "prepare-response"
+    | "await-response"
+    | "reuse-not-accepted"
+    | "reuse-accepted"
+    | "done"
+    | "deleted";
   their_service?: ServiceDecorator;
   /** Record trace information, based on agent configuration */
   trace?: boolean;
@@ -2899,7 +2899,7 @@ export interface PluginCreateWalletRequest {
    * Key management method to use for this wallet.
    * @example "managed"
    */
-  key_management_mode?: 'managed';
+  key_management_mode?: "managed";
   /**
    * Label for this wallet. This label is publicized        (self-attested) to other agents as part of forming a connection.
    * @example "Alice"
@@ -2909,7 +2909,7 @@ export interface PluginCreateWalletRequest {
    * Webhook target dispatch type for this wallet.         default - Dispatch only to webhooks associated with this wallet.         base - Dispatch only to webhooks associated with the base wallet.         both - Dispatch to both webhook targets.
    * @example "default"
    */
-  wallet_dispatch_type?: 'default' | 'both' | 'base';
+  wallet_dispatch_type?: "default" | "both" | "base";
   /**
    * Master key used for key derivation.
    * @example "MySecretKey123"
@@ -2919,7 +2919,7 @@ export interface PluginCreateWalletRequest {
    * Key derivation
    * @example "RAW"
    */
-  wallet_key_derivation?: 'ARGON2I_MOD' | 'ARGON2I_INT' | 'RAW';
+  wallet_key_derivation?: "ARGON2I_MOD" | "ARGON2I_INT" | "RAW";
   /**
    * Wallet name
    * @example "MyNewWallet"
@@ -2929,7 +2929,7 @@ export interface PluginCreateWalletRequest {
    * Type of the wallet to create
    * @example "indy"
    */
-  wallet_type?: 'askar' | 'in_memory' | 'indy';
+  wallet_type?: "askar" | "in_memory" | "indy";
   /** List of Webhook URLs associated with this subwallet */
   wallet_webhook_urls?: string[];
 }
@@ -2955,12 +2955,12 @@ export interface PresentationProposal {
    * Message identifier
    * @example "3fa85f64-5717-4562-b3fc-2c963f66afa6"
    */
-  '@id'?: string;
+  "@id"?: string;
   /**
    * Message type
    * @example "https://didcomm.org/my-family/1.0/my-message-type"
    */
-  '@type'?: string;
+  "@type"?: string;
   /** Human-readable comment */
   comment?: string | null;
   presentation_proposal: IndyPresPreview;
@@ -2971,15 +2971,15 @@ export interface PresentationRequest {
    * Message identifier
    * @example "3fa85f64-5717-4562-b3fc-2c963f66afa6"
    */
-  '@id'?: string;
+  "@id"?: string;
   /**
    * Message type
    * @example "https://didcomm.org/my-family/1.0/my-message-type"
    */
-  '@type'?: string;
+  "@type"?: string;
   /** Human-readable comment */
   comment?: string | null;
-  'request_presentations~attach': AttachDecorator[];
+  "request_presentations~attach": AttachDecorator[];
 }
 
 export interface ProfileSettings {
@@ -3006,12 +3006,12 @@ export interface Queries {
    * Message identifier
    * @example "3fa85f64-5717-4562-b3fc-2c963f66afa6"
    */
-  '@id'?: string;
+  "@id"?: string;
   /**
    * Message type
    * @example "https://didcomm.org/my-family/1.0/my-message-type"
    */
-  '@type'?: string;
+  "@type"?: string;
   queries?: QueryItem[];
 }
 
@@ -3020,19 +3020,19 @@ export interface Query {
    * Message identifier
    * @example "3fa85f64-5717-4562-b3fc-2c963f66afa6"
    */
-  '@id'?: string;
+  "@id"?: string;
   /**
    * Message type
    * @example "https://didcomm.org/my-family/1.0/my-message-type"
    */
-  '@type'?: string;
+  "@type"?: string;
   comment?: string | null;
   query: string;
 }
 
 export interface QueryItem {
   /** feature type */
-  'feature-type': 'protocol' | 'goal-code';
+  "feature-type": "protocol" | "goal-code";
   /** match */
   match: string;
 }
@@ -3053,12 +3053,12 @@ export interface ReceiveInvitationRequest {
    * Message identifier
    * @example "3fa85f64-5717-4562-b3fc-2c963f66afa6"
    */
-  '@id'?: string;
+  "@id"?: string;
   /**
    * Message type
    * @example "https://didcomm.org/my-family/1.0/my-message-type"
    */
-  '@type'?: string;
+  "@type"?: string;
   /**
    * DID for connection invitation
    * @pattern ^(did:sov:)?[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{21,22}$|^did:([a-zA-Z0-9_]+):([a-zA-Z0-9_.%-]+(:[a-zA-Z0-9_.%-]+)*)((;[a-zA-Z0-9_.:%-]+=[a-zA-Z0-9_.:%-]*)*)(\/[^#?]*)?([?][^#]*)?(\#.*)?$$
@@ -3151,7 +3151,7 @@ export interface ReservationRecord {
    * The state of the tenant request.
    * @example "requested"
    */
-  state: 'requested' | 'approved' | 'checked_in';
+  state: "requested" | "approved" | "checked_in";
   /** Notes about the state of the tenant request */
   state_notes?: string;
   /**
@@ -3293,7 +3293,7 @@ export interface RevokeRequest {
   /** Send a notification to the credential recipient */
   notify?: boolean;
   /** Specify which version of the revocation notification should be sent */
-  notify_version?: 'v1_0' | 'v2_0';
+  notify_version?: "v1_0" | "v2_0";
   /** (True) publish revocation to ledger immediately, or (default, False) mark it pending */
   publish?: boolean;
   /**
@@ -3539,7 +3539,7 @@ export interface SubmissionRequirements {
   /** Purpose */
   purpose?: string;
   /** Selection */
-  rule?: 'all' | 'pick';
+  rule?: "all" | "pick";
 }
 
 export interface TAAAccept {
@@ -3704,7 +3704,7 @@ export interface TenantRecord {
    * The state of the tenant.
    * @example "active"
    */
-  state: 'active' | 'deleted';
+  state: "active" | "deleted";
   /**
    * Tenant Record identifier
    * @example "3fa85f64-5717-4562-b3fc-2c963f66afa6"
@@ -3730,12 +3730,12 @@ export interface TenantRecord {
 
 export interface TransactionJobs {
   /** My transaction related job */
-  transaction_my_job?: 'TRANSACTION_AUTHOR' | 'TRANSACTION_ENDORSER' | 'reset';
+  transaction_my_job?: "TRANSACTION_AUTHOR" | "TRANSACTION_ENDORSER" | "reset";
   /** Their transaction related job */
   transaction_their_job?:
-    | 'TRANSACTION_AUTHOR'
-    | 'TRANSACTION_ENDORSER'
-    | 'reset';
+    | "TRANSACTION_AUTHOR"
+    | "TRANSACTION_ENDORSER"
+    | "reset";
 }
 
 export interface TransactionList {
@@ -3866,7 +3866,7 @@ export interface UpdateWalletRequest {
    * Webhook target dispatch type for this wallet.         default - Dispatch only to webhooks associated with this wallet.         base - Dispatch only to webhooks associated with the base wallet.         both - Dispatch to both webhook targets.
    * @example "default"
    */
-  wallet_dispatch_type?: 'default' | 'both' | 'base';
+  wallet_dispatch_type?: "default" | "both" | "base";
   /** List of Webhook URLs associated with this subwallet */
   wallet_webhook_urls?: string[];
 }
@@ -4003,7 +4003,7 @@ export interface V10CredentialExchange {
    * Issue-credential exchange initiator: self or external
    * @example "self"
    */
-  initiator?: 'self' | 'external';
+  initiator?: "self" | "external";
   /**
    * Parent thread identifier
    * @example "3fa85f64-5717-4562-b3fc-2c963f66afa6"
@@ -4019,7 +4019,7 @@ export interface V10CredentialExchange {
    * Issue-credential exchange role: holder or issuer
    * @example "issuer"
    */
-  role?: 'holder' | 'issuer';
+  role?: "holder" | "issuer";
   /**
    * Schema identifier
    * @pattern ^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{21,22}:2:.+:[0-9.]+$
@@ -4292,7 +4292,7 @@ export interface V10PresentationExchange {
    * Present-proof exchange initiator: self or external
    * @example "self"
    */
-  initiator?: 'self' | 'external';
+  initiator?: "self" | "external";
   /** (Indy) presentation (also known as proof) */
   presentation?: IndyProof;
   /**
@@ -4310,7 +4310,7 @@ export interface V10PresentationExchange {
    * Present-proof exchange role: prover or verifier
    * @example "prover"
    */
-  role?: 'prover' | 'verifier';
+  role?: "prover" | "verifier";
   /**
    * Present-proof exchange state
    * @example "verified"
@@ -4333,7 +4333,7 @@ export interface V10PresentationExchange {
    * Whether presentation is verified: true or false
    * @example "true"
    */
-  verified?: 'true' | 'false';
+  verified?: "true" | "false";
   verified_msgs?: string[];
 }
 
@@ -4426,7 +4426,7 @@ export interface V20CredAttrSpec {
    * MIME type: omit for (null) default
    * @example "image/jpeg"
    */
-  'mime-type'?: string | null;
+  "mime-type"?: string | null;
   /**
    * Attribute name
    * @example "favourite_drink"
@@ -4524,7 +4524,7 @@ export interface V20CredExRecord {
    * Issue-credential exchange initiator: self or external
    * @example "self"
    */
-  initiator?: 'self' | 'external';
+  initiator?: "self" | "external";
   /**
    * Parent thread identifier
    * @example "3fa85f64-5717-4562-b3fc-2c963f66afa6"
@@ -4534,24 +4534,24 @@ export interface V20CredExRecord {
    * Issue-credential exchange role: holder or issuer
    * @example "issuer"
    */
-  role?: 'issuer' | 'holder';
+  role?: "issuer" | "holder";
   /**
    * Issue-credential exchange state
    * @example "done"
    */
   state?:
-    | 'proposal-sent'
-    | 'proposal-received'
-    | 'offer-sent'
-    | 'offer-received'
-    | 'request-sent'
-    | 'request-received'
-    | 'credential-issued'
-    | 'credential-received'
-    | 'done'
-    | 'credential-revoked'
-    | 'abandoned'
-    | 'deleted';
+    | "proposal-sent"
+    | "proposal-received"
+    | "offer-sent"
+    | "offer-received"
+    | "request-sent"
+    | "request-received"
+    | "credential-issued"
+    | "credential-received"
+    | "done"
+    | "credential-revoked"
+    | "abandoned"
+    | "deleted";
   /**
    * Thread identifier
    * @example "3fa85f64-5717-4562-b3fc-2c963f66afa6"
@@ -4738,16 +4738,16 @@ export interface V20CredIssue {
    * Message identifier
    * @example "3fa85f64-5717-4562-b3fc-2c963f66afa6"
    */
-  '@id'?: string;
+  "@id"?: string;
   /**
    * Message type
    * @example "https://didcomm.org/my-family/1.0/my-message-type"
    */
-  '@type'?: string;
+  "@type"?: string;
   /** Human-readable comment */
   comment?: string | null;
   /** Credential attachments */
-  'credentials~attach': AttachDecorator[];
+  "credentials~attach": AttachDecorator[];
   /** Acceptable attachment formats */
   formats: V20CredFormat[];
   /**
@@ -4771,19 +4771,19 @@ export interface V20CredOffer {
    * Message identifier
    * @example "3fa85f64-5717-4562-b3fc-2c963f66afa6"
    */
-  '@id'?: string;
+  "@id"?: string;
   /**
    * Message type
    * @example "https://didcomm.org/my-family/1.0/my-message-type"
    */
-  '@type'?: string;
+  "@type"?: string;
   /** Human-readable comment */
   comment?: string | null;
   credential_preview?: V20CredPreview;
   /** Acceptable credential formats */
   formats: V20CredFormat[];
   /** Offer attachments */
-  'offers~attach': AttachDecorator[];
+  "offers~attach": AttachDecorator[];
   /**
    * Issuer-unique identifier to coordinate credential replacement
    * @example "3fa85f64-5717-4562-b3fc-2c963f66afa6"
@@ -4840,7 +4840,7 @@ export interface V20CredPreview {
    * Message type identifier
    * @example "issue-credential/2.0/credential-preview"
    */
-  '@type'?: string;
+  "@type"?: string;
   attributes: V20CredAttrSpec[];
 }
 
@@ -4849,18 +4849,18 @@ export interface V20CredProposal {
    * Message identifier
    * @example "3fa85f64-5717-4562-b3fc-2c963f66afa6"
    */
-  '@id'?: string;
+  "@id"?: string;
   /**
    * Message type
    * @example "https://didcomm.org/my-family/1.0/my-message-type"
    */
-  '@type'?: string;
+  "@type"?: string;
   /** Human-readable comment */
   comment?: string | null;
   /** Credential preview */
   credential_preview?: V20CredPreview;
   /** Credential filter per acceptable format on corresponding identifier */
-  'filters~attach': AttachDecorator[];
+  "filters~attach": AttachDecorator[];
   /** Attachment formats */
   formats: V20CredFormat[];
 }
@@ -4870,18 +4870,18 @@ export interface V20CredRequest {
    * Message identifier
    * @example "3fa85f64-5717-4562-b3fc-2c963f66afa6"
    */
-  '@id'?: string;
+  "@id"?: string;
   /**
    * Message type
    * @example "https://didcomm.org/my-family/1.0/my-message-type"
    */
-  '@type'?: string;
+  "@type"?: string;
   /** Human-readable comment */
   comment?: string | null;
   /** Acceptable attachment formats */
   formats: V20CredFormat[];
   /** Request attachments */
-  'requests~attach': AttachDecorator[];
+  "requests~attach": AttachDecorator[];
 }
 
 export interface V20CredRequestFree {
@@ -4997,17 +4997,17 @@ export interface V20Pres {
    * Message identifier
    * @example "3fa85f64-5717-4562-b3fc-2c963f66afa6"
    */
-  '@id'?: string;
+  "@id"?: string;
   /**
    * Message type
    * @example "https://didcomm.org/my-family/1.0/my-message-type"
    */
-  '@type'?: string;
+  "@type"?: string;
   /** Human-readable comment */
   comment?: string | null;
   /** Acceptable attachment formats */
   formats: V20PresFormat[];
-  'presentations~attach': AttachDecorator[];
+  "presentations~attach": AttachDecorator[];
 }
 
 export interface V20PresCreateRequestRequest {
@@ -5062,7 +5062,7 @@ export interface V20PresExRecord {
    * Present-proof exchange initiator: self or external
    * @example "self"
    */
-  initiator?: 'self' | 'external';
+  initiator?: "self" | "external";
   /** Presentation message */
   pres?: V20Pres;
   /**
@@ -5078,18 +5078,18 @@ export interface V20PresExRecord {
    * Present-proof exchange role: prover or verifier
    * @example "prover"
    */
-  role?: 'prover' | 'verifier';
+  role?: "prover" | "verifier";
   /** Present-proof exchange state */
   state?:
-    | 'proposal-sent'
-    | 'proposal-received'
-    | 'request-sent'
-    | 'request-received'
-    | 'presentation-sent'
-    | 'presentation-received'
-    | 'done'
-    | 'abandoned'
-    | 'deleted';
+    | "proposal-sent"
+    | "proposal-received"
+    | "request-sent"
+    | "request-received"
+    | "presentation-sent"
+    | "presentation-received"
+    | "done"
+    | "abandoned"
+    | "deleted";
   /**
    * Thread identifier
    * @example "3fa85f64-5717-4562-b3fc-2c963f66afa6"
@@ -5107,7 +5107,7 @@ export interface V20PresExRecord {
    * Whether presentation is verified: 'true' or 'false'
    * @example "true"
    */
-  verified?: 'true' | 'false';
+  verified?: "true" | "false";
   verified_msgs?: string[];
 }
 
@@ -5144,17 +5144,17 @@ export interface V20PresProposal {
    * Message identifier
    * @example "3fa85f64-5717-4562-b3fc-2c963f66afa6"
    */
-  '@id'?: string;
+  "@id"?: string;
   /**
    * Message type
    * @example "https://didcomm.org/my-family/1.0/my-message-type"
    */
-  '@type'?: string;
+  "@type"?: string;
   /** Human-readable comment */
   comment?: string;
   formats: V20PresFormat[];
   /** Attachment per acceptable format on corresponding identifier */
-  'proposals~attach': AttachDecorator[];
+  "proposals~attach": AttachDecorator[];
 }
 
 export interface V20PresProposalByFormat {
@@ -5190,17 +5190,17 @@ export interface V20PresRequest {
    * Message identifier
    * @example "3fa85f64-5717-4562-b3fc-2c963f66afa6"
    */
-  '@id'?: string;
+  "@id"?: string;
   /**
    * Message type
    * @example "https://didcomm.org/my-family/1.0/my-message-type"
    */
-  '@type'?: string;
+  "@type"?: string;
   /** Human-readable comment */
   comment?: string;
   formats: V20PresFormat[];
   /** Attachment per acceptable format on corresponding identifier */
-  'request_presentations~attach': AttachDecorator[];
+  "request_presentations~attach": AttachDecorator[];
   /** Whether verifier will send confirmation ack */
   will_confirm?: boolean;
 }
@@ -5342,7 +5342,7 @@ export interface WalletRecord {
    */
   created_at?: string;
   /** Mode regarding management of wallet key */
-  key_management_mode: 'managed' | 'unmanaged';
+  key_management_mode: "managed" | "unmanaged";
   /** Settings for this wallet. */
   settings?: object;
   /**
