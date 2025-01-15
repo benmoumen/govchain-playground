@@ -4,7 +4,6 @@ import tailwindcssAnimate from "tailwindcss-animate";
 export default {
   darkMode: ["class"],
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
@@ -83,7 +82,11 @@ export default {
       animation: {
         "fade-in": "fade-in 0.6s ease-out forwards",
         "pulse-hover": "pulse-hover 8s ease-in-out infinite",
-        shine: "shine 3s ease-out infinite",
+        shine: "shine var(--duration) ease-out infinite",
+        "star-movement-bottom":
+          "star-movement-bottom linear infinite alternate",
+        "star-movement-top": "star-movement-top linear infinite alternate",
+        aurora: "aurora 60s linear infinite",
       },
       keyframes: {
         "fade-in": {
@@ -95,9 +98,31 @@ export default {
           "50%": { transform: "translateY(-2%)" },
         },
         shine: {
-          "0%": { backgroundPosition: "200% 0" },
-          "25%": { backgroundPosition: "-200% 0" },
-          "100%": { backgroundPosition: "-200% 0" },
+          "0%": {
+            "background-position": "0% 0%",
+          },
+          "50%": {
+            "background-position": "100% 100%",
+          },
+          to: {
+            "background-position": "0% 0%",
+          },
+        },
+        "star-movement-bottom": {
+          "0%": { transform: "translate(0%, 0%)", opacity: "1" },
+          "100%": { transform: "translate(-100%, 0%)", opacity: "0" },
+        },
+        "star-movement-top": {
+          "0%": { transform: "translate(0%, 0%)", opacity: "1" },
+          "100%": { transform: "translate(100%, 0%)", opacity: "0" },
+        },
+        aurora: {
+          from: {
+            backgroundPosition: "50% 50%, 50% 50%",
+          },
+          to: {
+            backgroundPosition: "350% 50%, 350% 50%",
+          },
         },
       },
     },

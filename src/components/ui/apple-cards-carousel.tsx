@@ -225,10 +225,10 @@ export const Card = ({
               exit={{ opacity: 0 }}
               ref={containerRef}
               layoutId={layout ? `card-${card.title}` : undefined}
-              className="flex   min-h-dvh flex-col items-center justify-start max-w-5xl mx-auto bg-white dark:bg-neutral-900 h-fit  z-[60] my-5 p-4 md:p-10 rounded-3xl font-sans relative"
+              className="flex min-h-dvh flex-col items-center justify-start max-w-5xl mx-auto bg-neutral-50 dark:bg-neutral-900 h-fit  z-[60] my-5 p-4 md:p-10 rounded-3xl font-sans relative"
             >
               <button
-                className="sticky top-4 h-8 w-8 right-0 ml-auto bg-black dark:bg-white rounded-full flex items-center justify-center"
+                className="sticky top-4 h-8 w-8 z-10 right-0 ml-auto bg-black dark:bg-white rounded-full flex items-center justify-center"
                 onClick={handleClose}
               >
                 <IconX className="h-6 w-6 text-neutral-100 dark:text-neutral-900" />
@@ -245,7 +245,7 @@ export const Card = ({
               >
                 {card.title}
               </motion.p>
-              <div className="py-10 mt-4">{card.content}</div>
+              <div className="py-10 mt-4 w-full">{card.content}</div>
             </motion.div>
           </div>
         )}
