@@ -11,5 +11,10 @@
     }
   ],
   "eslint.format.enable": false,
-  "eslint.useFlatConfig": true
+  "eslint.useFlatConfig": true,
+  "javascript.preferences.organizeImports": {},
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit",
+    "source.fixAll.eslint": "always"
+  }
 }
