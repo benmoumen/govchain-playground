@@ -1,5 +1,11 @@
 import { InvalidParameterError } from "@/lib/errors";
-import type { UCForm, UCMetadata, VCConfig, VCIssuer } from "@/types/vc";
+import type {
+  UCForm,
+  UCMetadata,
+  VCConfig,
+  VCIdentifiers,
+  VCIssuer,
+} from "@/types/vc";
 import digitalDUI from "./digital-dui";
 
 export const useCaseConfig: VCConfig = {
@@ -35,4 +41,11 @@ export function getUseCaseForm(useCase: string): UCForm {
     throw new InvalidParameterError("Invalid [useCase] parameter");
   }
   return useCaseConfig.useCases[useCase].form;
+}
+
+export function getVCIdentifiersByCase(useCase: string): VCIdentifiers {
+  if (!useCaseConfig.useCases[useCase]) {
+    throw new InvalidParameterError("Invalid [useCase] parameter");
+  }
+  return useCaseConfig.useCases[useCase].identifiers;
 }

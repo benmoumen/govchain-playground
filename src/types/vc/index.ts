@@ -1,6 +1,10 @@
 import type { VCFormFieldDefinition } from "@/components/vc/credential-form";
 import type { z } from "zod";
-import type { ConnRecord } from "./acapyApi/acapyInterface";
+import type {
+  ConnRecord,
+  CredAttrSpec,
+  V20CredExRecord,
+} from "./acapyApi/acapyInterface";
 
 export interface VCIssuer {
   tenantId: string;
@@ -21,10 +25,16 @@ export interface UCForm {
   defaultValues: { [key: string]: string | undefined };
 }
 
+export interface VCIdentifiers {
+  credDefId: string;
+  schemaId: string;
+}
+
 export interface UseCaseConfig {
   issuer: VCIssuer;
   metadata: UCMetadata;
   form: UCForm;
+  identifiers: VCIdentifiers;
 }
 
 export interface VCConfig {
@@ -36,6 +46,10 @@ export interface VCConfig {
   useCases: Record<string, UseCaseConfig>;
 }
 
+export interface ErrorResponse {
+  error_message: string;
+}
+
 export interface InitConnectionResponse {
   connection_id: string;
   invitation_url: string;
@@ -45,6 +59,17 @@ export interface ConnectionStateResponse {
   state: string;
   connection: ConnRecord;
 }
-export interface ErrorResponse {
-  error_message: string;
+
+export interface OfferCredentialData {
+  connection_id: string;
+  attributes: CredAttrSpec[];
+}
+
+export interface OfferCredentialResponse {
+  credential_id: string;
+}
+
+export interface CredentialStateResponse {
+  state: string;
+  credential: V20CredExRecord;
 }

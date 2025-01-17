@@ -179,6 +179,10 @@ const digitalDUI: UseCaseConfig = {
     fields: formFields,
     defaultValues: defaultValues,
   },
+  identifiers: {
+    credDefId: "K6zBDo67bUpgzaKzSxn7tQ:3:CL:13:2025",
+    schemaId: "K6zBDo67bUpgzaKzSxn7tQ:2:ElSalvador_DUI:1.0",
+  },
 };
 
 export default digitalDUI;
