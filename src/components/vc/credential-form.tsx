@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+
 import {
   Card,
   CardContent,
@@ -32,86 +33,89 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import useConnection from "@/hooks/vc/use-connection";
+import { getUseCaseForm } from "@/config/vc";
 import useCredential from "@/hooks/vc/use-credential";
-import { cn, formatDateToYYYYMMDD, formatYYYYMMDDToDate } from "@/lib/utils";
+import { cn, formatYYYYMMDDToDate } from "@/lib/utils";
 import type { CredAttrSpec } from "@/types/vc/acapyApi/acapyInterface";
+import type { VCFormFieldDefinition } from "@/types/vc/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon, Loader2, ShieldCheck } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-export enum VCFormFieldEnum {
-  Text = "text",
-  Date = "date",
-  Enum = "enum",
-}
-type VCFormFieldType =
-  | VCFormFieldEnum.Text
-  | VCFormFieldEnum.Date
-  | VCFormFieldEnum.Enum;
-
-export interface VCFormFieldDefinition {
-  name: string;
-  label: string;
-  placeholder?: string;
-  description?: string;
-  type?: VCFormFieldType;
-  options?: string[]; // For enum type
-  toDate?: Date | undefined;
-  fromDate?: Date | undefined;
-  hidden?: boolean;
-}
-
 interface CredentialFormProps {
   useCase: string;
-  schema: z.ZodSchema;
-  defaultValues: { [key: string]: string | undefined };
-  formFields: VCFormFieldDefinition[];
+  connectionId: string;
 }
 
 // Generic CredentialForm component
 const CredentialForm: React.FC<CredentialFormProps> = ({
   useCase,
-  schema,
-  defaultValues,
-  formFields: formFields,
+  connectionId,
 }) => {
-  const [showHiddenFields, setShowHiddenFields] = useState(false);
+  const { schema, fields, defaultValues } = getUseCaseForm(useCase);
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues,
   });
-  const { sendCredentialOffer } = useCredential(useCase);
-  const { activeConnection } = useConnection(useCase);
+  const { sendCredentialOffer, credential, isPolling, error, sendingOffer } =
+    useCredential(useCase);
+  const [showHiddenFields, setShowHiddenFields] = useState(false);
 
   const onSubmit = (data: z.infer<typeof schema>) => {
-    if (!activeConnection?.connection_id) {
-      toast.error(
-        "No active connection found! Please make a connection first."
-      );
-      return;
-    }
     // convert data to CredAttrSpec[]
     console.log("Credential data:", data);
     const attributes: CredAttrSpec[] = Object.entries(data).map(
       ([key, value]) => ({
         name: key,
-        value: value as string,
+        value: value,
       })
     );
     console.info("Converted to credential attributes format:", attributes);
 
-    sendCredentialOffer(activeConnection.connection_id, attributes);
+    try {
+      sendCredentialOffer(connectionId, attributes);
+    } catch {
+      toast.error(
+        "The issuer agent could not issue the credential. Please try again later."
+      );
+    }
     toast.info("Sending credential offer...");
   };
 
+  const handleFormSubmit = form.handleSubmit(onSubmit, () => {
+    console.log("Form errors:", form.formState.errors);
+    const errors = form.formState.errors;
+    const hasHiddenFieldErrors = fields.some(
+      (field) => field.hidden && errors[field.name]
+    );
+
+    if (hasHiddenFieldErrors) {
+      setShowHiddenFields(true);
+      toast.error("Please correct the errors in the hidden fields.");
+    }
+  });
+
+  useEffect(() => {
+    if (credential) {
+      toast.success("Credential issued and accepted!");
+    }
+  }, [credential]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(
+        "The issuer agent encountered an error. Please try again later."
+      );
+    }
+  }, [error]);
+
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={handleFormSubmit} className="space-y-8">
         <Card>
           <CardHeader>
             <CardTitle>Credential Request Form</CardTitle>
@@ -122,7 +126,7 @@ const CredentialForm: React.FC<CredentialFormProps> = ({
             </CardDescription>
           </CardHeader>
           <CardContent className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {formFields.map((formField: VCFormFieldDefinition) => (
+            {fields.map((formField: VCFormFieldDefinition) => (
               <FormField
                 key={formField.name}
                 name={formField.name}
@@ -169,36 +173,30 @@ const CredentialForm: React.FC<CredentialFormProps> = ({
                                     ? new Date(field.value)
                                     : undefined
                                 }
-                                onSelect={(date) =>
-                                  field.onChange(
-                                    date
-                                      ? formatDateToYYYYMMDD(date)
-                                      : undefined
-                                  )
-                                }
+                                onSelect={(date) => field.onChange(date)}
                                 hidden={[
                                   formField.fromDate
-                                    ? { before: new Date(formField.fromDate) }
+                                    ? { before: formField.fromDate }
                                     : false,
                                   formField.toDate
-                                    ? { after: new Date(formField.toDate) }
+                                    ? { after: formField.toDate }
                                     : false,
                                 ]}
                                 startMonth={
                                   formField.fromDate
-                                    ? new Date(formField.fromDate)
+                                    ? formField.fromDate
                                     : undefined
                                 }
                                 endMonth={
                                   formField.toDate
-                                    ? new Date(formField.toDate)
+                                    ? formField.toDate
                                     : undefined
                                 }
                                 disabled={(date) =>
                                   (formField.fromDate &&
-                                    date < new Date(formField.fromDate)) ||
+                                    date < formField.fromDate) ||
                                   (formField.toDate &&
-                                    date > new Date(formField.toDate)) ||
+                                    date > formField.toDate) ||
                                   false
                                 }
                               />
@@ -209,7 +207,7 @@ const CredentialForm: React.FC<CredentialFormProps> = ({
                         return (
                           <Select
                             onValueChange={field.onChange}
-                            value={field.value}
+                            value={field.value as string | undefined}
                           >
                             <SelectTrigger>
                               <SelectValue
@@ -231,6 +229,11 @@ const CredentialForm: React.FC<CredentialFormProps> = ({
                           <Input
                             placeholder={formField.placeholder}
                             {...field}
+                            value={
+                              field.value instanceof Date
+                                ? field.value.toISOString()
+                                : field.value
+                            }
                           />
                         );
                     }
@@ -257,11 +260,16 @@ const CredentialForm: React.FC<CredentialFormProps> = ({
             ))}
           </CardContent>
           <CardFooter className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center space-y-4 sm:space-y-0">
-            <Button type="submit" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting ? (
+            <Button type="submit" disabled={sendingOffer || isPolling}>
+              {sendingOffer ? (
                 <>
                   <Loader2 className="animate-spin" />
                   Sending a request to the issuer
+                </>
+              ) : isPolling ? (
+                <>
+                  <Loader2 className="animate-spin" />
+                  Waiting for credential issuance...
                 </>
               ) : (
                 <>

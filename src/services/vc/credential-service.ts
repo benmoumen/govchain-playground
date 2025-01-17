@@ -1,5 +1,6 @@
 import type {
   V20CredExRecord,
+  V20CredExRecordDetail,
   V20CredOfferRequest,
 } from "@/types/vc/acapyApi/acapyInterface";
 import type { AcapyApiClient } from "./acapy-api";
@@ -28,6 +29,6 @@ export const getCredential = async (
   acapyApi: AcapyApiClient,
   id: string,
   params: Record<string, string> = {}
-): Promise<V20CredExRecord | null> => {
+): Promise<V20CredExRecordDetail | null> => {
   return fetchItem(acapyApi, API_PATH.ISSUE_CREDENTIAL_20_RECORDS, id, params);
 };

@@ -55,6 +55,7 @@ const useCredential = (caseParam: string) => {
       connection_id: connectionId,
       attributes,
     };
+    console.info("Offer Credential Data:", data);
     const resp = (await fetch(`/api/vc/${caseParam}/credential`, {
       method: "POST",
       cache: "no-store",
@@ -68,19 +69,12 @@ const useCredential = (caseParam: string) => {
       const res = (await resp.json()) as OfferCredentialResponse;
       setCredentialId(res.credential_id);
       setShouldPoll(true);
+      setSendingOffer(false);
     } else {
       console.error("Failed to send credential offer:", await resp.text());
+      setSendingOffer(false);
+      throw new Error("Failed to send credential offer");
     }
-    setSendingOffer(false);
-  };
-
-  const isCredentialIssued = (state?: string) => {
-    return state === "credential_issued";
-  };
-
-  const updateCredential = (credential: V20CredExRecord) => {
-    setCredential(credential);
-    setShouldPoll(false);
   };
 
   useEffect(() => {
@@ -98,9 +92,11 @@ const useCredential = (caseParam: string) => {
   }, [pollCount]);
 
   useEffect(() => {
-    // update state when credential is issued
-    if (data && isCredentialIssued(data.state)) {
-      updateCredential(data.credential);
+    if (data?.credential !== undefined) {
+      setCredential(data.credential);
+    }
+    if (data && data.state === "done") {
+      setShouldPoll(false);
     }
   }, [data]);
 
@@ -109,7 +105,6 @@ const useCredential = (caseParam: string) => {
     isPolling: shouldPoll,
     error: !!error,
     sendCredentialOffer,
-    credentialId,
     sendingOffer,
   };
 };

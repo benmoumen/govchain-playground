@@ -22,7 +22,7 @@ export interface UCMetadata {
 export interface UCForm {
   schema: z.AnyZodObject;
   fields: VCFormFieldDefinition[];
-  defaultValues: { [key: string]: string | undefined };
+  defaultValues: { [key: string]: string | Date | undefined };
 }
 
 export interface VCIdentifiers {

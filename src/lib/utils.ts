@@ -7,11 +7,14 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatDateToYYYYMMDD(date: Date) {
+export function formatDateToYYYYMMDD(date: Date): string {
   return format(date, "yyyyMMdd");
 }
 
-export function formatYYYYMMDDToDate(date: string) {
+export function formatYYYYMMDDToDate(date: string | Date): Date {
+  if (date instanceof Date) {
+    return date;
+  }
   return new Date(date.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3"));
 }
 

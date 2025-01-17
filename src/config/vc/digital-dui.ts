@@ -37,14 +37,12 @@ const getRandomElement = (arr: string[]) =>
   arr[Math.floor(Math.random() * arr.length)];
 
 // Default values
-const defaultValues: { [key: string]: string | undefined } = {
+const defaultValues: { [key: string]: string | Date | undefined } = {
   "Full Name": "Juan Carlos Martinez",
   "Document Number": generateRandomDUIDocumentNumber(),
-  "Date of Birth": formatDateToYYYYMMDD(
-    new Date(
-      birthDate.setFullYear(
-        today.getFullYear() - Math.floor(Math.random() * 50 + 18)
-      )
+  "Date of Birth": new Date(
+    birthDate.setFullYear(
+      today.getFullYear() - Math.floor(Math.random() * 50 + 18)
     )
   ),
   "Place of Birth": "San Salvador, El Salvador",
@@ -56,8 +54,8 @@ const defaultValues: { [key: string]: string | undefined } = {
   Department: "San Salvador",
   Photograph: "base64-encoded-photograph",
   Signature: "base64-encoded-signature",
-  "Date of Issue": formatDateToYYYYMMDD(today),
-  "Date of Expiry": formatDateToYYYYMMDD(expiryDate),
+  "Date of Issue": today,
+  "Date of Expiry": expiryDate,
 };
 // Form fields
 const formFields: VCFormFieldDefinition[] = [
@@ -79,7 +77,6 @@ const formFields: VCFormFieldDefinition[] = [
   {
     name: "Place of Birth",
     label: "Place of Birth",
-
     hidden: true,
   },
   {
@@ -134,35 +131,35 @@ const formFields: VCFormFieldDefinition[] = [
 
 // Form schema
 const formSchema: z.AnyZodObject = z.object({
-  "Full Name": z
+  "Full Name": z.string().trim().nonempty("Full Name cannot be empty."),
+  "Document Number": z
     .string()
-    .min(2, { message: "Full name must be at least 2 characters." }),
-  "Document Number": z.string({
-    required_error: "Document number is required.",
-  }),
-  "Date of Birth": z
-    .string({
+    .trim()
+    .nonempty("Document Number cannot be empty."),
+  "Date of Birth": z.coerce
+    .date({
       required_error: "Date of Birth is required.",
     })
-    .transform((str) => new Date(str)),
-  "Place of Birth": z.string({
-    required_error: "Place of Birth is required.",
-  }),
+    .transform((date) => formatDateToYYYYMMDD(date)),
+  "Place of Birth": z.string().trim().nonempty("Place of Birth is required."),
+  Nationality: z.string().trim().optional(),
   Sex: SexEnum.optional(),
   "Marital Status": MaritalStatusEnum.optional(),
-  Address: z.string({ required_error: "Address is required." }),
-  Municipality: z.string().optional(),
-  Department: z.string().optional(),
-  "Date of Issue": z
-    .string({
+  Address: z.string().trim().nonempty("Address is required."),
+  Municipality: z.string().trim().optional(),
+  Department: z.string().trim().optional(),
+  "Date of Issue": z.coerce
+    .date({
       required_error: "Date of Issue is required.",
     })
-    .transform((str) => new Date(str)),
-  "Date of Expiry": z
-    .string({
+    .transform((date) => formatDateToYYYYMMDD(date)),
+  "Date of Expiry": z.coerce
+    .date({
       required_error: "Date of Expiry is required.",
     })
-    .transform((str) => new Date(str)),
+    .transform((date) => formatDateToYYYYMMDD(date)),
+  Photograph: z.string().trim().optional(),
+  Signature: z.string().trim().optional(),
 });
 
 ////////////////////////

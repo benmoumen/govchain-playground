@@ -69,9 +69,6 @@ const UseCasePage: React.FC = () => {
           }}
         />
       </div>
-      <Button onClick={() => setActiveStep(steps.CONNECT)}>Connect</Button>
-      <Button onClick={() => setActiveStep(steps.REQUEST)}>Request</Button>
-
       <PageFooter />
     </div>
   );
