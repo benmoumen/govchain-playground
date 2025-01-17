@@ -1,9 +1,6 @@
-import {
-  VCFormFieldEnum,
-  type VCFormFieldDefinition,
-} from "@/components/vc/credential-form";
 import { formatDateToYYYYMMDD } from "@/lib/utils";
 import type { UseCaseConfig } from "@/types/vc";
+import { VCFormFieldEnum, type VCFormFieldDefinition } from "@/types/vc/form";
 import { z } from "zod";
 
 const issuer = {

@@ -1,10 +1,10 @@
-import type { VCFormFieldDefinition } from "@/components/vc/credential-form";
 import type { z } from "zod";
 import type {
   ConnRecord,
   CredAttrSpec,
   V20CredExRecord,
 } from "./acapyApi/acapyInterface";
+import type { VCFormFieldDefinition } from "./form";
 
 export interface VCIssuer {
   tenantId: string;
@@ -70,6 +70,6 @@ export interface OfferCredentialResponse {
 }
 
 export interface CredentialStateResponse {
-  state: string;
+  state: V20CredExRecord["state"];
   credential: V20CredExRecord;
 }
