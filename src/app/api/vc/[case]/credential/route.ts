@@ -11,11 +11,12 @@ import type { V20CredExRecord } from "@/types/vc/acapyApi/acapyInterface";
 import { NextRequest, NextResponse } from "next/server";
 
 /**
- * Handles the creation of a connection invitation.
- * @param tenant - The credential issuer information.
- * @param caseParam - The case identifier for the connection.
- * @param isOob - Flag indicating whether to create an out-of-band invitation (recommended).
- * @returns A Promise that resolves to a NextResponse containing either the InitConnectionResponse or ErrorResponse.
+ * Sends a credential offer to a specified connection.
+ *
+ * @param tenant - The tenant issuing the credential.
+ * @param credDefId - The credential definition ID.
+ * @param data - The data required to offer the credential.
+ * @returns A promise that resolves to a NextResponse containing either the credential ID or an error message.
  */
 async function sendCredential(
   tenant: VCIssuer,

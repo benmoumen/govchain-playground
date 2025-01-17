@@ -5,6 +5,17 @@ import type { ErrorResponse, VCIssuer } from "@/types/vc";
 import type { V20CredExRecord } from "@/types/vc/acapyApi/acapyInterface";
 import { NextRequest, NextResponse } from "next/server";
 
+/**
+ * Handles the retrieval and response of a credential based on the provided tenant and credential ID.
+ *
+ * @param tenant - The VCIssuer tenant instance used to create the Acapy API.
+ * @param id - The ID of the credential to be retrieved.
+ * @returns A promise that resolves to a NextResponse containing either the credential record or an error response.
+ *
+ * @remarks
+ * - If the credential does not exist, a 404 response with an error message is returned.
+ * - If the credential state is undefined, a 404 response with an error message is returned.
+ */
 async function handleCredential(
   tenant: VCIssuer,
   id: string
