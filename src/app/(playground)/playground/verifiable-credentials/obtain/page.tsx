@@ -1,5 +1,6 @@
 import { Card, Carousel } from "@/components/ui/apple-cards-carousel";
 import UseCasePage from "@/components/vc/usecase-page";
+import { VCProvider } from "@/contexts/vc-context";
 
 export default function RequestVCPage() {
   const cards = data.map((card, index) => (
@@ -21,7 +22,11 @@ const data = [
     category: "Identity",
     title: "Get your Digital ID.",
     src: "https://images.unsplash.com/photo-1626423962491-eb76bdc2e0be?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    content: <UseCasePage useCase="digitalDUI" />,
+    content: (
+      <VCProvider useCase="digitalDUI">
+        <UseCasePage />
+      </VCProvider>
+    ),
   },
   {
     category: "Business",

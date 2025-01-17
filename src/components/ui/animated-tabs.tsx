@@ -79,7 +79,7 @@ export const AnimatedTabs = ({
         currentStep={currentStep}
         tabs={propTabs}
         hovering={hovering}
-        className={cn("mt-32", contentClassName)}
+        className={cn("mt-4", contentClassName)}
       />
     </>
   );

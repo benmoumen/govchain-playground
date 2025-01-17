@@ -1,7 +1,6 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import useConnection from "@/hooks/vc/use-connection";
+import { useVCContext } from "@/contexts/vc-context";
 import type { VCIssuer } from "@/types/vc";
-import type { ConnRecord } from "@/types/vc/acapyApi/acapyInterface";
 import { Loader2, RefreshCcw, Waypoints } from "lucide-react";
 import { motion } from "motion/react";
 import { useTheme } from "next-themes";
@@ -14,17 +13,13 @@ import { MessageLoading } from "../ui/message-loading";
 import { ShineBorder } from "../ui/shine-border";
 
 interface VCConnectionCardProps {
-  useCase: string;
   issuer: VCIssuer;
   credentialName: string;
-  setConnection?: (conn: ConnRecord) => void;
 }
 
 const VCConnectionCard: React.FC<VCConnectionCardProps> = ({
-  useCase,
   issuer,
   credentialName,
-  setConnection,
 }) => {
   const { resolvedTheme } = useTheme();
   const {
@@ -34,14 +29,7 @@ const VCConnectionCard: React.FC<VCConnectionCardProps> = ({
     invitationUrl,
     isPolling,
     error,
-  } = useConnection(useCase);
-
-  useEffect(() => {
-    if (activeConnection) {
-      //setConnection(activeConnection);
-      console.log("Connection has been made successfully!");
-    }
-  }, [activeConnection, setConnection]);
+  } = useVCContext();
 
   useEffect(() => {
     console.log("Calling initiate connection");

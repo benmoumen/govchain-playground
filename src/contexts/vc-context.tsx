@@ -1,3 +1,4 @@
+"use client";
 import { getActiveConnectionCookieName } from "@/lib/vc";
 import type {
   ConnectionStateResponse,
@@ -6,15 +7,28 @@ import type {
 } from "@/types/vc";
 import type { ConnRecord } from "@/types/vc/acapyApi/acapyInterface";
 import type { NextResponse } from "next/server";
-import { useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import useSWR from "swr";
 
-const maxPolls = 50;
-const pollInterval = 3000;
+interface VCContextType {
+  useCase: string;
+  activeConnection: ConnRecord | null;
+  isPolling: boolean;
+  error: boolean;
+  initiateConnection: (force?: boolean) => Promise<void>;
+  connectionId: string | null | undefined;
+  invitationUrl: string | null;
+  generatingInvitation: boolean;
+}
 
-const useConnection = (caseParam: string) => {
-  const cookieName = getActiveConnectionCookieName(caseParam);
+const VCContext = createContext<VCContextType | undefined>(undefined);
+
+export const VCProvider: React.FC<{
+  useCase: string;
+  children: React.ReactNode;
+}> = ({ useCase, children }) => {
+  const cookieName = getActiveConnectionCookieName(useCase);
   const [cookies] = useCookies([cookieName]);
   const [generatingInvitation, setGeneratingInvitation] =
     useState<boolean>(false);
@@ -28,6 +42,9 @@ const useConnection = (caseParam: string) => {
   const [shouldPoll, setShouldPoll] = useState<boolean>(false);
   const [pollCount, setPollCount] = useState<number>(0);
 
+  const maxPolls = 50;
+  const pollInterval = 3000;
+
   const fetcher = async (url: string) => {
     setPollCount((prevCount) => prevCount + 1);
     const resp = await fetch(url);
@@ -36,7 +53,7 @@ const useConnection = (caseParam: string) => {
 
   // poll connection state
   const { data, error } = useSWR(
-    shouldPoll ? `/api/vc/${caseParam}/connection/${connectionId}` : null,
+    shouldPoll ? `/api/vc/${useCase}/connection/${connectionId}` : null,
     fetcher,
     { refreshInterval: pollInterval }
   ) as {
@@ -54,7 +71,7 @@ const useConnection = (caseParam: string) => {
         console.info("Active connection found:", activeConnId);
         console.info("Fetching connection...");
         const resp = (await fetch(
-          `/api/vc/${caseParam}/connection/${activeConnId}`
+          `/api/vc/${useCase}/connection/${activeConnId}`
         )) as
           | NextResponse<ConnectionStateResponse>
           | NextResponse<ErrorResponse>;
@@ -83,7 +100,7 @@ const useConnection = (caseParam: string) => {
     setShouldPoll(false);
     setPollCount(0);
     // initiate connection
-    const resp = (await fetch(`/api/vc/${caseParam}/connection`, {
+    const resp = (await fetch(`/api/vc/${useCase}/connection`, {
       method: "POST",
       cache: "no-store",
     })) as NextResponse<InitConnectionResponse> | NextResponse<ErrorResponse>;
@@ -128,15 +145,28 @@ const useConnection = (caseParam: string) => {
     }
   }, [data]);
 
-  return {
-    activeConnection,
-    isPolling: shouldPoll,
-    error: !!error,
-    initiateConnection,
-    connectionId,
-    invitationUrl,
-    generatingInvitation,
-  };
+  return (
+    <VCContext.Provider
+      value={{
+        useCase,
+        activeConnection,
+        isPolling: shouldPoll,
+        error: !!error,
+        initiateConnection,
+        connectionId,
+        invitationUrl,
+        generatingInvitation,
+      }}
+    >
+      {children}
+    </VCContext.Provider>
+  );
 };
 
-export default useConnection;
+export const useVCContext = () => {
+  const context = useContext(VCContext);
+  if (!context) {
+    throw new Error("useVCContext must be used within a VCProvider");
+  }
+  return context;
+};
