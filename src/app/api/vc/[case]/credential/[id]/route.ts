@@ -12,20 +12,25 @@ async function handleCredential(
   const acapyApi = createAcapyApi(tenant);
   const credential = await getCredential(acapyApi, id);
 
-  if (credential === null) {
+  const credentialRecord = credential?.cred_ex_record;
+
+  if (!credentialRecord) {
     return NextResponse.json(
       { error_message: "Credential does not exist" },
       { status: 404 }
     );
   }
-  if (credential.state === undefined) {
+  if (credentialRecord.state === undefined) {
     return NextResponse.json(
-      { error_message: "Credential State is undefined" },
+      {
+        error_message:
+          "Credential State is undefined: " + JSON.stringify(credential),
+      },
       { status: 404 }
     );
   }
 
-  return NextResponse.json(credential);
+  return NextResponse.json(credentialRecord);
 }
 
 export async function GET(
