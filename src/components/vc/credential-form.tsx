@@ -32,7 +32,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import useConnection from "@/hooks/vc/use-connection";
+import useCredential from "@/hooks/vc/use-credential";
 import { cn, formatDateToYYYYMMDD, formatYYYYMMDDToDate } from "@/lib/utils";
+import type { CredAttrSpec } from "@/types/vc/acapyApi/acapyInterface";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon, Loader2, ShieldCheck } from "lucide-react";
@@ -63,26 +66,47 @@ export interface VCFormFieldDefinition {
   hidden?: boolean;
 }
 
-// Generic CredentialForm component
-const CredentialForm: React.FC<{
+interface CredentialFormProps {
+  useCase: string;
   schema: z.ZodSchema;
   defaultValues: { [key: string]: string | undefined };
   formFields: VCFormFieldDefinition[];
-}> = ({ schema, defaultValues, formFields: formFields }) => {
+}
+
+// Generic CredentialForm component
+const CredentialForm: React.FC<CredentialFormProps> = ({
+  useCase,
+  schema,
+  defaultValues,
+  formFields: formFields,
+}) => {
   const [showHiddenFields, setShowHiddenFields] = useState(false);
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues,
   });
+  const { sendCredentialOffer } = useCredential(useCase);
+  const { activeConnection } = useConnection(useCase);
 
   const onSubmit = (data: z.infer<typeof schema>) => {
-    toast("You submitted the following values:", {
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+    if (!activeConnection?.connection_id) {
+      toast.error(
+        "No active connection found! Please make a connection first."
+      );
+      return;
+    }
+    // convert data to CredAttrSpec[]
+    console.log("Credential data:", data);
+    const attributes: CredAttrSpec[] = Object.entries(data).map(
+      ([key, value]) => ({
+        name: key,
+        value: value as string,
+      })
+    );
+    console.info("Converted to credential attributes format:", attributes);
+
+    sendCredentialOffer(activeConnection.connection_id, attributes);
+    toast.info("Sending credential offer...");
   };
 
   return (
