@@ -33,13 +33,6 @@ export async function GET(
   props: { params: Promise<{ case: string; id: string }> }
 ): Promise<NextResponse<V20CredExRecord> | NextResponse<ErrorResponse>> {
   const params = await props.params;
-  try {
-    const tenant = getTenantByCase(params.case);
-    return await handleCredential(tenant, params.id);
-  } catch {
-    return NextResponse.json(
-      { error_message: "Invalid [case] parameter" },
-      { status: 400 }
-    );
-  }
+  const tenant = getTenantByCase(params.case);
+  return await handleCredential(tenant, params.id);
 }

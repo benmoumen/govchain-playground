@@ -54,13 +54,6 @@ export async function GET(
   NextResponse<ConnectionStateResponse> | NextResponse<ErrorResponse>
 > {
   const params = await props.params;
-  try {
-    const tenant = getTenantByCase(params.case);
-    return await handleConnection(request, params.case, tenant, params.id);
-  } catch {
-    return NextResponse.json(
-      { error_message: "Invalid [case] parameter" },
-      { status: 400 }
-    );
-  }
+  const tenant = getTenantByCase(params.case);
+  return await handleConnection(request, params.case, tenant, params.id);
 }

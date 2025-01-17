@@ -137,14 +137,7 @@ export async function POST(
   props: { params: Promise<{ case: string }> }
 ): Promise<NextResponse<InitConnectionResponse> | NextResponse<ErrorResponse>> {
   const params = await props.params;
-  try {
-    const tenant = getTenantByCase(params.case);
-    const isOob = true; // Use out-of-band invitation (recommended)
-    return await handleInvitation(tenant, params.case, isOob);
-  } catch {
-    return NextResponse.json(
-      { error_message: "Invalid [case] parameter" },
-      { status: 400 }
-    );
-  }
+  const tenant = getTenantByCase(params.case);
+  const isOob = true; // Use out-of-band invitation (recommended)
+  return await handleInvitation(tenant, params.case, isOob);
 }

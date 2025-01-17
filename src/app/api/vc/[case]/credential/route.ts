@@ -69,15 +69,8 @@ export async function POST(
   NextResponse<OfferCredentialResponse> | NextResponse<ErrorResponse>
 > {
   const params = await props.params;
-  try {
-    const tenant = getTenantByCase(params.case);
-    const cred_def_id = getVCIdentifiersByCase(params.case).credDefId;
-    const data: OfferCredentialData = await request.json();
-    return await sendCredential(tenant, cred_def_id, data);
-  } catch {
-    return NextResponse.json(
-      { error_message: "Invalid [case] parameter" },
-      { status: 400 }
-    );
-  }
+  const tenant = getTenantByCase(params.case);
+  const cred_def_id = getVCIdentifiersByCase(params.case).credDefId;
+  const data: OfferCredentialData = await request.json();
+  return await sendCredential(tenant, cred_def_id, data);
 }
