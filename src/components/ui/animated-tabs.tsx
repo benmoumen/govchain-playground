@@ -97,7 +97,7 @@ export const FadeInDiv = ({
   currentStep: number;
 }) => {
   return (
-    <div className="w-full h-full relative">
+    <div className="w-full relative">
       {tabs.map((tab, idx) => (
         <motion.div
           key={tab.value}
@@ -106,18 +106,20 @@ export const FadeInDiv = ({
             opacity: 0,
             x: idx > currentStep ? 100 : -100,
             scale: 0.8,
+            position: "absolute",
           }}
           animate={{
             opacity: idx === currentStep ? 1 : 0,
             x: idx === currentStep ? 0 : idx > currentStep ? 100 : -100,
             scale: idx === currentStep ? 1 : 0.8,
+            position: idx === currentStep ? "relative" : "absolute",
           }}
           transition={{
             duration: 0.3,
             ease: "easeInOut",
           }}
           className={cn(
-            "w-full h-full absolute top-0 left-0",
+            "w-full",
             idx === currentStep ? "pointer-events-auto" : "pointer-events-none",
             className
           )}
