@@ -1,5 +1,5 @@
 import { getTenantByCase } from "@/config/vc";
-import { createLongLivingCookieOptions } from "@/lib/utils";
+import { createLongLivingCookieOptions, isValidUUIDv4 } from "@/lib/utils";
 import { createAcapyApi } from "@/services/vc/acapy-api";
 import { getConnection } from "@/services/vc/connection-service";
 import type {
@@ -17,6 +17,12 @@ async function handleConnection(
 ): Promise<
   NextResponse<ConnectionStateResponse> | NextResponse<ErrorResponse>
 > {
+  if (!isValidUUIDv4(id)) {
+    return NextResponse.json(
+      { error_message: "Invalid connection ID format. Must be a UUID v4" },
+      { status: 400 }
+    );
+  }
   const acapyApi = createAcapyApi(tenant);
   const connection = await getConnection(acapyApi, id);
   // cookie to store the connection id if it is active

@@ -1,8 +1,12 @@
 import { getTenantByCase } from "@/config/vc";
+import { isValidUUIDv4 } from "@/lib/utils";
 import { createAcapyApi } from "@/services/vc/acapy-api";
 import { getCredential } from "@/services/vc/credential-service";
-import type { ErrorResponse, VCIssuer } from "@/types/vc";
-import type { V20CredExRecord } from "@/types/vc/acapyApi/acapyInterface";
+import type {
+  CredentialStateResponse,
+  ErrorResponse,
+  VCIssuer,
+} from "@/types/vc";
 import { NextRequest, NextResponse } from "next/server";
 
 /**
@@ -19,7 +23,15 @@ import { NextRequest, NextResponse } from "next/server";
 async function handleCredential(
   tenant: VCIssuer,
   id: string
-): Promise<NextResponse<V20CredExRecord> | NextResponse<ErrorResponse>> {
+): Promise<
+  NextResponse<CredentialStateResponse> | NextResponse<ErrorResponse>
+> {
+  if (!isValidUUIDv4(id)) {
+    return NextResponse.json(
+      { error_message: "Invalid credential ID format. Must be a UUID v4" },
+      { status: 400 }
+    );
+  }
   const acapyApi = createAcapyApi(tenant);
   const credential = await getCredential(acapyApi, id);
 
@@ -41,13 +53,18 @@ async function handleCredential(
     );
   }
 
-  return NextResponse.json(credentialRecord);
+  return NextResponse.json({
+    state: credentialRecord.state,
+    credential: credentialRecord,
+  });
 }
 
 export async function GET(
   request: NextRequest,
   props: { params: Promise<{ case: string; id: string }> }
-): Promise<NextResponse<V20CredExRecord> | NextResponse<ErrorResponse>> {
+): Promise<
+  NextResponse<CredentialStateResponse> | NextResponse<ErrorResponse>
+> {
   const params = await props.params;
   const tenant = getTenantByCase(params.case);
   return await handleCredential(tenant, params.id);
