@@ -242,7 +242,7 @@ export const Card = ({
               </motion.p> */}
               <motion.div layoutId={layout ? `title-${card.title}` : undefined}>
                 <TextGenerateEffect
-                  duration={3}
+                  duration={2}
                   words={card.title}
                   className="text-2xl md:text-5xl font-semibold text-neutral-700 dark:text-white"
                 />

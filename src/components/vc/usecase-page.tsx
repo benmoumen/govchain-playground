@@ -7,6 +7,7 @@ import { getTenantByCase, getUseCaseMetadata } from "@/config/vc";
 import { useVCContext } from "@/contexts/vc-context";
 import { VCSteps, type UCMetadata, type VCIssuer } from "@/types/vc";
 import type { ConnRecord } from "@/types/vc/acapyApi/acapyInterface";
+import { motion } from "framer-motion";
 import { ShieldCheck, Waypoints } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
@@ -124,7 +125,12 @@ const UseCasePage: React.FC = () => {
   console.info(">>>>UseCasePage rendered");
 
   return (
-    <div className="flex flex-col gap-5 items-center">
+    <motion.div
+      className="flex flex-col gap-5 items-center"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 2, delay: 1 }}
+    >
       <AnimatedTabs
         tabs={tabs}
         currentStep={activeStep}
@@ -133,7 +139,7 @@ const UseCasePage: React.FC = () => {
         }}
       />
       <PageFooter />
-    </div>
+    </motion.div>
   );
 };
 
