@@ -16,6 +16,7 @@ export interface UCMetadata {
   credentialName: string;
   category: string;
   title: string;
+  benefits: string[];
   src: string;
 }
 

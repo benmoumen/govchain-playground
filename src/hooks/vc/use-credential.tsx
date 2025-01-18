@@ -67,6 +67,7 @@ const useCredential = (caseParam: string) => {
 
     if (resp.ok) {
       const res = (await resp.json()) as OfferCredentialResponse;
+      setCredential(null);
       setCredentialId(res.credential_id);
       setShouldPoll(true);
       setSendingOffer(false);
