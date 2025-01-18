@@ -2,7 +2,6 @@
 
 import { cn } from "@/lib/utils";
 import { motion, type MotionValue } from "framer-motion";
-import { useState } from "react";
 
 type Tab = {
   title: string;
@@ -12,13 +11,12 @@ type Tab = {
     | React.ReactNode
     | MotionValue<number>
     | MotionValue<string>;
+  icon?: React.ReactNode;
 };
 
 export const AnimatedTabs = ({
   tabs: propTabs,
-  containerClassName,
-  activeTabClassName,
-  tabClassName,
+
   contentClassName,
   currentStep,
   onStepChange,
@@ -31,8 +29,6 @@ export const AnimatedTabs = ({
   currentStep: number;
   onStepChange: (step: number) => void;
 }) => {
-  const [hovering, setHovering] = useState(false);
-
   const goToStep = (step: number) => {
     if (step >= 0 && step < propTabs.length) {
       onStepChange(step);
@@ -41,83 +37,92 @@ export const AnimatedTabs = ({
 
   return (
     <>
-      <div
-        className={cn(
-          "flex flex-row items-center justify-center [perspective:1000px] relative overflow-auto sm:overflow-visible no-visible-scrollbar max-w-full w-full gap-4",
-          containerClassName
-        )}
-      >
+      <div className="flex w-fit rounded-full bg-muted p-1">
         {propTabs.map((tab, idx) => (
-          <button
+          <TabBar
             key={tab.title}
-            onClick={() => goToStep(idx)}
-            onMouseEnter={() => setHovering(true)}
-            onMouseLeave={() => setHovering(false)}
-            className={cn("relative px-4 py-2 rounded-full", tabClassName)}
-            style={{
-              transformStyle: "preserve-3d",
-            }}
-          >
-            {currentStep === idx && (
-              <motion.div
-                layoutId="clickedbutton"
-                transition={{ type: "spring", bounce: 0.3, duration: 0.6 }}
-                className={cn(
-                  "absolute inset-0 bg-gray-200 dark:bg-zinc-800 rounded-full ",
-                  activeTabClassName
-                )}
-              />
-            )}
-
-            <span className="relative block text-black dark:text-white">
-              {tab.title}
-            </span>
-          </button>
+            text={tab.title}
+            selected={currentStep === idx}
+            setSelected={() => goToStep(idx)}
+            icon={tab.icon}
+          />
         ))}
       </div>
       <FadeInDiv
         currentStep={currentStep}
         tabs={propTabs}
-        hovering={hovering}
         className={cn("mt-4", contentClassName)}
       />
     </>
   );
 };
 
+interface TabBarProps {
+  text: string;
+  selected: boolean;
+  setSelected: (text: string) => void;
+  icon?: React.ReactNode;
+}
+
+export function TabBar({ text, selected, setSelected, icon }: TabBarProps) {
+  return (
+    <button
+      onClick={() => setSelected(text)}
+      className={cn(
+        "relative w-fit px-4 py-2 text-sm font-semibold capitalize",
+        "text-foreground transition-colors",
+        icon && "flex items-center justify-center gap-2.5"
+      )}
+    >
+      {icon && <span className="relative z-10">{icon}</span>}
+      <span className="relative z-10">{text}</span>
+      {selected && (
+        <motion.span
+          layoutId="tab"
+          transition={{ type: "spring", duration: 0.4 }}
+          className="absolute inset-0 z-0 rounded-full bg-background shadow-sm"
+        />
+      )}
+    </button>
+  );
+}
+
 export const FadeInDiv = ({
   className,
   tabs,
-  hovering,
   currentStep,
 }: {
   className?: string;
   tabs: Tab[];
-  hovering?: boolean;
   currentStep: number;
 }) => {
   return (
-    <div className="relative w-full h-full">
+    <div className="w-full h-full relative">
       {tabs.map((tab, idx) => (
         <motion.div
           key={tab.value}
           layoutId={tab.value}
-          style={{
-            scale: 1 - Math.abs(currentStep - idx) * 0.1,
-            top: hovering ? (idx - currentStep) * -50 : 0,
-            zIndex: -Math.abs(currentStep - idx),
-            opacity:
-              Math.abs(currentStep - idx) < 3
-                ? 1 - Math.abs(currentStep - idx) * 0.1
-                : 0,
+          initial={{
+            opacity: 0,
+            x: idx > currentStep ? 100 : -100,
+            scale: 0.8,
           }}
           animate={{
-            y: idx === currentStep ? [0, 40, 0] : 0,
+            opacity: idx === currentStep ? 1 : 0,
+            x: idx === currentStep ? 0 : idx > currentStep ? 100 : -100,
+            scale: idx === currentStep ? 1 : 0.8,
           }}
-          className={cn("w-full h-full absolute top-0 left-0", className)}
+          transition={{
+            duration: 0.3,
+            ease: "easeInOut",
+          }}
+          className={cn(
+            "w-full h-full absolute top-0 left-0",
+            idx === currentStep ? "pointer-events-auto" : "pointer-events-none",
+            className
+          )}
         >
-          {/* Only render content when this step is active */}
-          {idx === currentStep && tab.content}
+          {tab.content}
         </motion.div>
       ))}
     </div>

@@ -7,72 +7,10 @@ import { getTenantByCase, getUseCaseMetadata } from "@/config/vc";
 import { useVCContext } from "@/contexts/vc-context";
 import { VCSteps, type VCIssuer } from "@/types/vc";
 import type { ConnRecord } from "@/types/vc/acapyApi/acapyInterface";
+import { ShieldCheck, Waypoints } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
 import { AnimatedTabs } from "../ui/animated-tabs";
-
-const UseCasePage: React.FC = () => {
-  const { useCase, activeConnection } = useVCContext();
-  const { credentialName, src } = getUseCaseMetadata(useCase);
-  const issuer = getTenantByCase(useCase);
-
-  const [activeStep, setActiveStep] = useState<number>(VCSteps.CONNECT);
-
-  const tabs = [
-    {
-      title: "Connect to the issuer",
-      value: "connect",
-      content: (
-        <StepConnect
-          src={src}
-          issuer={issuer}
-          credentialName={credentialName}
-          setActiveStep={setActiveStep}
-        />
-      ),
-    },
-    {
-      title: "Request your " + credentialName,
-      value: "request",
-      content: (
-        <StepRequest
-          useCase={useCase}
-          activeConnection={activeConnection}
-          src={src}
-        />
-      ),
-    },
-  ];
-
-  // log component re-rendering
-  console.info(">>>>UseCasePage rendered");
-
-  return (
-    <div className="flex flex-col gap-6 items-center">
-      <div className="h-[20rem] md:h-[40rem] [perspective:1000px] relative b flex flex-col max-w-5xl mx-auto w-full items-center justify-center">
-        <AnimatedTabs
-          tabs={tabs}
-          currentStep={activeStep}
-          onStepChange={function (step: number): void {
-            setActiveStep(step);
-          }}
-        />
-      </div>
-      <PageFooter />
-    </div>
-  );
-};
-
-export default UseCasePage;
-
-const PageFooter: React.FC = () => (
-  <>
-    <div className="button-title text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary">
-      Get your Digital Wallet app ready!
-    </div>
-    <AppDownloadButtons />
-  </>
-);
 
 const StepConnect: React.FC<{
   src: string;
@@ -138,3 +76,68 @@ const StepRequest: React.FC<{
     )
   );
 };
+
+const PageFooter: React.FC = () => (
+  <>
+    <div className="button-title text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary">
+      Get your Digital Wallet app ready!
+    </div>
+    <AppDownloadButtons />
+  </>
+);
+
+const UseCasePage: React.FC = () => {
+  const { useCase, activeConnection } = useVCContext();
+  const { credentialName, src } = getUseCaseMetadata(useCase);
+  const issuer = getTenantByCase(useCase);
+
+  const [activeStep, setActiveStep] = useState<number>(VCSteps.CONNECT);
+
+  const tabs = [
+    {
+      title: "Connect to the issuer",
+      value: "connect",
+      content: (
+        <StepConnect
+          src={src}
+          issuer={issuer}
+          credentialName={credentialName}
+          setActiveStep={setActiveStep}
+        />
+      ),
+      icon: <Waypoints size={16} />,
+    },
+    {
+      title: "Request your " + credentialName,
+      value: "request",
+      content: (
+        <StepRequest
+          useCase={useCase}
+          activeConnection={activeConnection}
+          src={src}
+        />
+      ),
+      icon: <ShieldCheck size={16} />,
+    },
+  ];
+
+  // log component re-rendering
+  console.info(">>>>UseCasePage rendered");
+
+  return (
+    <div className="flex flex-col gap-6 items-center">
+      <div className="min-h-[20rem] md:min-h-[40rem] h-full [perspective:1000px] relative b flex flex-col max-w-5xl mx-auto w-full items-center">
+        <AnimatedTabs
+          tabs={tabs}
+          currentStep={activeStep}
+          onStepChange={function (step: number): void {
+            setActiveStep(step);
+          }}
+        />
+      </div>
+      <PageFooter />
+    </div>
+  );
+};
+
+export default UseCasePage;
