@@ -1,57 +1,46 @@
 "use client";
 import { AppDownloadButtons } from "@/components/ui/app-download-buttons";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import CredentialForm from "@/components/vc/credential-form";
 import VCConnectionCard from "@/components/vc/vc-connection-card";
 import { getTenantByCase, getUseCaseMetadata } from "@/config/vc";
 import { useVCContext } from "@/contexts/vc-context";
-import type { VCIssuer } from "@/types/vc";
+import { VCSteps, type VCIssuer } from "@/types/vc";
 import type { ConnRecord } from "@/types/vc/acapyApi/acapyInterface";
-import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
 import { AnimatedTabs } from "../ui/animated-tabs";
-
-enum steps {
-  CONNECT,
-  REQUEST,
-  END,
-}
 
 const UseCasePage: React.FC = () => {
   const { useCase, activeConnection } = useVCContext();
   const { credentialName, src } = getUseCaseMetadata(useCase);
   const issuer = getTenantByCase(useCase);
 
-  const [activeStep, setActiveStep] = useState<number>(steps.CONNECT);
+  const [activeStep, setActiveStep] = useState<number>(VCSteps.CONNECT);
 
   const tabs = [
     {
-      title: "Connect",
+      title: "Connect to the issuer",
       value: "connect",
-      content:
-        activeStep === steps.CONNECT ? (
-          <StepConnect
-            src={src}
-            issuer={issuer}
-            credentialName={credentialName}
-            activeConnection={activeConnection}
-            setActiveStep={setActiveStep}
-          />
-        ) : null,
+      content: (
+        <StepConnect
+          src={src}
+          issuer={issuer}
+          credentialName={credentialName}
+          setActiveStep={setActiveStep}
+        />
+      ),
     },
     {
-      title: "Request",
+      title: "Request your " + credentialName,
       value: "request",
-      content:
-        activeStep === steps.REQUEST ? (
-          <StepRequest
-            useCase={useCase}
-            activeConnection={activeConnection}
-            src={src}
-          />
-        ) : null,
+      content: (
+        <StepRequest
+          useCase={useCase}
+          activeConnection={activeConnection}
+          src={src}
+        />
+      ),
     },
   ];
 
@@ -60,12 +49,12 @@ const UseCasePage: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-6 items-center">
-      <div className="h-[20rem] md:h-[40rem] [perspective:1000px] relative b flex flex-col max-w-5xl mx-auto w-full  items-start justify-start">
+      <div className="h-[20rem] md:h-[40rem] [perspective:1000px] relative b flex flex-col max-w-5xl mx-auto w-full items-center justify-center">
         <AnimatedTabs
           tabs={tabs}
           currentStep={activeStep}
           onStepChange={function (step: number): void {
-            console.info("onStepChange", step);
+            setActiveStep(step);
           }}
         />
       </div>
@@ -89,45 +78,27 @@ const StepConnect: React.FC<{
   src: string;
   issuer: VCIssuer;
   credentialName: string;
-  activeConnection: ConnRecord | null;
   setActiveStep: (step: number) => void;
-}> = ({ src, issuer, credentialName, activeConnection, setActiveStep }) => (
+}> = ({ src, issuer, credentialName, setActiveStep }) => (
   <Card className="overflow-hidden">
     <CardContent className="grid p-0 md:grid-cols-2">
-      <div className="relative p-6 md:p-8">
-        <div className="flex flex-col gap-6 items-center">
-          <div className="flex flex-col items-center text-center">
-            <h1 className="text-2xl font-bold">Connect to the issuer</h1>
-          </div>
-
-          <VCConnectionCard issuer={issuer} credentialName={credentialName} />
+      <div className="relative min-h-96">
+        <div className="flex flex-col gap-6 items-center justify-center h-full">
+          <VCConnectionCard
+            issuer={issuer}
+            credentialName={credentialName}
+            setActiveStep={setActiveStep}
+          />
         </div>
       </div>
       <div className="relative hidden bg-muted md:block">
-        {activeConnection && (
-          <div className="absolute inset-0 z-10 flex items-center justify-center">
-            <Button
-              effect={"expandIcon"}
-              icon={ChevronRight}
-              iconPlacement="left"
-              variant={"secondary"}
-              onClick={() => setActiveStep(steps.REQUEST)}
-            >
-              {" "}
-              Request your {credentialName}
-            </Button>
-          </div>
-        )}
-
         <Image
           src={src}
           sizes="(min-width: 768px) 50vw, 100vw"
           alt="Image"
           fill
           style={{ objectFit: "cover" }}
-          className={`absolute inset-0 dark:brightness-[0.8] transition-all duration-300 ${
-            activeConnection ? "blur-sm" : ""
-          }`}
+          className="absolute inset-0 dark:brightness-[0.8] transition-all duration-300"
         />
       </div>
     </CardContent>
@@ -150,9 +121,7 @@ const StepRequest: React.FC<{
               alt="Image"
               fill
               style={{ objectFit: "cover" }}
-              className={`absolute inset-0 dark:brightness-[0.8] transition-all duration-300 ${
-                activeConnection ? "blur-sm" : ""
-              }`}
+              className="absolute inset-0 dark:brightness-[0.8] transition-all duration-300"
             />
           </div>
           <div className="relative col-span-2 p-6 md:p-8">
