@@ -7,7 +7,14 @@ import type {
 } from "@/types/vc";
 import type { ConnRecord } from "@/types/vc/acapyApi/acapyInterface";
 import type { NextResponse } from "next/server";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { useCookies } from "react-cookie";
 import useSWR from "swr";
 
@@ -62,58 +69,62 @@ export const VCProvider: React.FC<{
   };
 
   // initiate connection
-  const initiateConnection = async (force = false) => {
-    if (!force) {
-      console.info("Checking for active connection...");
-      const activeConnId = cookies[cookieName];
-      if (activeConnId) {
-        // check if connection is active (one time check, no polling)
-        console.info("Active connection found:", activeConnId);
-        console.info("Fetching connection...");
-        const resp = (await fetch(
-          `/api/vc/${useCase}/connection/${activeConnId}`
-        )) as
-          | NextResponse<ConnectionStateResponse>
-          | NextResponse<ErrorResponse>;
-        if (resp.ok) {
-          const res = (await resp.json()) as ConnectionStateResponse;
-          if (isConnectionActive(res.state)) {
-            console.info("Connection loaded!");
-            updateActiveConnection(res.connection);
-            return;
+  const initiateConnection = useCallback(
+    async (force = false) => {
+      if (!force) {
+        console.info("Checking for active connection...");
+        const activeConnId = cookies[cookieName];
+        if (activeConnId) {
+          // check if connection is active (one time check, no polling)
+          console.info("Active connection found:", activeConnId);
+          console.info("Fetching connection...");
+          const resp = (await fetch(
+            `/api/vc/${useCase}/connection/${activeConnId}`
+          )) as
+            | NextResponse<ConnectionStateResponse>
+            | NextResponse<ErrorResponse>;
+          if (resp.ok) {
+            const res = (await resp.json()) as ConnectionStateResponse;
+            if (isConnectionActive(res.state)) {
+              console.info("Connection loaded!");
+              updateActiveConnection(res.connection);
+              return;
+            }
+            console.info("Connection is not active.");
+            // connection is not active => generate new invitation
+          } else {
+            console.error(
+              "Connection not found or Error occured:",
+              await resp.text()
+            );
           }
-          console.info("Connection is not active.");
-          // connection is not active => generate new invitation
-        } else {
-          console.error(
-            "Connection not found or Error occured:",
-            await resp.text()
-          );
         }
+        // no existing connection
+        setConnectionId(null);
       }
-      // no existing connection
-      setConnectionId(null);
-    }
-    console.info("Generating new invitation...");
+      console.info("Generating new invitation...");
 
-    setGeneratingInvitation(true);
-    setShouldPoll(false);
-    setPollCount(0);
-    // initiate connection
-    const resp = (await fetch(`/api/vc/${useCase}/connection`, {
-      method: "POST",
-      cache: "no-store",
-    })) as NextResponse<InitConnectionResponse> | NextResponse<ErrorResponse>;
-    if (resp.ok) {
-      const res = (await resp.json()) as InitConnectionResponse;
-      setInvitationUrl(res.invitation_url);
-      setConnectionId(res.connection_id);
-      setShouldPoll(true);
-    } else {
-      console.error("Failed to initiate connection:", await resp.text());
-    }
-    setGeneratingInvitation(false);
-  };
+      setGeneratingInvitation(true);
+      setShouldPoll(false);
+      setPollCount(0);
+      // initiate connection
+      const resp = (await fetch(`/api/vc/${useCase}/connection`, {
+        method: "POST",
+        cache: "no-store",
+      })) as NextResponse<InitConnectionResponse> | NextResponse<ErrorResponse>;
+      if (resp.ok) {
+        const res = (await resp.json()) as InitConnectionResponse;
+        setInvitationUrl(res.invitation_url);
+        setConnectionId(res.connection_id);
+        setShouldPoll(true);
+      } else {
+        console.error("Failed to initiate connection:", await resp.text());
+      }
+      setGeneratingInvitation(false);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
 
   const isConnectionActive = (state?: string) => {
     return state === "active" || state === "response";
@@ -145,22 +156,30 @@ export const VCProvider: React.FC<{
     }
   }, [data]);
 
-  return (
-    <VCContext.Provider
-      value={{
-        useCase,
-        activeConnection,
-        isPolling: shouldPoll,
-        error: !!error,
-        initiateConnection,
-        connectionId,
-        invitationUrl,
-        generatingInvitation,
-      }}
-    >
-      {children}
-    </VCContext.Provider>
+  const value = useMemo(
+    () => ({
+      useCase,
+      activeConnection,
+      isPolling: shouldPoll,
+      error: !!error,
+      initiateConnection,
+      connectionId,
+      invitationUrl,
+      generatingInvitation,
+    }),
+    [
+      useCase,
+      activeConnection,
+      shouldPoll,
+      error,
+      initiateConnection,
+      connectionId,
+      invitationUrl,
+      generatingInvitation,
+    ]
   );
+
+  return <VCContext.Provider value={value}>{children}</VCContext.Provider>;
 };
 
 export const useVCContext = () => {
