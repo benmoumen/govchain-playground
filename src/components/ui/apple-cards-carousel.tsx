@@ -16,6 +16,7 @@ import React, {
   useState,
   type JSX,
 } from "react";
+import { TextGenerateEffect } from "./text-generate-effect";
 //import { useOutsideClick } from "@/hooks/use-outside-click";
 
 interface CarouselProps {
@@ -239,12 +240,13 @@ export const Card = ({
               >
                 {card.category}
               </motion.p> */}
-              <motion.p
-                layoutId={layout ? `title-${card.title}` : undefined}
-                className="text-2xl md:text-5xl font-semibold text-neutral-700 dark:text-white"
-              >
-                {card.title}
-              </motion.p>
+              <motion.div layoutId={layout ? `title-${card.title}` : undefined}>
+                <TextGenerateEffect
+                  duration={3}
+                  words={card.title}
+                  className="text-2xl md:text-5xl font-semibold text-neutral-700 dark:text-white"
+                />
+              </motion.div>
               <div className="py-10 mt-4 w-full">{card.content}</div>
             </motion.div>
           </div>

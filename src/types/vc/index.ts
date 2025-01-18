@@ -46,6 +46,12 @@ export interface VCConfig {
   useCases: Record<string, UseCaseConfig>;
 }
 
+export enum VCSteps {
+  CONNECT,
+  REQUEST,
+  END,
+}
+
 export interface ErrorResponse {
   error_message: string;
 }
