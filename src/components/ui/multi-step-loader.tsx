@@ -167,9 +167,11 @@ export const MultiStepLoader = ({
                   transition={{ duration: 2 }}
                   className="z-[100] flex flex-col items-start max-w-md"
                 >
-                  <Alert>
+                  <Alert variant={"success"}>
                     <PartyPopper className="h-4 w-4" />
-                    <AlertTitle>Well done!</AlertTitle>
+                    <AlertTitle className="font-light">
+                      Congratulations!
+                    </AlertTitle>
                     <AlertDescription>{successMessage}</AlertDescription>
                   </Alert>
                 </motion.div>

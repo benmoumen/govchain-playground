@@ -94,7 +94,7 @@ const CredentialForm: React.FC<CredentialFormProps> = ({
   } = useCredential(useCase);
   const [showHiddenFields, setShowHiddenFields] = useState(false);
   const [isMultiStepLoaderVisible, setIsMultiStepLoaderVisible] =
-    useState(true);
+    useState(false);
 
   const handleCloseMultiStepLoader = () => {
     window.location.reload();
@@ -167,9 +167,13 @@ const CredentialForm: React.FC<CredentialFormProps> = ({
             <>
               You can now start using your{" "}
               <strong>{metadata.credentialName}</strong> for:{" "}
-              <div className="flex flex-wrap gap-2 mt-2">
+              <div className="flex flex-wrap gap-1 mt-2">
                 {metadata.benefits.map((benefit, index) => (
-                  <Badge key={index} variant={"outline"}>
+                  <Badge
+                    key={index}
+                    variant={"secondary"}
+                    className="opacity-75"
+                  >
                     {benefit}
                   </Badge>
                 ))}
