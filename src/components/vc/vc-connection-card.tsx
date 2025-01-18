@@ -1,6 +1,5 @@
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useVCContext } from "@/contexts/vc-context";
-import type { VCIssuer } from "@/types/vc";
+import { VCSteps, type VCIssuer } from "@/types/vc";
 import { Loader2, RefreshCcw, Waypoints } from "lucide-react";
 import { motion } from "motion/react";
 import { useTheme } from "next-themes";
@@ -9,17 +8,20 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 import { BackgroundLines } from "../ui/background-lines";
 import { Button } from "../ui/button";
+import { GradientButton } from "../ui/gradient-button";
 import { MessageLoading } from "../ui/message-loading";
 import { ShineBorder } from "../ui/shine-border";
 
 interface VCConnectionCardProps {
   issuer: VCIssuer;
   credentialName: string;
+  setActiveStep: (step: number) => void;
 }
 
 const VCConnectionCard: React.FC<VCConnectionCardProps> = ({
   issuer,
   credentialName,
+  setActiveStep,
 }) => {
   const { resolvedTheme } = useTheme();
   const {
@@ -64,16 +66,22 @@ const VCConnectionCard: React.FC<VCConnectionCardProps> = ({
   );
 
   const ConnectionSuccessAlert: React.FC = () => (
-    <BackgroundLines className="items-center justify-center w-full flex-col px-4">
-      <Alert variant={"success"}>
-        <Waypoints className="h-4 w-4" />
-        <AlertTitle>
-          You can now request your <strong>{credentialName}</strong>.
-        </AlertTitle>
-        <AlertDescription>
-          Your wallet is connected with <strong>{issuer.name}</strong>.
-        </AlertDescription>
-      </Alert>
+    <BackgroundLines className="items-center justify-center w-full flex-col">
+      <div className="w-full h-full flex flex-col items-center justify-center gap-4  text-green-600  dark:text-green-600 [&>svg]:text-green bg-black px-6">
+        <Waypoints className="h-6 w-6" />
+        <h4 className="leading-none tracking-tight text-center mb-6">
+          Your wallet is connected with
+          <br />
+          <strong>{issuer.name}</strong>.
+        </h4>
+
+        <GradientButton
+          variant={"variant"}
+          onClick={() => setActiveStep(VCSteps.REQUEST)}
+        >
+          Request your {credentialName}
+        </GradientButton>
+      </div>
     </BackgroundLines>
   );
 
@@ -123,17 +131,17 @@ const VCConnectionCard: React.FC<VCConnectionCardProps> = ({
     toast.error("Error while fetching your connection state");
   }
 
+  if (activeConnection) {
+    return <ConnectionSuccessAlert />;
+  }
+
   return (
-    <div className="min-w-[300px] flex flex-col justify-center items-center gap-2">
-      {activeConnection ? (
-        <ConnectionSuccessAlert />
-      ) : (
-        invitationUrl && (
-          <InvitationQRCode
-            url={invitationUrl}
-            isDark={resolvedTheme === "dark"}
-          />
-        )
+    <div className="min-w-[300px] flex flex-col justify-center items-center gap-2 p-8">
+      {invitationUrl && (
+        <InvitationQRCode
+          url={invitationUrl}
+          isDark={resolvedTheme === "dark"}
+        />
       )}
 
       {isPolling && (
