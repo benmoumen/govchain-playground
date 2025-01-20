@@ -141,11 +141,19 @@ const VCConnectionCard: React.FC<VCConnectionCardProps> = ({
 
   if (activeConnection) {
     return (
-      <ConnectionSuccessAlert
-        issuerName={issuer.name}
-        credentialName={credentialName}
-        setActiveStep={setActiveStep}
-      />
+      <>
+        <ConnectionSuccessAlert
+          issuerName={issuer.name}
+          credentialName={credentialName}
+          setActiveStep={setActiveStep}
+        />
+        <div className="my-4 z-10 opacity-85">
+          <NewInvitationButton
+            loading={generatingInvitation}
+            initiateConnection={() => initiateConnection(true)}
+          />
+        </div>
+      </>
     );
   }
 

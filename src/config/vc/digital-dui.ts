@@ -48,9 +48,7 @@ const defaultValues: { [key: string]: string | Date | undefined } = {
   "Full Name": "Juan Carlos Martinez",
   "Document Number": generateRandomDUIDocumentNumber(),
   "Date of Birth": new Date(
-    birthDate.setFullYear(
-      today.getFullYear() - Math.floor(Math.random() * 50 + 18)
-    )
+    birthDate.setFullYear(today.getFullYear() - Math.floor(Math.random() * 50))
   ),
   "Place of Birth": "San Salvador, El Salvador",
   Sex: getRandomElement(SexEnum.options),

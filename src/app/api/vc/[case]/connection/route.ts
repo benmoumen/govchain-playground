@@ -95,7 +95,7 @@ async function handleConnectionInvitation(
     isOob: false,
     multi: false,
     alias: conn_alias,
-    my_label: tenant.shortName,
+    my_label: tenant.name,
   });
 
   if (!result?.invitation_url || !result.connection_id) {

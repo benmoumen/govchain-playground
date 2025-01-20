@@ -104,6 +104,7 @@ export const VCProvider: React.FC<{
       }
       console.info("Generating new invitation...");
 
+      setActiveConnection(null);
       setGeneratingInvitation(true);
       setShouldPoll(false);
       setPollCount(0);
