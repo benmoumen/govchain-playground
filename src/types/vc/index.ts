@@ -48,9 +48,8 @@ export interface VCConfig {
 }
 
 export enum VCSteps {
-  CONNECT,
-  REQUEST,
-  END,
+  CONNECTION,
+  CREDENTIAL,
 }
 
 export interface ErrorResponse {

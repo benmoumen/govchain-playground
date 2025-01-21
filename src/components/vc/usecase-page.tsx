@@ -13,7 +13,7 @@ import Image from "next/image";
 import React, { useState } from "react";
 import { AnimatedTabs } from "../ui/animated-tabs";
 
-const StepConnect: React.FC<{
+const StepConnection: React.FC<{
   issuer: VCTenant;
   metadata: UCMetadata;
   setActiveStep: (step: number) => void;
@@ -43,7 +43,7 @@ const StepConnect: React.FC<{
   </Card>
 );
 
-const StepRequest: React.FC<{
+const StepCredential: React.FC<{
   useCase: string;
   activeConnection: ConnRecord | null;
   issuer: VCTenant;
@@ -91,14 +91,14 @@ const UseCasePage: React.FC = () => {
   const metadata = getUseCaseMetadata(useCase);
   const issuer = getTenantByCase(useCase);
 
-  const [activeStep, setActiveStep] = useState<number>(VCSteps.CONNECT);
+  const [activeStep, setActiveStep] = useState<number>(VCSteps.CONNECTION);
 
   const tabs = [
     {
       title: "Connect to the issuer",
-      value: "connect",
+      value: "connection-step",
       content: (
-        <StepConnect
+        <StepConnection
           issuer={issuer}
           metadata={metadata}
           setActiveStep={setActiveStep}
@@ -108,9 +108,9 @@ const UseCasePage: React.FC = () => {
     },
     {
       title: "Request your " + metadata.credentialName,
-      value: "request",
+      value: "credential-step",
       content: (
-        <StepRequest
+        <StepCredential
           useCase={useCase}
           activeConnection={activeConnection}
           issuer={issuer}

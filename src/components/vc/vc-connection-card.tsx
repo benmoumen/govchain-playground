@@ -49,7 +49,15 @@ const ConnectionSuccessAlert: React.FC<{
   issuerName: string;
   credentialName: string;
   setActiveStep: (step: number) => void;
-}> = ({ issuerName, credentialName, setActiveStep }) => (
+  generatingInvitation: boolean;
+  initiateConnection: (force?: boolean) => void;
+}> = ({
+  issuerName,
+  credentialName,
+  setActiveStep,
+  generatingInvitation,
+  initiateConnection,
+}) => (
   <BackgroundLines className="items-center justify-center w-full flex-col">
     <div className="w-full h-full flex flex-col items-center justify-center gap-4 text-green-600  dark:text-green-600 [&>svg]:text-green bg-black px-6">
       <Waypoints className="h-6 w-6" />
@@ -61,11 +69,18 @@ const ConnectionSuccessAlert: React.FC<{
 
       <GradientButton
         variant={"variant"}
-        onClick={() => setActiveStep(VCSteps.REQUEST)}
+        onClick={() => setActiveStep(VCSteps.CREDENTIAL)}
         className="mx-16"
       >
         Request your {credentialName}
       </GradientButton>
+
+      <div className="my-4 z-10 opacity-85">
+        <NewInvitationButton
+          loading={generatingInvitation}
+          initiateConnection={() => initiateConnection(true)}
+        />
+      </div>
     </div>
   </BackgroundLines>
 );
@@ -142,19 +157,13 @@ const VCConnectionCard: React.FC<VCConnectionCardProps> = ({
 
   if (activeConnection) {
     return (
-      <>
-        <ConnectionSuccessAlert
-          issuerName={issuer.name}
-          credentialName={credentialName}
-          setActiveStep={setActiveStep}
-        />
-        <div className="my-4 z-10 opacity-85">
-          <NewInvitationButton
-            loading={generatingInvitation}
-            initiateConnection={() => initiateConnection(true)}
-          />
-        </div>
-      </>
+      <ConnectionSuccessAlert
+        issuerName={issuer.name}
+        credentialName={credentialName}
+        setActiveStep={setActiveStep}
+        generatingInvitation={generatingInvitation}
+        initiateConnection={initiateConnection}
+      />
     );
   }
 
