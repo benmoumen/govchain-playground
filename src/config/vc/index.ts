@@ -4,8 +4,9 @@ import type {
   UCMetadata,
   VCConfig,
   VCIdentifiers,
-  VCIssuer,
+  VCTenant,
 } from "@/types/vc";
+import companyOwnership from "./company-ownership";
 import digitalDUI from "./digital-dui";
 
 export const useCaseConfig: VCConfig = {
@@ -16,13 +17,14 @@ export const useCaseConfig: VCConfig = {
   },
   useCases: {
     digitalDUI: digitalDUI,
+    companyOwnership: companyOwnership,
   },
 };
 
 /**
  * @throws {InvalidParameterError} - If the useCase is not found in the config.
  */
-export function getTenantByCase(useCase: string): VCIssuer {
+export function getTenantByCase(useCase: string): VCTenant {
   if (!useCaseConfig.useCases[useCase]) {
     throw new InvalidParameterError("Invalid [useCase] parameter");
   }

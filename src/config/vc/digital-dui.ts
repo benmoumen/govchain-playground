@@ -2,13 +2,8 @@ import { formatDateToYYYYMMDD } from "@/lib/utils";
 import type { UseCaseConfig } from "@/types/vc";
 import { VCFormFieldEnum, type VCFormFieldDefinition } from "@/types/vc/form";
 import { z } from "zod";
-
-const issuer = {
-  tenantId: "59378286-b0f1-4c4a-804d-c6b0f7628a39",
-  name: "Registro National de las Personas Naturales",
-  shortName: "RNPN",
-  apiKeyVar: "VC_ISSUER_APIKEY_RNPN",
-};
+import credentials from "./credentials";
+import tenants from "./tenants";
 
 const metadata = {
   credentialName: "Digital DUI",
@@ -171,17 +166,14 @@ const formSchema: z.AnyZodObject = z.object({
 // Use Case Config /////
 ////////////////////////
 const digitalDUI: UseCaseConfig = {
-  issuer: issuer,
+  issuer: tenants.RNPN,
   metadata: metadata,
   form: {
     schema: formSchema,
     fields: formFields,
     defaultValues: defaultValues,
   },
-  identifiers: {
-    credDefId: "K6zBDo67bUpgzaKzSxn7tQ:3:CL:13:2025",
-    schemaId: "K6zBDo67bUpgzaKzSxn7tQ:2:ElSalvador_DUI:1.0",
-  },
+  identifiers: credentials.digitalDUI,
 };
 
 export default digitalDUI;
