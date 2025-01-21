@@ -1,4 +1,5 @@
 "use client";
+import { getTenantByCase } from "@/config/vc";
 import { getActiveConnectionCookieName } from "@/lib/vc";
 import type {
   ConnectionStateResponse,
@@ -35,7 +36,8 @@ export const VCProvider: React.FC<{
   useCase: string;
   children: React.ReactNode;
 }> = ({ useCase, children }) => {
-  const cookieName = getActiveConnectionCookieName(useCase);
+  const { tenantId } = getTenantByCase(useCase);
+  const cookieName = getActiveConnectionCookieName(tenantId);
   const [cookies] = useCookies([cookieName]);
   const [generatingInvitation, setGeneratingInvitation] =
     useState<boolean>(false);
