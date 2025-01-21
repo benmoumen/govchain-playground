@@ -1,18 +1,19 @@
 import { getTenantByCase } from "@/config/vc";
 import { createLongLivingCookieOptions, isValidUUIDv4 } from "@/lib/utils";
+import { getActiveConnectionCookieName } from "@/lib/vc";
 import { createAcapyApi } from "@/services/vc/acapy-api";
 import { getConnection } from "@/services/vc/connection-service";
 import type {
   ConnectionStateResponse,
   ErrorResponse,
-  VCIssuer,
+  VCTenant,
 } from "@/types/vc";
 import { NextRequest, NextResponse } from "next/server";
 
 async function handleConnection(
   request: NextRequest,
   caseParam: string,
-  tenant: VCIssuer,
+  tenant: VCTenant,
   id: string
 ): Promise<
   NextResponse<ConnectionStateResponse> | NextResponse<ErrorResponse>
@@ -26,7 +27,7 @@ async function handleConnection(
   const acapyApi = createAcapyApi(tenant);
   const connection = await getConnection(acapyApi, id);
   // cookie to store the connection id if it is active
-  const cookieName = `active_conn_id_${caseParam}`;
+  const cookieName = getActiveConnectionCookieName(tenant.tenantId);
 
   if (connection === null) {
     return NextResponse.json(

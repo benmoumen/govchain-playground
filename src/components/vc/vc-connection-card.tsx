@@ -1,5 +1,5 @@
 import { useVCContext } from "@/contexts/vc-context";
-import { VCSteps, type VCIssuer } from "@/types/vc";
+import { VCSteps, type VCTenant } from "@/types/vc";
 import { Loader2, RefreshCcw, Waypoints } from "lucide-react";
 import { motion } from "motion/react";
 import { useTheme } from "next-themes";
@@ -13,7 +13,7 @@ import { MessageLoading } from "../ui/message-loading";
 import { ShineBorder } from "../ui/shine-border";
 
 interface VCConnectionCardProps {
-  issuer: VCIssuer;
+  issuer: VCTenant;
   credentialName: string;
   setActiveStep: (step: number) => void;
 }

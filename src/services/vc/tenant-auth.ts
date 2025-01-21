@@ -1,6 +1,6 @@
 "server-cli-only";
 
-import type { VCIssuer } from "@/types/vc";
+import type { VCTenant } from "@/types/vc";
 import prisma from "@myprisma/client";
 import { NextRequest } from "next/server";
 import "server-cli-only";
@@ -8,7 +8,7 @@ import { API_PATH } from "./utils/constants";
 import { proxyPath } from "./utils/fetch";
 
 export async function getAccessToken(
-  tenant: VCIssuer,
+  tenant: VCTenant,
   isApiKey: boolean
 ): Promise<{ token: string | null; isNewToken: boolean } | null> {
   // Check if the access token already exists in the database
@@ -43,7 +43,7 @@ export async function clearTenantToken(tenantId: string): Promise<void> {
 }
 
 async function login(
-  tenant: VCIssuer,
+  tenant: VCTenant,
   isApiKey: boolean
 ): Promise<string | null> {
   // Load the Tenant Password from the .env file

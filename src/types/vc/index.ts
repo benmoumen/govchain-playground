@@ -6,7 +6,7 @@ import type {
 } from "./acapyApi/acapyInterface";
 import type { VCFormFieldDefinition } from "./form";
 
-export interface VCIssuer {
+export interface VCTenant {
   tenantId: string;
   name: string;
   shortName: string;
@@ -32,7 +32,7 @@ export interface VCIdentifiers {
 }
 
 export interface UseCaseConfig {
-  issuer: VCIssuer;
+  issuer: VCTenant;
   metadata: UCMetadata;
   form: UCForm;
   identifiers: VCIdentifiers;

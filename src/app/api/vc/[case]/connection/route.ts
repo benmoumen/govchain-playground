@@ -7,7 +7,7 @@ import {
 import type {
   ErrorResponse,
   InitConnectionResponse,
-  VCIssuer,
+  VCTenant,
 } from "@/types/vc";
 import type { InvitationResult } from "@/types/vc/acapyApi/acapyInterface";
 import { NextRequest, NextResponse } from "next/server";
@@ -27,7 +27,7 @@ import { NextRequest, NextResponse } from "next/server";
  */
 async function handleOobInvitation(
   acapyApi: AcapyApiClient,
-  tenant: VCIssuer,
+  tenant: VCTenant,
   caseParam: string
 ): Promise<NextResponse<InitConnectionResponse> | NextResponse<ErrorResponse>> {
   const conn_alias = `${caseParam}_connection_${Date.now()}`;
@@ -87,7 +87,7 @@ async function handleOobInvitation(
  */
 async function handleConnectionInvitation(
   acapyApi: AcapyApiClient,
-  tenant: VCIssuer,
+  tenant: VCTenant,
   caseParam: string
 ): Promise<NextResponse<InitConnectionResponse> | NextResponse<ErrorResponse>> {
   const conn_alias = `${caseParam}_connection_${Date.now()}`;
@@ -122,7 +122,7 @@ async function handleConnectionInvitation(
  * @returns A Promise that resolves to a NextResponse containing either the InitConnectionResponse or ErrorResponse.
  */
 async function handleInvitation(
-  tenant: VCIssuer,
+  tenant: VCTenant,
   caseParam: string,
   isOob: boolean
 ): Promise<NextResponse<InitConnectionResponse> | NextResponse<ErrorResponse>> {

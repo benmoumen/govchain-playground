@@ -36,7 +36,7 @@ import { Switch } from "@/components/ui/switch";
 import { getUseCaseForm } from "@/config/vc";
 import useCredential from "@/hooks/vc/use-credential";
 import { cn, formatYYYYMMDDToDate } from "@/lib/utils";
-import type { UCMetadata, VCIssuer } from "@/types/vc";
+import type { UCMetadata, VCTenant } from "@/types/vc";
 import type { CredAttrSpec } from "@/types/vc/acapyApi/acapyInterface";
 import type { VCFormFieldDefinition } from "@/types/vc/form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -52,7 +52,7 @@ import { MultiStepLoader } from "../ui/multi-step-loader";
 interface CredentialFormProps {
   useCase: string;
   connectionId: string;
-  issuer: VCIssuer;
+  issuer: VCTenant;
   metadata: UCMetadata;
 }
 

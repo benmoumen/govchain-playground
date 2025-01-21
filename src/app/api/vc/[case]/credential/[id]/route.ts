@@ -5,7 +5,7 @@ import { getCredential } from "@/services/vc/credential-service";
 import type {
   CredentialStateResponse,
   ErrorResponse,
-  VCIssuer,
+  VCTenant,
 } from "@/types/vc";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -21,7 +21,7 @@ import { NextRequest, NextResponse } from "next/server";
  * - If the credential state is undefined, a 404 response with an error message is returned.
  */
 async function handleCredential(
-  tenant: VCIssuer,
+  tenant: VCTenant,
   id: string
 ): Promise<
   NextResponse<CredentialStateResponse> | NextResponse<ErrorResponse>

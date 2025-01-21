@@ -5,7 +5,7 @@ import type {
   ErrorResponse,
   OfferCredentialData,
   OfferCredentialResponse,
-  VCIssuer,
+  VCTenant,
 } from "@/types/vc";
 import type { V20CredExRecord } from "@/types/vc/acapyApi/acapyInterface";
 import { NextRequest, NextResponse } from "next/server";
@@ -19,7 +19,7 @@ import { NextRequest, NextResponse } from "next/server";
  * @returns A promise that resolves to a NextResponse containing either the credential ID or an error message.
  */
 async function sendCredential(
-  tenant: VCIssuer,
+  tenant: VCTenant,
   credDefId: string,
   data: OfferCredentialData
 ): Promise<
@@ -51,8 +51,7 @@ async function sendCredential(
   if (!result?.cred_ex_id) {
     return NextResponse.json(
       {
-        error_message:
-          "Failed to create connection invitation: " + JSON.stringify(result),
+        error_message: "Failed to offer credential: " + JSON.stringify(result),
       },
       { status: 400 }
     );

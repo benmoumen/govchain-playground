@@ -5,7 +5,7 @@ import CredentialForm from "@/components/vc/credential-form";
 import VCConnectionCard from "@/components/vc/vc-connection-card";
 import { getTenantByCase, getUseCaseMetadata } from "@/config/vc";
 import { useVCContext } from "@/contexts/vc-context";
-import { VCSteps, type UCMetadata, type VCIssuer } from "@/types/vc";
+import { VCSteps, type UCMetadata, type VCTenant } from "@/types/vc";
 import type { ConnRecord } from "@/types/vc/acapyApi/acapyInterface";
 import { motion } from "framer-motion";
 import { ShieldCheck, Waypoints } from "lucide-react";
@@ -14,7 +14,7 @@ import React, { useState } from "react";
 import { AnimatedTabs } from "../ui/animated-tabs";
 
 const StepConnect: React.FC<{
-  issuer: VCIssuer;
+  issuer: VCTenant;
   metadata: UCMetadata;
   setActiveStep: (step: number) => void;
 }> = ({ issuer, metadata, setActiveStep }) => (
@@ -46,7 +46,7 @@ const StepConnect: React.FC<{
 const StepRequest: React.FC<{
   useCase: string;
   activeConnection: ConnRecord | null;
-  issuer: VCIssuer;
+  issuer: VCTenant;
   metadata: UCMetadata;
 }> = ({ useCase, activeConnection, issuer, metadata }) => {
   return (

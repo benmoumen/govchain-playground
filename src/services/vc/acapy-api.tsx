@@ -2,7 +2,7 @@
 
 import { useCaseConfig } from "@/config/vc";
 import { FailedRequestError, UnauthorizedAccessError } from "@/lib/errors";
-import type { VCIssuer } from "@/types/vc";
+import type { VCTenant } from "@/types/vc";
 import { NextResponse } from "next/server";
 import { clearTenantToken, getAccessToken } from "./tenant-auth";
 
@@ -47,10 +47,10 @@ export interface AcapyApiClient {
 /**
  * Creates an instance of the ACAPY API client for a given tenant.
  *
- * @param {VCIssuer} tenant - The tenant for which the ACAPY API client is created.
+ * @param {VCTenant} tenant - The tenant for which the ACAPY API client is created.
  * @returns {AcapyApiClient} - An object containing methods to make HTTP requests to the ACAPY service.
  */
-export const createAcapyApi = (tenant: VCIssuer): AcapyApiClient => {
+export const createAcapyApi = (tenant: VCTenant): AcapyApiClient => {
   const baseUrl = useCaseConfig.acapy.tenantProxyPath;
 
   /**
