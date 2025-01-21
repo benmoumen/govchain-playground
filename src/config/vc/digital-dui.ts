@@ -1,4 +1,8 @@
-import { formatDateToYYYYMMDD } from "@/lib/utils";
+import {
+  formatDateToYYYYMMDD,
+  generateRandomIDDocumentNumber,
+  getRandomElement,
+} from "@/lib/utils";
 import type { UseCaseConfig } from "@/types/vc";
 import { VCFormFieldEnum, type VCFormFieldDefinition } from "@/types/vc/form";
 import { z } from "zod";
@@ -31,17 +35,10 @@ expiryDate.setFullYear(today.getFullYear() + 10);
 const birthDate = new Date();
 birthDate.setFullYear(today.getFullYear() - 20);
 
-const generateRandomDUIDocumentNumber = () => {
-  return Math.floor(100000000 + Math.random() * 900000000).toString();
-};
-
-const getRandomElement = (arr: string[]) =>
-  arr[Math.floor(Math.random() * arr.length)];
-
 // Default values
 const defaultValues: { [key: string]: string | Date | undefined } = {
   "Full Name": "Juan Carlos Martinez",
-  "Document Number": generateRandomDUIDocumentNumber(),
+  "Document Number": generateRandomIDDocumentNumber(),
   "Date of Birth": new Date(
     birthDate.setFullYear(today.getFullYear() - Math.floor(Math.random() * 50))
   ),

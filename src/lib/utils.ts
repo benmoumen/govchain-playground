@@ -36,3 +36,10 @@ export function isValidUUIDv4(uuid: string): boolean {
     uuid
   );
 }
+
+export const generateRandomIDDocumentNumber = () => {
+  return Math.floor(100000000 + Math.random() * 900000000).toString();
+};
+
+export const getRandomElement = (arr: string[]) =>
+  arr[Math.floor(Math.random() * arr.length)];
