@@ -51,7 +51,7 @@ const ConnectionSuccessAlert: React.FC<{
   setActiveStep: (step: number) => void;
 }> = ({ issuerName, credentialName, setActiveStep }) => (
   <BackgroundLines className="items-center justify-center w-full flex-col">
-    <div className="w-full h-full flex flex-col items-center justify-center gap-4  text-green-600  dark:text-green-600 [&>svg]:text-green bg-black px-6">
+    <div className="w-full h-full flex flex-col items-center justify-center gap-4 text-green-600  dark:text-green-600 [&>svg]:text-green bg-black px-6">
       <Waypoints className="h-6 w-6" />
       <h4 className="leading-none tracking-tight text-center mb-6">
         Your wallet is connected with
@@ -62,6 +62,7 @@ const ConnectionSuccessAlert: React.FC<{
       <GradientButton
         variant={"variant"}
         onClick={() => setActiveStep(VCSteps.REQUEST)}
+        className="mx-16"
       >
         Request your {credentialName}
       </GradientButton>

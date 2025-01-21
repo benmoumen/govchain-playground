@@ -11,7 +11,7 @@ export default function Home() {
             Trust
           </>
         }
-        tagline="For the first time, use verifiable credentials to obtain documents from government agencies, prove your identity, tokenize your company, and unlock trustworthy interactions online."
+        tagline="Receive government-issued credentials and use them as trusted digital proofs for critical services. Moreover, tokenize your company and use your wallet to manage your shares with ease."
         buttonLabel="Let's Explore"
         buttonHref="/playground"
         caption=""

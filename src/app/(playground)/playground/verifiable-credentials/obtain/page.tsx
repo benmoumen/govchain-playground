@@ -1,4 +1,5 @@
 import { Card, Carousel } from "@/components/ui/apple-cards-carousel";
+import { Badge } from "@/components/ui/badge";
 import UseCasePage from "@/components/vc/usecase-page";
 import { VCProvider } from "@/contexts/vc-context";
 
@@ -8,11 +9,25 @@ export default function RequestVCPage() {
   ));
 
   return (
-    <div className="w-full h-full py-20">
-      <h2 className="max-w-7xl pl-4 mx-auto text-xl md:text-5xl font-bold text-neutral-800 dark:text-neutral-200 font-sans">
-        Get your verifiable credentials.
-      </h2>
-      <Carousel items={cards} />
+    <div className="w-full py-10 lg:py-20">
+      <div className="container mx-auto">
+        <div className="flex flex-col gap-10">
+          <div className="flex gap-4 flex-col items-start">
+            <div>
+              <Badge variant={"secondary"} className="uppercase">
+                Verifiable Credentials
+              </Badge>
+            </div>
+            <h2 className="text-3xl md:text-5xl tracking-tighter max-w-xl font-regular text-left">
+              Collect your digital proofs
+            </h2>
+            <p className="text-lg max-w-xl lg:max-w-lg leading-relaxed tracking-tight text-muted-foreground  text-left">
+              Get credentials and use them as digital proofs.
+            </p>
+          </div>
+        </div>
+        <Carousel items={cards} />
+      </div>
     </div>
   );
 }
@@ -30,9 +45,13 @@ const data = [
   },
   {
     category: "Business",
-    title: "Get your Shareholder Certificate.",
+    title: "Get your Shareholder Credential.",
     src: "https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=4000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    content: <></>,
+    content: (
+      <VCProvider useCase="companyOwnership">
+        <UseCasePage />
+      </VCProvider>
+    ),
   },
   {
     category: "Education",
