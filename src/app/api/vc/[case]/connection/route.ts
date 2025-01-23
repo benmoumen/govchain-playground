@@ -9,24 +9,16 @@ import type {
   InitConnectionResponse,
   VCTenant,
 } from "@/types/vc";
-import type { InvitationResult } from "@/types/vc/acapyApi/acapyInterface";
+import type {
+  AttachmentDef,
+  InvitationResult,
+} from "@/types/vc/acapyApi/acapyInterface";
 import { NextRequest, NextResponse } from "next/server";
 
-/**
- * Handles the creation of an out-of-band (OOB) connection invitation (recommended way).
- *
- * @param acapyApi - The ACA-PY API client instance.
- * @param tenant - The Verifiable Credentials issuer information.
- *
- * @returns A Promise that resolves to either:
- * - A successful response containing the invitation URL and connection ID.
- * - An error response with status 400 if the invitation creation fails.
- *
- * @throws Will return a 400 response if the invitation creation fails or required fields are missing.
- */
 async function handleOobInvitation(
   acapyApi: AcapyApiClient,
-  tenant: VCTenant
+  tenant: VCTenant,
+  attachments?: AttachmentDef[]
 ): Promise<NextResponse<InitConnectionResponse> | NextResponse<ErrorResponse>> {
   const conn_alias = `${tenant.shortName}_connection_${Date.now()}`;
   const result = await createInvitation(acapyApi, {
@@ -34,6 +26,7 @@ async function handleOobInvitation(
     multi: false,
     alias: conn_alias,
     my_label: tenant.shortName,
+    attachments: attachments,
   });
 
   const invitationURL = result?.invitation_url;
@@ -70,18 +63,6 @@ async function handleOobInvitation(
   });
 }
 
-/**
- * Handles the creation of a connection invitation following the Connections Protocol (deprecated).
- *
- * @param acapyApi - The ACA-PY API client instance
- * @param tenant - The Verifiable Credentials issuer information
- *
- * @returns A Promise that resolves to either:
- * - A successful response containing the invitation URL and connection ID
- * - An error response with status 400 if the invitation creation fails
- *
- * @throws Will return a 400 response if the invitation creation fails or required fields are missing
- */
 async function handleConnectionInvitation(
   acapyApi: AcapyApiClient,
   tenant: VCTenant
@@ -110,19 +91,14 @@ async function handleConnectionInvitation(
   });
 }
 
-/**
- * Handles the creation of a connection invitation.
- * @param tenant - The credential issuer information.
- * @param isOob - Flag indicating whether to create an out-of-band invitation (recommended).
- * @returns A Promise that resolves to a NextResponse containing either the InitConnectionResponse or ErrorResponse.
- */
 async function handleInvitation(
   tenant: VCTenant,
-  isOob: boolean
+  isOob: boolean = true,
+  attachments?: AttachmentDef[]
 ): Promise<NextResponse<InitConnectionResponse> | NextResponse<ErrorResponse>> {
   const acapyApi = createAcapyApi(tenant);
   return isOob
-    ? handleOobInvitation(acapyApi, tenant)
+    ? handleOobInvitation(acapyApi, tenant, attachments)
     : handleConnectionInvitation(acapyApi, tenant);
 }
 
@@ -132,6 +108,8 @@ export async function POST(
 ): Promise<NextResponse<InitConnectionResponse> | NextResponse<ErrorResponse>> {
   const params = await props.params;
   const tenant = getTenantByCase(params.case);
-  const isOob = true; // Use out-of-band invitation (recommended)
-  return await handleInvitation(tenant, isOob);
+  const { attachments } = (await request.json()) as {
+    attachments?: AttachmentDef[];
+  };
+  return handleInvitation(tenant, true, attachments || undefined);
 }

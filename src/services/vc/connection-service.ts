@@ -2,6 +2,8 @@
 
 import {
   ConnRecord,
+  type AttachmentDef,
+  type InvitationCreateRequest,
   type InvitationRecord,
 } from "@/types/vc/acapyApi/acapyInterface";
 import type { AcapyApiClient } from "./acapy-api";
@@ -48,6 +50,13 @@ export const getInvitation = async (
  * @param params.my_label - The label for the invitation (only OOB invitations).
  * @param params.goal - (Optional) The goal of the invitation.
  * @param params.goal_code - (Optional) The goal code object containing a code string.
+ * @param params.attachments - The attachments to include with the invitation.
+ * Example: "attachments": [
+    {
+      "id": "602e4828-5f47-4658-8a94-428df713a09a", // Record ID
+      "type": "present-proof" // Attachment type
+    }
+  ]
  * @returns A promise that resolves to an `InvitationRecord` object or null.
  */
 export async function createInvitation(
@@ -61,6 +70,7 @@ export async function createInvitation(
     goal_code?: {
       code: string;
     };
+    attachments?: AttachmentDef[];
   }
 ): Promise<InvitationRecord | null> {
   const code = params.goal_code ? params.goal_code.code : "";
@@ -75,6 +85,7 @@ export async function createInvitation(
           "https://didcomm.org/connections/1.0",
         ],
         my_label: params.my_label,
+        attachments: params.attachments,
         protocol_version: "1.1",
         use_public_did: false,
       })
@@ -104,7 +115,7 @@ const createConnectionInvitation = async (
 const createOobInvitation = async (
   acapyApi: AcapyApiClient,
   multiUse: boolean,
-  payload = {}
+  payload: InvitationCreateRequest = {}
 ): Promise<InvitationRecord | null> => {
   const response = await acapyApi.postHttp<InvitationRecord | null>(
     API_PATH.OUT_OF_BAND_CREATE,
