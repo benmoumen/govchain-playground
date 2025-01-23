@@ -5,7 +5,10 @@ import type {
   InitConnectionResponse,
   PresentationStateResponse,
 } from "@/types/vc";
-import type { V20PresExRecord } from "@/types/vc/acapyApi/acapyInterface";
+import type {
+  AttachmentDef,
+  V20PresExRecord,
+} from "@/types/vc/acapyApi/acapyInterface";
 import type { NextResponse } from "next/server";
 import React, {
   createContext,
@@ -127,7 +130,7 @@ export const VPPresentationProvider: React.FC<{
               id: presentation_exchange_id,
               type: "present-proof",
             },
-          ],
+          ] as AttachmentDef[],
         }),
       })) as NextResponse<InitConnectionResponse> | NextResponse<ErrorResponse>;
 
