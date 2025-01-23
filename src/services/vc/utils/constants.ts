@@ -126,6 +126,7 @@ export const API_PATH = {
   PRESENT_PROOF_20_RECORDS: "/present-proof-2.0/records",
   PRESENT_PROOF_20_RECORD: (id: string) => `/present-proof-2.0/records/${id}`,
   PRESENT_PROOF_20_SEND_REQUEST: "/present-proof-2.0/send-request",
+  PRESENT_PROOF_20_CREATE_REQUEST: "/present-proof-2.0/create-request",
 
   REVOCATION_REVOKE: "/revocation/revoke",
 
