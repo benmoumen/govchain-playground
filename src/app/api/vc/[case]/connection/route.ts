@@ -17,7 +17,6 @@ import { NextRequest, NextResponse } from "next/server";
  *
  * @param acapyApi - The ACA-PY API client instance.
  * @param tenant - The Verifiable Credentials issuer information.
- * @param caseParam - The case parameter used to create a unique connection alias.
  *
  * @returns A Promise that resolves to either:
  * - A successful response containing the invitation URL and connection ID.
@@ -27,10 +26,9 @@ import { NextRequest, NextResponse } from "next/server";
  */
 async function handleOobInvitation(
   acapyApi: AcapyApiClient,
-  tenant: VCTenant,
-  caseParam: string
+  tenant: VCTenant
 ): Promise<NextResponse<InitConnectionResponse> | NextResponse<ErrorResponse>> {
-  const conn_alias = `${caseParam}_connection_${Date.now()}`;
+  const conn_alias = `${tenant.shortName}_connection_${Date.now()}`;
   const result = await createInvitation(acapyApi, {
     isOob: true,
     multi: false,
@@ -77,7 +75,6 @@ async function handleOobInvitation(
  *
  * @param acapyApi - The ACA-PY API client instance
  * @param tenant - The Verifiable Credentials issuer information
- * @param caseParam - The case parameter used to create a unique connection alias
  *
  * @returns A Promise that resolves to either:
  * - A successful response containing the invitation URL and connection ID
@@ -87,10 +84,9 @@ async function handleOobInvitation(
  */
 async function handleConnectionInvitation(
   acapyApi: AcapyApiClient,
-  tenant: VCTenant,
-  caseParam: string
+  tenant: VCTenant
 ): Promise<NextResponse<InitConnectionResponse> | NextResponse<ErrorResponse>> {
-  const conn_alias = `${caseParam}_connection_${Date.now()}`;
+  const conn_alias = `${tenant.shortName}_connection_${Date.now()}`;
   const result: InvitationResult | null = await createInvitation(acapyApi, {
     isOob: false,
     multi: false,
@@ -117,19 +113,17 @@ async function handleConnectionInvitation(
 /**
  * Handles the creation of a connection invitation.
  * @param tenant - The credential issuer information.
- * @param caseParam - The case identifier for the connection.
  * @param isOob - Flag indicating whether to create an out-of-band invitation (recommended).
  * @returns A Promise that resolves to a NextResponse containing either the InitConnectionResponse or ErrorResponse.
  */
 async function handleInvitation(
   tenant: VCTenant,
-  caseParam: string,
   isOob: boolean
 ): Promise<NextResponse<InitConnectionResponse> | NextResponse<ErrorResponse>> {
   const acapyApi = createAcapyApi(tenant);
   return isOob
-    ? handleOobInvitation(acapyApi, tenant, caseParam)
-    : handleConnectionInvitation(acapyApi, tenant, caseParam);
+    ? handleOobInvitation(acapyApi, tenant)
+    : handleConnectionInvitation(acapyApi, tenant);
 }
 
 export async function POST(
@@ -139,5 +133,5 @@ export async function POST(
   const params = await props.params;
   const tenant = getTenantByCase(params.case);
   const isOob = true; // Use out-of-band invitation (recommended)
-  return await handleInvitation(tenant, params.case, isOob);
+  return await handleInvitation(tenant, isOob);
 }
