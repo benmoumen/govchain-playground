@@ -3,7 +3,7 @@ import {
   generateRandomIDDocumentNumber,
   getRandomElement,
 } from "@/lib/utils";
-import type { UseCaseConfig } from "@/types/vc";
+import type { CredentialUseCaseConfig } from "@/types/vc";
 import { VCFormFieldEnum } from "@/types/vc/form";
 import { z } from "zod";
 import credentials from "./credentials";
@@ -56,8 +56,8 @@ const defaultValues = {
   "NFT Token ID": Math.ceil(Math.random() * 100).toString(),
 };
 
-const companyOwnership: UseCaseConfig = {
-  issuer: tenants.RNPN,
+const companyOwnership: CredentialUseCaseConfig = {
+  tenant: tenants.RNPN,
   metadata: {
     credentialName: "Company Ownership Certificate",
     category: "Business",

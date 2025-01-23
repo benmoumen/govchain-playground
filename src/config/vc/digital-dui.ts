@@ -3,7 +3,7 @@ import {
   generateRandomIDDocumentNumber,
   getRandomElement,
 } from "@/lib/utils";
-import type { UseCaseConfig } from "@/types/vc";
+import type { CredentialUseCaseConfig } from "@/types/vc";
 import { VCFormFieldEnum, type VCFormFieldDefinition } from "@/types/vc/form";
 import { z } from "zod";
 import credentials from "./credentials";
@@ -162,8 +162,8 @@ const formSchema: z.AnyZodObject = z.object({
 ////////////////////////
 // Use Case Config /////
 ////////////////////////
-const digitalDUI: UseCaseConfig = {
-  issuer: tenants.RNPN,
+const digitalDUI: CredentialUseCaseConfig = {
+  tenant: tenants.RNPN,
   metadata: metadata,
   form: {
     schema: formSchema,

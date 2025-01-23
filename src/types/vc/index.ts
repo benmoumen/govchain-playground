@@ -2,7 +2,9 @@ import type { z } from "zod";
 import type {
   ConnRecord,
   CredAttrSpec,
+  IndyProofRequest,
   V20CredExRecord,
+  V20PresExRecord,
 } from "./acapyApi/acapyInterface";
 import type { VCFormFieldDefinition } from "./form";
 
@@ -31,11 +33,16 @@ export interface VCIdentifiers {
   schemaId: string;
 }
 
-export interface UseCaseConfig {
-  issuer: VCTenant;
+export interface CredentialUseCaseConfig {
+  tenant: VCTenant;
   metadata: UCMetadata;
   form: UCForm;
   identifiers: VCIdentifiers;
+}
+
+export interface ProofUseCaseConfig {
+  tenant: VCTenant;
+  proofRequest: IndyProofRequest;
 }
 
 export interface VCConfig {
@@ -44,7 +51,7 @@ export interface VCConfig {
     apiPath: string;
     basePath: string;
   };
-  useCases: Record<string, UseCaseConfig>;
+  useCases: Record<string, CredentialUseCaseConfig | ProofUseCaseConfig>;
 }
 
 export enum VCSteps {
@@ -62,7 +69,7 @@ export interface InitConnectionResponse {
 }
 
 export interface ConnectionStateResponse {
-  state: string;
+  state: ConnRecord["state"];
   connection: ConnRecord;
 }
 
@@ -78,4 +85,13 @@ export interface OfferCredentialResponse {
 export interface CredentialStateResponse {
   state: V20CredExRecord["state"];
   credential: V20CredExRecord;
+}
+
+export interface CreatePresentationResponse {
+  presentation_exchange_id: string;
+}
+
+export interface PresentationStateResponse {
+  state: V20PresExRecord["state"];
+  presentation: V20PresExRecord;
 }
