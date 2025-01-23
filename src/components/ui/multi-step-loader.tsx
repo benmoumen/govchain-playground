@@ -40,6 +40,7 @@ const CheckFilled = ({ className }: { className?: string }) => {
 
 type LoadingState = {
   text: string;
+  description?: string;
 };
 
 const LoaderCore = ({
@@ -77,14 +78,19 @@ const LoaderCore = ({
                 />
               )}
             </div>
-            <span
+            <div
               className={cn(
                 "text-black dark:text-white",
                 value === index && "text-black dark:text-lime-500 opacity-100"
               )}
             >
               {loadingState.text}
-            </span>
+              {loadingState.description && (
+                <div className="text-xs text-muted-foreground">
+                  {loadingState.description}
+                </div>
+              )}
+            </div>
           </motion.div>
         );
       })}
@@ -103,7 +109,7 @@ export const MultiStepLoader = ({
   currentState: number;
   loading?: boolean;
   successMessage?: string | React.ReactNode;
-  onClose: () => void;
+  onClose?: () => void;
 }) => {
   const [bufferedState, setBufferedState] = useState(currentState);
 
@@ -130,7 +136,7 @@ export const MultiStepLoader = ({
 
   function handleClose(): void {
     console.log("Closing loader...");
-    onClose();
+    if (onClose) onClose();
     loading = false;
     currentState = 0;
   }
