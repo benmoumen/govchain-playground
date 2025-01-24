@@ -78,6 +78,12 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        "tremor-default": "0.5rem",
+        "tremor-small": "0.375rem",
+        "tremor-full": "9999px",
+      },
+      fontSize: {
+        "tremor-label": ["0.75rem", "1rem"],
       },
       animation: {
         "fade-in": "fade-in 0.6s ease-out forwards",
