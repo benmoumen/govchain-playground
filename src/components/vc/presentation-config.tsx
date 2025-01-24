@@ -28,7 +28,13 @@ export const PresentationConfig: React.FC<PresentationConfigProps> = ({
   config,
 }) => {
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 justify-center">
+      <h2 className="text-2xl tracking-tight flex items-center gap-2">
+        {config.proofRequest.name}
+        <Badge variant="secondary" className="text-xs py-0.5">
+          {config.proofRequest.version}
+        </Badge>
+      </h2>
       <div>
         <p className="text-muted-foreground text-base">Verifier</p>
         <h3 className="text-xl tracking-tight">{config.tenant.name}</h3>

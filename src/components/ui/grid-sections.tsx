@@ -30,12 +30,7 @@ const GridSection = ({
   className?: string;
 }) => {
   return (
-    <div
-      className={cn(
-        `p-4 sm:p-8 relative overflow-hidden col-span-1`,
-        className
-      )}
-    >
+    <div className={cn(`p-8 sm:p-16 relative col-span-1`, className)}>
       {children}
     </div>
   );
