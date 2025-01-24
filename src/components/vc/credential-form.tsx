@@ -41,11 +41,12 @@ import type { CredAttrSpec } from "@/types/vc/acapyApi/acapyInterface";
 import type { VCFormFieldDefinition } from "@/types/vc/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import { CalendarIcon, Loader2, ShieldCheck } from "lucide-react";
+import { CalendarIcon, Loader2, PartyPopper, ShieldCheck } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { Badge } from "../ui/badge";
 import { MultiStepLoader } from "../ui/multi-step-loader";
 
@@ -164,21 +165,25 @@ const CredentialForm: React.FC<CredentialFormProps> = ({
             ) ?? 0
           }
           successMessage={
-            <>
-              You can now start using your{" "}
-              <strong>{metadata.credentialName}</strong> for:{" "}
-              <div className="flex flex-wrap gap-1 mt-2">
-                {metadata.benefits.map((benefit, index) => (
-                  <Badge
-                    key={index}
-                    variant={"secondary"}
-                    className="opacity-75"
-                  >
-                    {benefit}
-                  </Badge>
-                ))}
-              </div>
-            </>
+            <Alert variant={"success"}>
+              <PartyPopper className="h-4 w-4" />
+              <AlertTitle className="font-light">Congratulations!</AlertTitle>
+              <AlertDescription>
+                You can now start using your{" "}
+                <strong>{metadata.credentialName}</strong> for:{" "}
+                <div className="flex flex-wrap gap-1 mt-2">
+                  {metadata.benefits.map((benefit, index) => (
+                    <Badge
+                      key={index}
+                      variant={"secondary"}
+                      className="opacity-75"
+                    >
+                      {benefit}
+                    </Badge>
+                  ))}
+                </div>
+              </AlertDescription>
+            </Alert>
           }
           onClose={handleCloseMultiStepLoader}
         />
