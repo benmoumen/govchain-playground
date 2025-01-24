@@ -2,9 +2,7 @@
 import { cn } from "@/lib/utils";
 import { IconX } from "@tabler/icons-react";
 import { AnimatePresence, motion } from "framer-motion";
-import { PartyPopper } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { Alert, AlertDescription, AlertTitle } from "./alert";
 
 const CheckIcon = ({ className }: { className?: string }) => {
   return (
@@ -39,7 +37,7 @@ const CheckFilled = ({ className }: { className?: string }) => {
 };
 
 type LoadingState = {
-  text: string;
+  text: string | React.ReactNode;
   description?: string | React.ReactNode;
 };
 
@@ -99,12 +97,14 @@ const LoaderCore = ({
 };
 
 export const MultiStepLoader = ({
+  embed,
   loadingStates,
   currentState = 0,
   loading,
   successMessage,
   onClose,
 }: {
+  embed?: boolean;
   loadingStates: LoadingState[];
   currentState: number;
   loading?: boolean;
@@ -154,16 +154,21 @@ export const MultiStepLoader = ({
           exit={{
             opacity: 0,
           }}
-          className="w-full h-full fixed inset-0 z-[100] backdrop-blur-2xl"
+          className={cn(
+            "w-full h-full backdrop-blur-2xl",
+            embed ? "" : "fixed inset-0 z-[100]"
+          )}
         >
-          <button
-            className="sticky top-4 h-8 w-8 z-[110] right-0 ml-auto bg-black dark:bg-white rounded-full flex items-center justify-center"
-            onClick={handleClose}
-          >
-            <IconX className="h-6 w-6 text-neutral-100 dark:text-neutral-900" />
-          </button>
+          {!embed && (
+            <button
+              className="sticky top-4 h-8 w-8 z-[110] right-0 ml-auto bg-black dark:bg-white rounded-full flex items-center justify-center"
+              onClick={handleClose}
+            >
+              <IconX className="h-6 w-6 text-neutral-100 dark:text-neutral-900" />
+            </button>
+          )}
           <div className="w-full h-full flex items-center justify-center">
-            <div className="h-96 relative flex flex-col items-center justify-start">
+            <div className="h-96 w-auto relative flex flex-col items-center justify-center">
               <LoaderCore value={bufferedState} loadingStates={loadingStates} />
 
               {successMessage && allStepsDone && (
@@ -173,13 +178,7 @@ export const MultiStepLoader = ({
                   transition={{ duration: 2 }}
                   className="z-[100] flex flex-col items-start max-w-md"
                 >
-                  <Alert variant={"success"}>
-                    <PartyPopper className="h-4 w-4" />
-                    <AlertTitle className="font-light">
-                      Congratulations!
-                    </AlertTitle>
-                    <AlertDescription>{successMessage}</AlertDescription>
-                  </Alert>
+                  {successMessage}
                 </motion.div>
               )}
             </div>
