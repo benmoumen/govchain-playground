@@ -24,7 +24,6 @@ interface CardItem {
   icon: typeof Fingerprint;
   title: string;
   description: string;
-  active?: boolean;
   colSpan?: number;
 }
 
@@ -36,7 +35,6 @@ const UCCards: CardItem[] = [
     description:
       "Present your digital ID to prove your identity and gain access to services.",
     colSpan: 2,
-    active: true,
   },
   {
     useCase: ProofUseCases.PERSONHOOD,
