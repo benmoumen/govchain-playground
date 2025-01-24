@@ -2,6 +2,7 @@
 
 import { AppSidebar } from "@/components/app-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { BackgroundDotted } from "@/components/ui/background-dotted";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -100,7 +101,7 @@ export default function PlaygroundLayout({ children }: PlaygroundLayoutProps) {
         </header>
         <div className="flex-1">
           <div className="relative h-full w-full p-16 bg-background text-foreground">
-            <div className="absolute lab-bg inset-0 size-full bg-[radial-gradient(#00000021_1px,transparent_1px)] dark:bg-[radial-gradient(#ffffff22_1px,transparent_1px)] [background-size:16px_16px]"></div>
+            <BackgroundDotted />
             <div className="flex w-full justify-center relative">
               <div className="w-full">{children}</div>
             </div>

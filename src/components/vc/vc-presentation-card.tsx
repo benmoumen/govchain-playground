@@ -7,6 +7,7 @@ import { useTheme } from "next-themes";
 import { QRCodeSVG } from "qrcode.react";
 import { useEffect } from "react";
 import { toast } from "sonner";
+import { BackgroundDotted } from "../ui/background-dotted";
 import { BackgroundLines } from "../ui/background-lines";
 import { Button } from "../ui/button";
 import { Grid, GridSection } from "../ui/grid-sections";
@@ -31,11 +32,11 @@ const ProofRequest: React.FC<{
   isDark,
 }) => (
   <Grid bordered={false}>
-    <GridSection className="lg:col-span-3 dark:border-neutral-800">
-      <div className="relative min-h-96">
+    <GridSection className="lg:col-span-3 dark:border-neutral-800 flex justify-center">
+      <div className="relative min-h-[400px] flex items-center justify-center">
         <div className="flex flex-col gap-6 items-center justify-center h-full">
-          <div className="flex flex-col items-center gap-4 w-[400px]">
-            <p className="text-sm text-center">
+          <div className="flex flex-col items-center justify-center gap-4 h-full w-[400px]">
+            <h3 className="text-sm text-center mb-2">
               <span className="text-muted-foreground">
                 <strong>{config.tenant.name}</strong> invites you to present
                 your proof.
@@ -43,15 +44,15 @@ const ProofRequest: React.FC<{
               <span className="whitespace-nowrap">
                 Use your wallet app to scan the QR code.
               </span>
-            </p>
+            </h3>
             <ShineBorder
-              className="relative flex h-[320px] w-[320px] items-center justify-center rounded-lg border bg-background md:shadow-xl"
+              className="relative flex h-[400px] w-[400px] items-center justify-center rounded-lg border bg-background md:shadow-xl"
               color={["#A07CFE", "#FE8FB5", "#FFBE7B"]}
             >
               <QRCodeSVG
                 title="Scan the QR code with your wallet"
                 value={url}
-                size={320}
+                size={400}
                 marginSize={2}
                 fgColor={isDark ? "#fff" : "#000"}
                 bgColor={isDark ? "#000" : "#fff"}
@@ -59,7 +60,7 @@ const ProofRequest: React.FC<{
             </ShineBorder>
 
             {isPollingConnection && (
-              <>
+              <div className="flex items-center justify-between w-full gap-4">
                 <ConnectionPolling
                   message={
                     isPollingConnection
@@ -71,14 +72,15 @@ const ProofRequest: React.FC<{
                   loading={generatingInvitation}
                   createPresentation={createPresentation}
                 />
-              </>
+              </div>
             )}
           </div>
         </div>
       </div>
     </GridSection>
 
-    <GridSection className="lg:col-span-3 lg:border-r dark:border-neutral-800 lg:order-first">
+    <GridSection className="lg:col-span-3 lg:border-r dark:border-neutral-800 lg:order-first flex justify-center">
+      <BackgroundDotted />
       <PresentationConfig config={config} />
     </GridSection>
   </Grid>
@@ -106,7 +108,7 @@ const ConnectionPolling: React.FC<{ message: string }> = ({ message }) => (
     initial={{ opacity: 1 }}
     animate={{ opacity: [1, 0.2, 1] }}
     transition={{ duration: 2, repeat: Infinity }}
-    className="flex items-center justify-center gap-2 p-2"
+    className="flex items-center justify-center gap-2"
   >
     <MessageLoading />
     <span className="text-sm text-muted-foreground">{message}</span>
@@ -122,6 +124,7 @@ const NewPresentationButton: React.FC<{
     variant="link"
     size="sm"
     disabled={loading}
+    className="p-0 opacity-50"
   >
     {loading ? (
       <>
@@ -130,7 +133,7 @@ const NewPresentationButton: React.FC<{
       </>
     ) : (
       <>
-        <RefreshCcw className="mr-2 h-4 w-4" />
+        <RefreshCcw />
         Start again
       </>
     )}

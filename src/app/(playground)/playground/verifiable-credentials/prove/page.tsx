@@ -2,16 +2,17 @@
 
 import { Badge } from "@/components/ui/badge";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import VCPresentationCard from "@/components/vc/vc-presentation-card";
 import { ProofUseCases } from "@/config/vc";
 import { VPPresentationProvider } from "@/contexts/vc-presentation-context";
 import { cn } from "@/lib/utils";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { Briefcase, Building, Calendar, Fingerprint } from "lucide-react";
 import { motion } from "motion/react";
 
@@ -77,8 +78,8 @@ const ProofUseCaseCard: React.FC<ProofUseCaseCardProps> = ({ cardItem }) => {
       : "");
 
   return (
-    <Dialog modal={true}>
-      <DialogTrigger asChild>
+    <Sheet>
+      <SheetTrigger asChild>
         <div
           className={cn("relative p-[4px] group", containerClassName)}
           role="button"
@@ -137,26 +138,27 @@ const ProofUseCaseCard: React.FC<ProofUseCaseCardProps> = ({ cardItem }) => {
             </div>
           </div>
         </div>
-      </DialogTrigger>
-      <DialogContent
-        className="flex flex-col gap-0 p-0 sm:max-h-[min(640px,80vh)] sm:max-w-[min(1024px,80vw)] [&>button:last-child]:top-3.5"
+      </SheetTrigger>
+      <SheetContent
+        side={"bottom"}
+        className="h-screen p-0"
         onInteractOutside={(e) => e.preventDefault()}
         onPointerDownOutside={(e) => e.preventDefault()}
         onFocusOutside={(e) => e.preventDefault()}
         onEscapeKeyDown={(e) => e.preventDefault()}
       >
-        <DialogHeader className="contents space-y-0 text-left">
-          <DialogTitle className="border-b border-border px-6 py-4 text-base">
-            {cardItem.title}
-          </DialogTitle>
-        </DialogHeader>
-        <div className="overflow-y-auto">
+        <SheetHeader>
+          <VisuallyHidden asChild>
+            <SheetTitle>{cardItem.title}</SheetTitle>
+          </VisuallyHidden>
+        </SheetHeader>
+        <div className="h-full overflow-y-auto">
           <VPPresentationProvider useCase={cardItem.useCase}>
             <VCPresentationCard />
           </VPPresentationProvider>
         </div>
-      </DialogContent>
-    </Dialog>
+      </SheetContent>
+    </Sheet>
   );
 };
 
