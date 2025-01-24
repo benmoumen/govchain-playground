@@ -81,6 +81,7 @@ export default {
       },
       animation: {
         "fade-in": "fade-in 0.6s ease-out forwards",
+        "fade-out": "fade-out 0.6s ease-out forwards",
         "pulse-hover": "pulse-hover 8s ease-in-out infinite",
         shine: "shine var(--duration) ease-out infinite",
         "star-movement-bottom":
@@ -92,6 +93,10 @@ export default {
         "fade-in": {
           "0%": { opacity: "0", transform: "translateY(12px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        "fade-out": {
+          "0%": { opacity: "1", transform: "translateY(0)" },
+          "100%": { opacity: "0", transform: "translateY(12px)" },
         },
         "pulse-hover": {
           "0%, 100%": { transform: "translateY(0)" },
