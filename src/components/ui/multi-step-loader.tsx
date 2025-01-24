@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { IconX } from "@tabler/icons-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { PartyPopper } from "lucide-react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "./alert";
 
 const CheckIcon = ({ className }: { className?: string }) => {
@@ -40,7 +40,7 @@ const CheckFilled = ({ className }: { className?: string }) => {
 
 type LoadingState = {
   text: string;
-  description?: string;
+  description?: string | React.ReactNode;
 };
 
 const LoaderCore = ({

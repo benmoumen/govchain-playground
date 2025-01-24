@@ -12,7 +12,7 @@ const Grid = ({
   return (
     <div
       className={cn(
-        "grid grid-cols-1 lg:grid-cols-6",
+        "grid grid-cols-1 lg:grid-cols-6 h-full w-full",
         bordered ? "lg:border rounded-md dark:border-neutral-800" : "",
         className
       )}

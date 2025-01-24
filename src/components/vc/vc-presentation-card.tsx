@@ -1,5 +1,6 @@
 import { getProofConfigByCase } from "@/config/vc";
 import { useVCPresentationContext } from "@/contexts/vc-presentation-context";
+import type { ProofUseCaseConfig } from "@/types/vc";
 import { Loader2, RefreshCcw, Waypoints } from "lucide-react";
 import { motion } from "motion/react";
 import { useTheme } from "next-themes";
@@ -8,49 +9,97 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 import { BackgroundLines } from "../ui/background-lines";
 import { Button } from "../ui/button";
+import { Grid, GridSection } from "../ui/grid-sections";
 import { MessageLoading } from "../ui/message-loading";
 import { ShineBorder } from "../ui/shine-border";
+import { PresentationConfig } from "./presentation-config";
+import VerificationSteps from "./verification-steps";
 
-const InvitationQRCode: React.FC<{
+const ProofRequest: React.FC<{
+  config: ProofUseCaseConfig;
   url: string;
+  isPollingConnection: boolean;
+  generatingInvitation: boolean;
+  createPresentation: () => Promise<void>;
   isDark: boolean;
-  verifierName: string;
-}> = ({ url, isDark, verifierName }) => (
-  <div className="flex flex-col items-center gap-4">
-    <p className="text-center text-muted-foreground">
-      You are invited by <strong>{verifierName}</strong> to present your proof.
-      Scan to proceed.
-    </p>
-    <ShineBorder
-      className="relative flex h-[280px] w-[280px] items-center justify-center rounded-lg border bg-background md:shadow-xl"
-      color={["#A07CFE", "#FE8FB5", "#FFBE7B"]}
-    >
-      <QRCodeSVG
-        title="Scan the QR code with your wallet"
-        value={url}
-        size={280}
-        marginSize={2}
-        fgColor={isDark ? "#fff" : "#000"}
-        bgColor={isDark ? "#000" : "#fff"}
-      />
-    </ShineBorder>
-  </div>
+}> = ({
+  config,
+  url,
+  isPollingConnection,
+  generatingInvitation,
+  createPresentation,
+  isDark,
+}) => (
+  <Grid bordered={false}>
+    <GridSection className="lg:col-span-3 dark:border-neutral-800">
+      <div className="relative min-h-96">
+        <div className="flex flex-col gap-6 items-center justify-center h-full">
+          <div className="flex flex-col items-center gap-4 w-[400px]">
+            <p className="text-sm text-center">
+              <span className="text-muted-foreground">
+                <strong>{config.tenant.name}</strong> invites you to present
+                your proof.
+              </span>{" "}
+              <span className="whitespace-nowrap">
+                Use your wallet app to scan the QR code.
+              </span>
+            </p>
+            <ShineBorder
+              className="relative flex h-[320px] w-[320px] items-center justify-center rounded-lg border bg-background md:shadow-xl"
+              color={["#A07CFE", "#FE8FB5", "#FFBE7B"]}
+            >
+              <QRCodeSVG
+                title="Scan the QR code with your wallet"
+                value={url}
+                size={320}
+                marginSize={2}
+                fgColor={isDark ? "#fff" : "#000"}
+                bgColor={isDark ? "#000" : "#fff"}
+              />
+            </ShineBorder>
+
+            {isPollingConnection && (
+              <>
+                <ConnectionPolling
+                  message={
+                    isPollingConnection
+                      ? "Checking connection status..."
+                      : "Checking presentation status..."
+                  }
+                />
+                <NewPresentationButton
+                  loading={generatingInvitation}
+                  createPresentation={createPresentation}
+                />
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    </GridSection>
+
+    <GridSection className="lg:col-span-3 lg:border-r dark:border-neutral-800 lg:order-first">
+      <PresentationConfig config={config} />
+    </GridSection>
+  </Grid>
 );
 
 const ConnectionSuccessAlert: React.FC<{ verifierName: string }> = ({
   verifierName,
-}) => (
-  <BackgroundLines className="flex w-full flex-col items-center justify-center">
-    <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-green-600 px-6">
-      <Waypoints className="h-6 w-6" />
-      <h4 className="mb-6 text-center leading-none">
-        Your proof has been successfully shared with
-        <br />
-        <strong>{verifierName}</strong>.
-      </h4>
-    </div>
-  </BackgroundLines>
-);
+}) => {
+  return (
+    <BackgroundLines className="flex w-full flex-col items-center justify-center">
+      <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-green-600 px-6">
+        <Waypoints className="h-6 w-6" />
+        <h4 className="mb-6 text-center leading-none">
+          Your proof has been successfully shared with
+          <br />
+          <strong>{verifierName}</strong>.
+        </h4>
+      </div>
+    </BackgroundLines>
+  );
+};
 
 const ConnectionPolling: React.FC<{ message: string }> = ({ message }) => (
   <motion.div
@@ -118,32 +167,25 @@ const VCPresentationCard: React.FC = () => {
     return <ConnectionSuccessAlert verifierName={useCaseConfig.tenant.name} />;
   }
 
-  return (
-    <div className="flex min-w-[300px] flex-col items-center justify-center gap-2 p-8">
-      {invitationUrl && (
-        <InvitationQRCode
-          url={invitationUrl}
-          isDark={resolvedTheme === "dark"}
-          verifierName={useCaseConfig.tenant.name}
-        />
-      )}
+  if (isPollingPresentation || isPresentationVerified) {
+    return <VerificationSteps />;
+  }
 
-      {(isPollingConnection || isPollingPresentation) && (
-        <>
-          <ConnectionPolling
-            message={
-              isPollingConnection
-                ? "Checking connection status..."
-                : "Checking presentation status..."
-            }
-          />
-          <NewPresentationButton
-            loading={generatingInvitation}
+  return (
+    <>
+      {invitationUrl && (
+        <div className="h-full min-w-[300px] flex flex-col items-center justify-start gap-2">
+          <ProofRequest
+            config={useCaseConfig}
+            url={invitationUrl}
+            isPollingConnection={isPollingConnection}
+            generatingInvitation={generatingInvitation}
             createPresentation={createPresentation}
+            isDark={resolvedTheme === "dark"}
           />
-        </>
+        </div>
       )}
-    </div>
+    </>
   );
 };
 
