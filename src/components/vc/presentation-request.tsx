@@ -1,32 +1,78 @@
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+import { extractAttributesFromPresentation } from "@/lib/vc";
 import type { ProofUseCaseConfig } from "@/types/vc";
-import { Link2 } from "lucide-react";
-import React from "react";
+import type { V20PresExRecord } from "@/types/vc/acapyApi/acapyInterface";
+import { Circle, CircleCheck, CircleX, Link2 } from "lucide-react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
+import { StatusBadge } from "../ui/status-badge";
 
-interface PresentationConfigProps {
+interface PresentationRequestProps {
   config: ProofUseCaseConfig;
+  presentationRecord: V20PresExRecord | null;
+  isVerified: boolean | null;
+  delayUpdate?: number;
 }
 
-const CredDefLink: React.FC<{ credDefId: string }> = ({ credDefId }) => (
-  <Badge variant="secondary" className="text-xs flex-col gap-1 py-1">
-    {credDefId}
-    <Button size="sm" variant="link" className="opacity-50 h-auto" asChild>
-      <a
-        href={`https://indy.govchain.technology/browse/domain?query=${credDefId}&txn_type=102`}
-        target="_blank"
-        className="text-xs"
-      >
-        <Link2 />
-        View definition on the blockchain
-      </a>
-    </Button>
-  </Badge>
-);
+const CredDefLink: React.FC<{
+  credDefId: string;
+  isVerified: boolean | null;
+}> = ({ credDefId, isVerified }) => {
+  const icon =
+    isVerified === null ? Circle : isVerified ? CircleCheck : CircleX;
+  return (
+    <Badge variant="secondary" className="text-xs flex-col gap-1 py-1">
+      <span className="inline-flex items-center gap-1.5 font-medium text-foreground">
+        {React.createElement(icon, {
+          className: cn(
+            "-ml-0.5 size-4 shrink-0",
+            isVerified === true && "text-emerald-600 dark:text-emerald-500",
+            isVerified === false && "text-red-600 dark:text-red-500"
+          ),
+        })}
+        {credDefId}
+      </span>
+      <Button size="sm" variant="link" className="opacity-50 h-auto" asChild>
+        <a
+          href={`https://indy.govchain.technology/browse/domain?query=${credDefId}&txn_type=102`}
+          target="_blank"
+          className="text-xs"
+        >
+          <Link2 />
+          View definition on the blockchain
+        </a>
+      </Button>
+    </Badge>
+  );
+};
 
-export const PresentationConfig: React.FC<PresentationConfigProps> = ({
+export const PresentationRequest: React.FC<PresentationRequestProps> = ({
   config,
+  presentationRecord,
+  isVerified = null,
+  delayUpdate = 6000,
 }) => {
+  const [delayedIsVerified, setDelayedIsVerified] = useState<boolean | null>(
+    isVerified
+  );
+
+  useEffect(() => {
+    if (isVerified === true) {
+      const timer = setTimeout(() => {
+        setDelayedIsVerified(isVerified);
+      }, delayUpdate);
+      return () => clearTimeout(timer);
+    } else {
+      setDelayedIsVerified(isVerified);
+    }
+  }, [isVerified, delayUpdate]);
+
+  const revealedAttributes =
+    delayedIsVerified && presentationRecord
+      ? extractAttributesFromPresentation(presentationRecord)
+      : null;
+
   return (
     <div className="flex flex-col gap-6 justify-center">
       <h2 className="text-2xl tracking-tight flex items-center gap-2">
@@ -49,7 +95,26 @@ export const PresentationConfig: React.FC<PresentationConfigProps> = ({
               </p>
               <div className="flex flex-wrap gap-2">
                 {attr.names?.map((name) => (
-                  <Badge key={name}>{name}</Badge>
+                  <StatusBadge
+                    key={name}
+                    leftIcon={
+                      delayedIsVerified === null
+                        ? Circle
+                        : delayedIsVerified
+                        ? CircleCheck
+                        : CircleX
+                    }
+                    rightIcon={undefined}
+                    leftLabel={name}
+                    rightLabel={revealedAttributes?.[name] || ""}
+                    status={
+                      delayedIsVerified === null
+                        ? "default"
+                        : delayedIsVerified
+                        ? "success"
+                        : "error"
+                    }
+                  />
                 ))}
               </div>
             </div>
@@ -65,6 +130,7 @@ export const PresentationConfig: React.FC<PresentationConfigProps> = ({
                       <CredDefLink
                         key={index}
                         credDefId={restriction.cred_def_id}
+                        isVerified={delayedIsVerified}
                       />
                     )
                 )}
@@ -104,6 +170,7 @@ export const PresentationConfig: React.FC<PresentationConfigProps> = ({
                           <CredDefLink
                             key={index}
                             credDefId={restriction.cred_def_id}
+                            isVerified={delayedIsVerified}
                           />
                         )
                     )}

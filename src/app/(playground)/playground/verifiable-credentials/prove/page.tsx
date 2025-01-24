@@ -74,7 +74,7 @@ const ProofUseCaseCard: React.FC<ProofUseCaseCardProps> = ({ cardItem }) => {
   const containerClassName =
     "h-full flex justify-between flex-col aspect-square " +
     (cardItem.colSpan && cardItem.colSpan > 1
-      ? "lg:aspect-auto lg:col-span-" + cardItem.colSpan
+      ? "aspect-auto col-span-" + cardItem.colSpan
       : "");
 
   return (
