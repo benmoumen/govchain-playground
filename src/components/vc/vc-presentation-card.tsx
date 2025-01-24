@@ -1,14 +1,13 @@
 import { getProofConfigByCase } from "@/config/vc";
 import { useVCPresentationContext } from "@/contexts/vc-presentation-context";
 import type { ProofUseCaseConfig } from "@/types/vc";
-import { Loader2, RefreshCcw, Waypoints } from "lucide-react";
+import { Loader2, RefreshCcw } from "lucide-react";
 import { motion } from "motion/react";
 import { useTheme } from "next-themes";
 import { QRCodeSVG } from "qrcode.react";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { BackgroundDotted } from "../ui/background-dotted";
-import { BackgroundLines } from "../ui/background-lines";
 import { Button } from "../ui/button";
 import { Grid, GridSection } from "../ui/grid-sections";
 import { MessageLoading } from "../ui/message-loading";
@@ -86,23 +85,6 @@ const ProofRequest: React.FC<{
   </Grid>
 );
 
-const ConnectionSuccessAlert: React.FC<{ verifierName: string }> = ({
-  verifierName,
-}) => {
-  return (
-    <BackgroundLines className="flex w-full flex-col items-center justify-center">
-      <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-green-600 px-6">
-        <Waypoints className="h-6 w-6" />
-        <h4 className="mb-6 text-center leading-none">
-          Your proof has been successfully shared with
-          <br />
-          <strong>{verifierName}</strong>.
-        </h4>
-      </div>
-    </BackgroundLines>
-  );
-};
-
 const ConnectionPolling: React.FC<{ message: string }> = ({ message }) => (
   <motion.div
     initial={{ opacity: 1 }}
@@ -164,10 +146,6 @@ const VCPresentationCard: React.FC = () => {
 
   if (error && !presentationRecord) {
     toast.error("Error while fetching proof state.");
-  }
-
-  if (isPresentationVerified) {
-    return <ConnectionSuccessAlert verifierName={useCaseConfig.tenant.name} />;
   }
 
   if (isPollingPresentation || isPresentationVerified) {
