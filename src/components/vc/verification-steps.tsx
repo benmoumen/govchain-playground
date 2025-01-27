@@ -28,7 +28,7 @@ const VerificationSteps: React.FC<VerificationStepsProps> = ({
       label: (
         <div className="flex justify-center items-center gap-2">
           Proof Request Sent
-          <Badge variant={"secondary"} className="py-1">
+          <Badge variant={"secondary"} size={"sm"}>
             Waiting your action
           </Badge>
         </div>
