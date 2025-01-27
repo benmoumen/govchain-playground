@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [{ hostname: "images.unsplash.com" }],
   },
   reactStrictMode: false,
+  output: "standalone",
 };
 
 export default nextConfig;
