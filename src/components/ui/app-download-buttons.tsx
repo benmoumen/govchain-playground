@@ -11,18 +11,17 @@ export const AppDownloadButtons = () => {
 
   return (
     <ButtonsContainer gap={10}>
-      <GooglePlayButton
-        url={APKUrl}
-        theme="dark"
-        className="app-download-button"
-        title="Get it on"
-      />
-
       <AppStoreButton
         url={IOSUrl}
         theme="dark"
         className="app-download-button"
         title="Download on the"
+      />
+      <GooglePlayButton
+        url={APKUrl}
+        theme="dark"
+        className="app-download-button"
+        title="Get it on"
       />
     </ButtonsContainer>
   );
