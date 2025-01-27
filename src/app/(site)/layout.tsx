@@ -11,17 +11,15 @@ interface SiteLayoutProps {
 export default function SiteLayout({ children }: SiteLayoutProps) {
   return (
     <div className="relative flex min-h-screen flex-col">
-      <div className="relative flex min-h-screen flex-col">
-        <SiteHeader>
-          <span className="text-xs text-muted-foreground/80">
-            <span className="hidden md:inline-block">Made by</span>
-            <Button variant={"link"} size={"sm"} effect={"hoverUnderline"}>
-              UNCTAD Digital Government
-            </Button>
-          </span>
-        </SiteHeader>
-        {children}
-      </div>
+      <SiteHeader>
+        <span className="text-xs text-muted-foreground/80">
+          <span className="hidden md:inline-block">Made by</span>
+          <Button variant={"link"} size={"sm"} effect={"hoverUnderline"}>
+            UNCTAD Digital Government
+          </Button>
+        </span>
+      </SiteHeader>
+      {children}
       <TailwindIndicator />
     </div>
   );

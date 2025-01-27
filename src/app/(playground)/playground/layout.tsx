@@ -13,17 +13,14 @@ interface PlaygroundLayoutProps {
 export default function PlaygroundLayout({ children }: PlaygroundLayoutProps) {
   return (
     <div className="relative flex min-h-screen flex-col">
-      <div className="relative flex min-h-screen flex-col">
-        <SiteHeader>
-          <MainMenu />
-        </SiteHeader>
-        {children}
-        <div className="flex-1">
-          <div className="relative h-full w-full p-16 bg-background text-foreground">
-            <BackgroundDotted />
-            <div className="flex w-full justify-center relative">
-              <div className="w-full">{children}</div>
-            </div>
+      <SiteHeader>
+        <MainMenu />
+      </SiteHeader>
+      <div className="flex-1">
+        <div className="relative h-full w-full p-16 bg-background text-foreground">
+          <BackgroundDotted />
+          <div className="flex w-full justify-center relative">
+            <div className="w-full">{children}</div>
           </div>
         </div>
       </div>
