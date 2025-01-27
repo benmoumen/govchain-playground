@@ -1,9 +1,10 @@
+"use client";
 import { Card, Carousel } from "@/components/ui/apple-cards-carousel";
 import { Badge } from "@/components/ui/badge";
 import UseCasePage from "@/components/vc/usecase-page";
 import { VCProvider } from "@/contexts/vc-context";
 
-export default async function RequestVCPage() {
+export default function RequestVCPage() {
   const cards = data.map((card, index) => (
     <Card key={card.src} card={card} index={index} />
   ));
@@ -14,14 +15,14 @@ export default async function RequestVCPage() {
         <div className="flex flex-col gap-10">
           <div className="flex gap-4 flex-col items-start">
             <div>
-              <Badge variant={"secondary"} className="uppercase">
-                Verifiable Credentials
+              <Badge variant={"outline"} size={"xs"} className="uppercase">
+                Verifiable Credential
               </Badge>
             </div>
             <h2 className="text-3xl md:text-5xl tracking-tighter max-w-xl font-regular text-left">
               Collect your digital proofs
             </h2>
-            <p className="text-lg max-w-xl lg:max-w-lg leading-relaxed tracking-tight text-muted-foreground  text-left">
+            <p className="text-lg max-w-xl lg:max-w-lg leading-relaxed tracking-tight text-muted-foreground text-left">
               Get credentials and use them as digital proofs.
             </p>
           </div>

@@ -18,7 +18,7 @@ const MainMenu: React.FC = () => {
         <NavigationMenuItem>
           <NavigationMenuTrigger>Digital Proofs</NavigationMenuTrigger>
           <NavigationMenuContent>
-            <ul className="grid gap-3 p-4 w-72 lg:w-14">
+            <ul className="grid gap-3 p-4 w-72">
               <ListItem
                 href="/playground/verifiable-credentials/obtain"
                 title="Obtain Credentials"
