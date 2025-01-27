@@ -108,8 +108,17 @@ export async function POST(
 ): Promise<NextResponse<InitConnectionResponse> | NextResponse<ErrorResponse>> {
   const params = await props.params;
   const tenant = getTenantByCase(params.case);
-  const { attachments } = (await request.json()) as {
-    attachments?: AttachmentDef[];
-  };
-  return handleInvitation(tenant, true, attachments || undefined);
+  let attachments: AttachmentDef[] | undefined;
+  if (request.body) {
+    try {
+      const requestBody = await request.json();
+      attachments = requestBody.attachments;
+    } catch (error) {
+      console.error("Failed to parse request body:", error);
+      attachments = undefined;
+    }
+  } else {
+    attachments = undefined;
+  }
+  return handleInvitation(tenant, true, attachments);
 }
