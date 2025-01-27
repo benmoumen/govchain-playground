@@ -13,8 +13,8 @@ import proofOfPersonhood from "./proof-personhood";
 import { isCredentialUseCaseConfig, isProofUseCaseConfig } from "./typeGuards";
 
 export enum CredentialUseCases {
-  DIGITAL_DUI = "digitalDUI",
-  COMPANY_OWNERSHIP = "companyOwnership",
+  DIGITAL_DUI = "digital_dui",
+  COMPANY_OWNERSHIP = "company_ownership",
 }
 
 export enum ProofUseCases {

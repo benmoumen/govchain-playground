@@ -2,6 +2,7 @@
 import { Card, Carousel } from "@/components/ui/apple-cards-carousel";
 import { Badge } from "@/components/ui/badge";
 import UseCasePage from "@/components/vc/usecase-page";
+import { CredentialUseCases } from "@/config/vc";
 import { VCProvider } from "@/contexts/vc-context";
 
 export default function RequestVCPage() {
@@ -39,7 +40,7 @@ const data = [
     title: "Get your Digital ID.",
     src: "/img/photo-wallet-scan.jpg",
     content: (
-      <VCProvider useCase="digitalDUI">
+      <VCProvider useCase={CredentialUseCases.DIGITAL_DUI}>
         <UseCasePage />
       </VCProvider>
     ),
@@ -49,7 +50,7 @@ const data = [
     title: "Get your Shareholder Credential.",
     src: "/img/photo-handshake.jpg",
     content: (
-      <VCProvider useCase="companyOwnership">
+      <VCProvider useCase={CredentialUseCases.COMPANY_OWNERSHIP}>
         <UseCasePage />
       </VCProvider>
     ),
