@@ -24,7 +24,7 @@ export function SiteHeader({ children }: SiteHeaderProps) {
         <div className="flex flex-1 items-center justify-end">
           <nav className="flex items-center gap-6">
             {children}
-            <ThemeToggle />
+            <ThemeToggle defaultTheme={siteConfig.theme} />
           </nav>
         </div>
       </div>
