@@ -36,7 +36,7 @@ const data = [
   {
     category: "Identity",
     title: "Get your Digital ID.",
-    src: "https://images.unsplash.com/photo-1626423962491-eb76bdc2e0be?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    src: "/img/photo-wallet-scan.jpg",
     content: (
       <VCProvider useCase="digitalDUI">
         <UseCasePage />
@@ -46,7 +46,7 @@ const data = [
   {
     category: "Business",
     title: "Get your Shareholder Credential.",
-    src: "https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=4000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    src: "/img/photo-handshake.jpg",
     content: (
       <VCProvider useCase="companyOwnership">
         <UseCasePage />
@@ -56,13 +56,13 @@ const data = [
   {
     category: "Education",
     title: "Receive your Diploma.",
-    src: "https://images.unsplash.com/photo-1627556704263-b486db44a463?q=80&w=2496&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    src: "/img/photo-graduation.jpg",
     content: <></>,
   },
   {
     category: "Health",
     title: "Get your Vaccination Pass.",
-    src: "https://images.unsplash.com/photo-1623964783162-8fc658548501?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    src: "/img/photo-vaccine.jpg",
     content: <></>,
   },
 ];

@@ -20,7 +20,7 @@ const metadata = {
     "Age verification",
     "Boarding domestic flights",
   ],
-  src: "https://images.unsplash.com/photo-1626423962491-eb76bdc2e0be?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  src: "/img/photo-wallet-scan.jpg",
 };
 
 ////////////////////////
