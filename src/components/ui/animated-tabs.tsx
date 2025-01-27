@@ -69,7 +69,7 @@ export function TabBar({ text, selected, setSelected, icon }: TabBarProps) {
     <button
       onClick={() => setSelected(text)}
       className={cn(
-        "relative w-fit px-4 py-2 text-sm font-semibold capitalize",
+        "relative w-fit px-4 py-2 text-sm font-semibold",
         "text-foreground transition-colors",
         icon && "flex items-center justify-center gap-2.5"
       )}

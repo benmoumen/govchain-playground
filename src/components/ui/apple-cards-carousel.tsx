@@ -17,7 +17,6 @@ import React, {
   type JSX,
 } from "react";
 import { TextGenerateEffect } from "./text-generate-effect";
-//import { useOutsideClick } from "@/hooks/use-outside-click";
 
 interface CarouselProps {
   items: JSX.Element[];
@@ -101,7 +100,7 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
         >
           <div
             className={cn(
-              "absolute right-0  z-[1000] h-auto  w-[5%] overflow-hidden bg-gradient-to-l"
+              "absolute right-0 z-10 h-auto w-[5%] overflow-hidden bg-gradient-to-l"
             )}
           ></div>
 
@@ -128,7 +127,7 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
                   },
                 }}
                 key={"card" + index}
-                className="last:pr-[5%] md:last:pr-[33%]  rounded-3xl"
+                className="last:pr-[5%] md:last:pr-[33%] rounded-3xl"
               >
                 {item}
               </motion.div>
@@ -137,14 +136,14 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
         </div>
         <div className="flex justify-start gap-2 ml-4">
           <button
-            className="relative z-40 h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center disabled:opacity-50"
+            className="relative z-20 h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center disabled:opacity-50"
             onClick={scrollLeft}
             disabled={!canScrollLeft}
           >
             <IconArrowNarrowLeft className="h-6 w-6 text-gray-500" />
           </button>
           <button
-            className="relative z-40 h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center disabled:opacity-50"
+            className="relative z-20 h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center disabled:opacity-50"
             onClick={scrollRight}
             disabled={!canScrollRight}
           >
@@ -191,20 +190,6 @@ export const Card = ({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [handleClose, open]);
 
-  /*   useOutsideClick(containerRef, (event) => {
-    // Close the modal when clicking outside of it
-    if (
-      // For dialogs, select elements and options, don't close the card
-      (event.target instanceof HTMLElement ||
-        event.target instanceof SVGElement) &&
-      (event.target.closest("[role='dialog']") ||
-        event.target.closest("[role='option']"))
-    ) {
-      return;
-    }
-    handleClose();
-  }); */
-
   const handleOpen = () => {
     setOpen(true);
   };
@@ -226,20 +211,14 @@ export const Card = ({
               exit={{ opacity: 0 }}
               ref={containerRef}
               layoutId={layout ? `card-${card.title}` : undefined}
-              className="flex min-h-dvh flex-col items-center justify-start max-w-5xl mx-auto bg-neutral-50 dark:bg-neutral-900 h-fit  z-[60] my-5 p-4 md:p-10 rounded-3xl font-sans relative"
+              className="flex min-h-dvh flex-col items-center justify-start max-w-5xl mx-auto bg-neutral-50 dark:bg-neutral-900 h-fit z-40 my-5 p-4 md:p-10 rounded-3xl font-sans relative"
             >
               <button
-                className="sticky top-4 h-8 w-8 z-10 right-0 ml-auto bg-black dark:bg-white rounded-full flex items-center justify-center"
+                className="sticky top-4 h-8 w-8 z-50 right-0 ml-auto bg-black dark:bg-white rounded-full flex items-center justify-center"
                 onClick={handleClose}
               >
                 <IconX className="h-6 w-6 text-neutral-100 dark:text-neutral-900" />
               </button>
-              {/* <motion.p
-                layoutId={layout ? `category-${card.title}` : undefined}
-                className="text-base font-medium text-black dark:text-white"
-              >
-                {card.category}
-              </motion.p> */}
               <motion.div layoutId={layout ? `title-${card.title}` : undefined}>
                 <TextGenerateEffect
                   duration={2}
@@ -257,8 +236,8 @@ export const Card = ({
         onClick={handleOpen}
         className="rounded-3xl bg-gray-100 dark:bg-neutral-900 h-80 w-56 md:h-[40rem] md:w-96 overflow-hidden flex flex-col items-start justify-start relative z-10"
       >
-        <div className="absolute h-full top-0 inset-x-0 bg-gradient-to-b from-black/50 via-transparent to-transparent z-30 pointer-events-none" />
-        <div className="relative z-40 p-8">
+        <div className="absolute h-full top-0 inset-x-0 bg-gradient-to-b from-black/50 via-transparent to-transparent z-20 pointer-events-none" />
+        <div className="relative z-30 p-8">
           <motion.p
             layoutId={layout ? `category-${card.category}` : undefined}
             className="text-white text-sm md:text-base font-medium font-sans text-left"

@@ -57,7 +57,7 @@ const TextWithBadge: React.FC<{
     )}
   >
     <span className="text-sm font-medium">{title}</span>
-    <Badge variant="outline" size={"xs"}>
+    <Badge variant="secondary" size={"xs"}>
       {badge}
     </Badge>
   </div>
