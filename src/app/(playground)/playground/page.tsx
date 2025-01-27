@@ -1,3 +1,4 @@
+"use server";
 import { AppDownloadButtons } from "@/components/ui/app-download-buttons";
 import { Card } from "@/components/ui/card";
 import { SplineScene } from "@/components/ui/spline-scene";

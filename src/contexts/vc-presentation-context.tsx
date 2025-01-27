@@ -140,7 +140,10 @@ export const VPPresentationProvider: React.FC<{
         setConnectionId(res.connection_id);
         setShouldPollConnection(true);
       } else {
-        console.error("Failed to initiate connection:", await resp.text());
+        console.error(
+          "[Presentation] Failed to create connection:",
+          await resp.text()
+        );
       }
     } catch (err) {
       console.error("Error creating presentation:", err);
