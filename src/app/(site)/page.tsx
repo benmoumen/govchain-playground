@@ -1,7 +1,7 @@
 import { Hero } from "@/components/blocks/hero-with-orb-effect";
 import { BackgroundBeams } from "@/components/ui/background-beams";
 
-export default function Home() {
+export default async function Home() {
   return (
     <main>
       <Hero

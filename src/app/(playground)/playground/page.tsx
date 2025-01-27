@@ -3,9 +3,9 @@ import { Card } from "@/components/ui/card";
 import { SplineScene } from "@/components/ui/spline-scene";
 import * as motion from "motion/react-client";
 
-export default function Page() {
+export default async function Page() {
   return (
-    <div className="w-full h-full p-5 flex flex-col items-center justify-center">
+    <div className="w-full h-full flex flex-col items-center justify-center">
       <Card className="w-full h-[600px] bg-black/[0.96] relative overflow-hidden">
         <div className="flex h-full">
           <SplineScene

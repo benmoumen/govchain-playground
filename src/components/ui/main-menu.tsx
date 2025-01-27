@@ -9,12 +9,9 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
-import { usePathname } from "next/navigation";
 import React from "react";
 
 const MainMenu: React.FC = () => {
-  const currentPath = usePathname();
-
   return (
     <NavigationMenu>
       <NavigationMenuList>
@@ -25,18 +22,12 @@ const MainMenu: React.FC = () => {
               <ListItem
                 href="/playground/verifiable-credentials/obtain"
                 title="Obtain Credentials"
-                active={
-                  currentPath === "/playground/verifiable-credentials/obtain"
-                }
               >
                 Collect your digital proofs.
               </ListItem>
               <ListItem
                 href="/playground/verifiable-credentials/prove"
                 title="Present your Proofs"
-                active={
-                  currentPath === "/playground/verifiable-credentials/prove"
-                }
               >
                 Prove your identity and ownership.
               </ListItem>

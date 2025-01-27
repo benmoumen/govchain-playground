@@ -1,5 +1,3 @@
-"use client";
-
 import { Badge } from "@/components/ui/badge";
 import {
   Sheet,
@@ -162,7 +160,7 @@ const ProofUseCaseCard: React.FC<ProofUseCaseCardProps> = ({ cardItem }) => {
   );
 };
 
-export default function PresentVCPage() {
+export default async function PresentVCPage() {
   return (
     <div className="w-full py-10 lg:py-20">
       <div className="container mx-auto">

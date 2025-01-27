@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import UseCasePage from "@/components/vc/usecase-page";
 import { VCProvider } from "@/contexts/vc-context";
 
-export default function RequestVCPage() {
+export default async function RequestVCPage() {
   const cards = data.map((card, index) => (
     <Card key={card.src} card={card} index={index} />
   ));

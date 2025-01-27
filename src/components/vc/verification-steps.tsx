@@ -1,3 +1,4 @@
+"use client";
 import type { V20PresExRecord } from "@/types/vc/acapyApi/acapyInterface";
 import type React from "react";
 import { useState } from "react";

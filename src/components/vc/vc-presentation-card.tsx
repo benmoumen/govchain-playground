@@ -1,3 +1,4 @@
+"use client";
 import { getProofConfigByCase } from "@/config/vc";
 import { useVCPresentationContext } from "@/contexts/vc-presentation-context";
 import { Loader2, PartyPopper, RefreshCcw } from "lucide-react";

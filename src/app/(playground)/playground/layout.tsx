@@ -1,5 +1,3 @@
-"use client";
-
 import { SiteHeader } from "@/components/site-header";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
 import { BackgroundDotted } from "@/components/ui/background-dotted";
@@ -10,7 +8,9 @@ interface PlaygroundLayoutProps {
   children: React.ReactNode;
 }
 
-export default function PlaygroundLayout({ children }: PlaygroundLayoutProps) {
+export default async function PlaygroundLayout({
+  children,
+}: PlaygroundLayoutProps) {
   return (
     <div className="relative flex min-h-screen flex-col">
       <SiteHeader>

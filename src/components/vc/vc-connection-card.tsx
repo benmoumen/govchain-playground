@@ -1,3 +1,4 @@
+"use client";
 import { useVCContext } from "@/contexts/vc-context";
 import { VCSteps, type VCTenant } from "@/types/vc";
 import { Loader2, RefreshCcw, Waypoints } from "lucide-react";
