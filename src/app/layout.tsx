@@ -8,6 +8,7 @@ import { fontGrotesk, fontMono, fontSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
+  applicationName: siteConfig.name,
   title: {
     default: siteConfig.name,
     template: `%s - ${siteConfig.name}`,
@@ -16,7 +17,6 @@ export const metadata: Metadata = {
 
   icons: {
     icon: "/favicon.ico",
-    shortcut: "/favicon-16x16.png",
     apple: "/apple-touch-icon.png",
   },
 };
