@@ -43,7 +43,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
             fontGrotesk.variable
           )}
         >
-          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme={siteConfig.theme}
+            enableSystem
+          >
             {children}
             <Toaster />
           </ThemeProvider>
