@@ -1,0 +1,10 @@
+name: playground
+
+services:
+  playground:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: app
+    ports:
+      - 3333:3000
