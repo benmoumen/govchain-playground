@@ -279,14 +279,14 @@ export const BlurImage = ({
         isLoading ? "blur-sm" : "blur-0",
         className
       )}
+      priority={true}
       onLoad={() => setLoading(false)}
       src={src}
       width={width}
       height={height}
-      loading="lazy"
       decoding="async"
       blurDataURL={typeof src === "string" ? src : undefined}
-      alt={alt ? alt : "Background of a beautiful view"}
+      alt={alt ? alt : "Illustrative image"}
       {...rest}
     />
   );

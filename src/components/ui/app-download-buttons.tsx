@@ -14,6 +14,7 @@ export const AppDownloadButtons = () => {
           alt="Download on the App Store"
           width={imageDimensions.width}
           height={imageDimensions.height}
+          priority={true}
         />
       </a>
       <a href={APKUrl} target="_blank" rel="noopener noreferrer">
@@ -22,6 +23,7 @@ export const AppDownloadButtons = () => {
           alt="Get it on Google Play"
           width={imageDimensions.width}
           height={imageDimensions.height}
+          priority={true}
         />
       </a>
     </div>
