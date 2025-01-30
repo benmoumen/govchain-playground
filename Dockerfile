@@ -59,6 +59,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 # Prisma
 COPY --from=builder /app/prisma ./prisma
+COPY --chown=nextjs:nodejs /app/prisma ./prisma
 
 USER nextjs
 
