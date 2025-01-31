@@ -21,10 +21,18 @@ import { NextRequest, NextResponse } from "next/server";
 async function sendCredential(
   tenant: VCTenant,
   credDefId: string,
-  data: OfferCredentialData
+  data: OfferCredentialData | null
 ): Promise<
   NextResponse<OfferCredentialResponse> | NextResponse<ErrorResponse>
 > {
+  if (!data) {
+    return NextResponse.json(
+      {
+        error_message: "Missing required data in request body",
+      },
+      { status: 400 }
+    );
+  }
   const acapyApi = createAcapyApi(tenant);
 
   const payload = {
@@ -71,6 +79,20 @@ export async function POST(
   const params = await props.params;
   const tenant = getTenantByCase(params.case);
   const cred_def_id = getVCIdentifiersByCase(params.case).credDefId;
-  const data: OfferCredentialData = await request.json();
+
+  let data: OfferCredentialData | null = null;
+  if (request.headers.get("content-type") === "application/json") {
+    try {
+      data = await request.json();
+    } catch (error) {
+      console.error(
+        "Failed to parse request body:",
+        error,
+        "[request body]:",
+        request.body
+      );
+    }
+  }
+
   return await sendCredential(tenant, cred_def_id, data);
 }

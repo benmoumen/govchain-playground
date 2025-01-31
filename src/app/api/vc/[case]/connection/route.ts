@@ -109,7 +109,8 @@ export async function POST(
   const params = await props.params;
   const tenant = getTenantByCase(params.case);
   let attachments: AttachmentDef[] | undefined;
-  if (request.body) {
+
+  if (request.headers.get("content-type") === "application/json") {
     try {
       const requestBody = await request.json();
       attachments = requestBody.attachments;
@@ -117,8 +118,7 @@ export async function POST(
       console.error("Failed to parse request body:", error);
       attachments = undefined;
     }
-  } else {
-    attachments = undefined;
   }
+
   return handleInvitation(tenant, true, attachments);
 }
