@@ -49,10 +49,7 @@ async function login(
   // Load the Tenant Password from the .env file
   const apiKeyVar = tenant.apiKeyVar;
   const apiKey = process.env[apiKeyVar];
-  if (apiKey) {
-    console.log("TenantAuthProvider.useEffect: password", apiKey);
-    console.log("TenantAuthProvider.useEffect: login");
-  } else {
+  if (apiKey === undefined) {
     console.error(`Missing Tenant API Key [${apiKeyVar}] in .env`, process.env);
     return null;
   }
