@@ -7,7 +7,7 @@ import * as motion from "motion/react-client";
 export default async function Page() {
   return (
     <div className="w-full h-full flex flex-col items-center justify-center">
-      <Card className="w-full h-[600px] bg-black/[0.96] relative overflow-hidden">
+      <Card className="w-full h-[600px] py-0 bg-black/[0.96] relative overflow-hidden">
         <div className="flex h-full">
           <SplineScene
             scene="https://draft.spline.design/6P4G2rL-QNk8ORGq/scene.splinecode"
