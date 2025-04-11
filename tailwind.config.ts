@@ -1,8 +1,8 @@
+import "tailwindcss";
 import type { Config } from "tailwindcss";
-import tailwindcssAnimate from "tailwindcss-animate";
 
 export default {
-  darkMode: ["class"],
+  darkMode: "selector",
   content: [
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
@@ -137,6 +137,5 @@ export default {
         },
       },
     },
-    plugins: [tailwindcssAnimate],
   },
 } satisfies Config;

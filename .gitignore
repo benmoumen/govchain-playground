@@ -44,3 +44,4 @@ next-env.d.ts
 
 # prisma databases
 prisma/db/*.db
+src/components/vc/presentation.json
