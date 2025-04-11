@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import UseCasePage from "@/components/vc/usecase-page";
 import { CredentialUseCases } from "@/config/vc";
 import { VCProvider } from "@/contexts/vc-context";
+import { CookiesProvider } from "react-cookie";
 
 export default function RequestVCPage() {
   const cards = data.map((card, index) => (
@@ -11,26 +12,28 @@ export default function RequestVCPage() {
   ));
 
   return (
-    <div className="w-full py-10 lg:py-20">
-      <div className="container mx-auto">
-        <div className="flex flex-col gap-10">
-          <div className="flex gap-4 flex-col items-start">
-            <div>
-              <Badge variant={"outline"} size={"xs"} className="uppercase">
-                Verifiable Credential
-              </Badge>
+    <CookiesProvider>
+      <div className="w-full py-10 lg:py-20">
+        <div className="container mx-auto">
+          <div className="flex flex-col gap-10">
+            <div className="flex gap-4 flex-col items-start">
+              <div>
+                <Badge variant={"outline"} size={"xs"} className="uppercase">
+                  Verifiable Credential
+                </Badge>
+              </div>
+              <h2 className="text-3xl md:text-5xl tracking-tighter max-w-xl font-regular text-left">
+                Collect your digital proofs
+              </h2>
+              <p className="text-lg max-w-xl lg:max-w-lg leading-relaxed tracking-tight text-muted-foreground text-left">
+                Get credentials and use them as digital proofs.
+              </p>
             </div>
-            <h2 className="text-3xl md:text-5xl tracking-tighter max-w-xl font-regular text-left">
-              Collect your digital proofs
-            </h2>
-            <p className="text-lg max-w-xl lg:max-w-lg leading-relaxed tracking-tight text-muted-foreground text-left">
-              Get credentials and use them as digital proofs.
-            </p>
           </div>
         </div>
         <Carousel items={cards} />
       </div>
-    </div>
+    </CookiesProvider>
   );
 }
 
