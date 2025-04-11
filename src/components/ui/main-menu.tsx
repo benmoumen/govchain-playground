@@ -9,9 +9,13 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
+import { headers } from "next/headers";
+import Link from "next/link";
 import React from "react";
 
-const MainMenu: React.FC = () => {
+export default async function MainMenu() {
+  const headerList = await headers();
+  const pathname = headerList.get("x-current-path");
   return (
     <NavigationMenu>
       <NavigationMenuList>
@@ -34,16 +38,20 @@ const MainMenu: React.FC = () => {
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
+        <NavigationMenuLink
+          asChild
+          className={navigationMenuTriggerStyle()}
+          active={pathname === "/playground/ai-assistant"}
+        >
+          <Link href="/playground/ai-assistant">AI Assistant</Link>
+        </NavigationMenuLink>
         <NavigationMenuItem className={navigationMenuTriggerStyle()}>
           <TextWithBadge title="Tokenized Companies" badge="Soon" disabled />
-        </NavigationMenuItem>
-        <NavigationMenuItem className={navigationMenuTriggerStyle()}>
-          <TextWithBadge title="AI Wallet" badge="Soon" disabled />
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
   );
-};
+}
 
 const TextWithBadge: React.FC<{
   title: string;
@@ -89,5 +97,3 @@ const ListItem = React.forwardRef<
   );
 });
 ListItem.displayName = "ListItem";
-
-export default MainMenu;
