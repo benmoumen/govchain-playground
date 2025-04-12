@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
 import type { Metadata, Viewport } from "next";
 
+import { EmbeddedScripts } from "@/components/embedded-scripts";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { siteConfig } from "@/config/site";
@@ -51,6 +52,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             {children}
             <Toaster />
           </ThemeProvider>
+          <EmbeddedScripts />
         </body>
       </html>
     </>
