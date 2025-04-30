@@ -9,13 +9,12 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
-import { headers } from "next/headers";
-import Link from "next/link";
+//import { headers } from "next/headers";
 import React from "react";
 
 export default async function MainMenu() {
-  const headerList = await headers();
-  const pathname = headerList.get("x-current-path");
+  //const headerList = await headers();
+  //const pathname = headerList.get("x-current-path");
   return (
     <NavigationMenu>
       <NavigationMenuList>
@@ -38,13 +37,16 @@ export default async function MainMenu() {
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
-        <NavigationMenuLink
+        {/* <NavigationMenuLink
           asChild
           className={navigationMenuTriggerStyle()}
           active={pathname === "/playground/ai-assistant"}
         >
           <Link href="/playground/ai-assistant">AI Assistant</Link>
-        </NavigationMenuLink>
+        </NavigationMenuLink> */}
+        <NavigationMenuItem className={navigationMenuTriggerStyle()}>
+          <TextWithBadge title="AI Assistant" badge="Soon" disabled />
+        </NavigationMenuItem>
         <NavigationMenuItem className={navigationMenuTriggerStyle()}>
           <TextWithBadge title="Tokenized Companies" badge="Soon" disabled />
         </NavigationMenuItem>

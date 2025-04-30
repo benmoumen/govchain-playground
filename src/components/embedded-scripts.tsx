@@ -1,5 +1,3 @@
-import Script from "next/script";
-
 export function EmbeddedScripts() {
   return (
     <>
@@ -28,7 +26,7 @@ export function EmbeddedScripts() {
         data-show-thoughts="false"
         data-support-email="faraja101@gmail.com"
         //data-username="WebsiteVisitor"
-      ></Script> */}
+      ></Script>
       <Script
         data-embed-id="a7e0a02a-5443-4f53-8d8d-257018f618ec"
         data-base-api-url="https://chat.tutorial.eregistrations.org/api/embed"
@@ -45,7 +43,7 @@ export function EmbeddedScripts() {
         data-position="bottom-right"
         data-window-height="600px"
         data-window-width="500px"
-        //data-text-size="14px"
+        data-text-size="14px"
         data-no-sponsor="true" // Hides the sponsor footer
         // data-sponsor-link="..." // Not needed if data-no-sponsor is true
         // data-sponsor-text="..." // Not needed if data-no-sponsor is true
@@ -55,7 +53,7 @@ export function EmbeddedScripts() {
         data-show-thoughts="false"
         data-support-email="faraja101@gmail.com"
         //data-username="WebsiteVisitor"
-      ></Script>
+      ></Script> */}
     </>
   );
 }
