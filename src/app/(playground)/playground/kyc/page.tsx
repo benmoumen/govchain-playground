@@ -6,6 +6,7 @@
 "use client";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -25,7 +26,7 @@ import {
 } from "@/components/ui/select";
 import { COUNTRIES } from "@/data/countries";
 import type { UserKYCData } from "@/types/didit/session";
-import { AlertCircle, ShieldCheck } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -45,7 +46,7 @@ export default function KYCVerificationPage() {
     dateOfBirth: "",
     email: "",
     phoneNumber: "",
-    country: "USA",
+    country: "LSO",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>("");
@@ -128,137 +129,146 @@ export default function KYCVerificationPage() {
   };
 
   return (
-    <div className="container mx-auto max-w-2xl px-4 py-8">
-      <div className="mb-8 text-center">
-        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
-          <ShieldCheck className="h-8 w-8 text-blue-600" />
+    <div className="w-full py-10 lg:py-20">
+      <div className="container mx-auto">
+        <div className="flex flex-col gap-10">
+          <div className="flex gap-4 flex-col items-start">
+            <div>
+              <Badge variant={"outline"} size={"xs"} className="uppercase">
+                KYC
+              </Badge>
+            </div>
+            <div className="flex gap-2 flex-col">
+              <h2 className="text-3xl md:text-5xl tracking-tighter max-w-xl font-regular text-left">
+                Verify Your Identity
+              </h2>
+            </div>
+          </div>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Personal Information</CardTitle>
+              <CardDescription>
+                Please provide your personal details for identity verification
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="firstName">First Name *</Label>
+                    <Input
+                      id="firstName"
+                      type="text"
+                      value={formData.firstName}
+                      onChange={(e) =>
+                        handleInputChange("firstName", e.target.value)
+                      }
+                      placeholder="Enter first name"
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="lastName">Last Name *</Label>
+                    <Input
+                      id="lastName"
+                      type="text"
+                      value={formData.lastName}
+                      onChange={(e) =>
+                        handleInputChange("lastName", e.target.value)
+                      }
+                      placeholder="Enter last name"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="dateOfBirth">Date of Birth *</Label>
+                  <Input
+                    id="dateOfBirth"
+                    type="date"
+                    value={formData.dateOfBirth}
+                    onChange={(e) =>
+                      handleInputChange("dateOfBirth", e.target.value)
+                    }
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email Address *</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => handleInputChange("email", e.target.value)}
+                    placeholder="Enter email address"
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="phoneNumber">Phone Number</Label>
+                  <Input
+                    id="phoneNumber"
+                    type="tel"
+                    value={formData.phoneNumber}
+                    onChange={(e) =>
+                      handleInputChange("phoneNumber", e.target.value)
+                    }
+                    placeholder="Enter phone number (optional)"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="country">Country *</Label>
+                  <Select
+                    value={formData.country}
+                    onValueChange={(value) =>
+                      handleInputChange("country", value)
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select country" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {COUNTRIES.map((country) => (
+                        <SelectItem key={country.code} value={country.code}>
+                          {country.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {error && (
+                  <Alert variant="destructive">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertDescription>{error}</AlertDescription>
+                  </Alert>
+                )}
+
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading ? "Creating Session..." : "Start Verification"}
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+
+          <div className="mt-8 rounded-lg border bg-muted/50 p-4">
+            <h3 className="font-semibold">What happens next?</h3>
+            <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
+              <li>
+                {" "}
+                • You&apos;ll be redirected to the secure verification portal
+              </li>
+              <li>• Follow the instructions to upload your ID document</li>
+              <li>• Complete any additional verification steps</li>
+              <li>• Return here once verification is complete</li>
+            </ul>
+          </div>
         </div>
-        <h1 className="text-3xl font-bold">Identity Verification</h1>
-        <p className="mt-2 text-muted-foreground">
-          Complete your KYC verification to get started
-        </p>
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Personal Information</CardTitle>
-          <CardDescription>
-            Please provide your personal details for identity verification
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="firstName">First Name *</Label>
-                <Input
-                  id="firstName"
-                  type="text"
-                  value={formData.firstName}
-                  onChange={(e) =>
-                    handleInputChange("firstName", e.target.value)
-                  }
-                  placeholder="Enter first name"
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="lastName">Last Name *</Label>
-                <Input
-                  id="lastName"
-                  type="text"
-                  value={formData.lastName}
-                  onChange={(e) =>
-                    handleInputChange("lastName", e.target.value)
-                  }
-                  placeholder="Enter last name"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="dateOfBirth">Date of Birth *</Label>
-              <Input
-                id="dateOfBirth"
-                type="date"
-                value={formData.dateOfBirth}
-                onChange={(e) =>
-                  handleInputChange("dateOfBirth", e.target.value)
-                }
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="email">Email Address *</Label>
-              <Input
-                id="email"
-                type="email"
-                value={formData.email}
-                onChange={(e) => handleInputChange("email", e.target.value)}
-                placeholder="Enter email address"
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="phoneNumber">Phone Number</Label>
-              <Input
-                id="phoneNumber"
-                type="tel"
-                value={formData.phoneNumber}
-                onChange={(e) =>
-                  handleInputChange("phoneNumber", e.target.value)
-                }
-                placeholder="Enter phone number (optional)"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="country">Country *</Label>
-              <Select
-                value={formData.country}
-                onValueChange={(value) => handleInputChange("country", value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select country" />
-                </SelectTrigger>
-                <SelectContent>
-                  {COUNTRIES.map((country) => (
-                    <SelectItem key={country.code} value={country.code}>
-                      {country.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            {error && (
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
-
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Creating Session..." : "Start Verification"}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
-
-      <div className="mt-8 rounded-lg border bg-muted/50 p-4">
-        <h3 className="font-semibold">What happens next?</h3>
-        <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
-          <li>
-            {" "}
-            • You&apos;ll be redirected to the secure verification portal
-          </li>
-          <li>• Follow the instructions to upload your ID document</li>
-          <li>• Complete any additional verification steps</li>
-          <li>• Return here once verification is complete</li>
-        </ul>
       </div>
     </div>
   );
