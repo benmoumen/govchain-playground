@@ -118,8 +118,13 @@ export class SimpleKYCService {
   /**
    * Get session status from Didit API (for any session)
    */
-  static async getSessionStatus(sessionId: string): Promise<Record<string, unknown>> {
-    return diditSDK.getSessionStatus(sessionId) as unknown as Record<string, unknown>;
+  static async getSessionStatus(
+    sessionId: string
+  ): Promise<Record<string, unknown>> {
+    return diditSDK.getSessionStatus(sessionId) as unknown as Record<
+      string,
+      unknown
+    >;
   }
 
   /**

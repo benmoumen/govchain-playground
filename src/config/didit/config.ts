@@ -7,14 +7,10 @@ export const SIMPLE_DIDIT_CONFIG = {
   API_BASE_URL: "https://verification.didit.me",
 
   // Webhook endpoint for receiving status updates
-  WEBHOOK_URL: process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}/api/didit/webhook`
-    : "http://localhost:3000/api/didit/webhook",
+  WEBHOOK_URL: `${process.env.NEXT_PUBLIC_BASE_URL}/api/didit/webhook`,
 
   // Callback URL where users return after verification
-  CALLBACK_URL: process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}/playground/kyc/verification/results`
-    : "http://localhost:3000/playground/kyc/verification/results",
+  CALLBACK_URL: `${process.env.NEXT_PUBLIC_BASE_URL}/playground/kyc/verification/results`,
 
   // Required environment variables
   API_KEY: process.env.DIDIT_API_KEY,

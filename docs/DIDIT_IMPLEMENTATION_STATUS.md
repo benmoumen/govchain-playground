@@ -149,9 +149,8 @@ src/
 
 ### Navigation
 
-- **Main Playground** → `http://localhost:3002/playground`
-- **Simple KYC** → `http://localhost:3002/playground/kyc/verification`
-- **Results Page** → `http://localhost:3002/playground/kyc/verification/results`
+- **KYC** → `/playground/kyc/verification`
+- **Results Page** → `/playground/kyc/verification/results`
 
 ## 🔐 Security Features
 
