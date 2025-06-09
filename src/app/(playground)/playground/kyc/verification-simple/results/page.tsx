@@ -12,7 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AlertCircle, CheckCircle, Clock, RefreshCw, Shield } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 
 interface SessionData {
   id: string;
@@ -47,7 +47,7 @@ function SimpleKYCResultsContent() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>("");
 
-  const fetchSession = async () => {
+  const fetchSession = useCallback(async () => {
     if (!sessionId) {
       setError("No session ID provided");
       setLoading(false);
@@ -76,7 +76,7 @@ function SimpleKYCResultsContent() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [sessionId]);
 
   useEffect(() => {
     fetchSession();
