@@ -38,11 +38,14 @@ export class KYCService {
     sessions.set(sessionId, session);
 
     try {
+      // Create callback URL with session ID parameter
+      const callbackUrl = `${DIDIT_CONFIG.CALLBACK_URL}?sessionId=${sessionId}`;
+      
       // Create Didit session
       const diditSession = await diditSDK.createSession(
         userData,
         sessionId,
-        DIDIT_CONFIG.CALLBACK_URL
+        callbackUrl
       );
 
       // Update local session with Didit data
