@@ -1,4 +1,4 @@
-const crypto = require("crypto");
+import { createHmac } from "crypto";
 
 // Test payload
 const payload = {
@@ -26,7 +26,7 @@ const secret = "test-secret-key-12345";
 const timestamp = Math.floor(Date.now() / 1000);
 
 // Generate signature
-const hmac = crypto.createHmac("sha256", secret);
+const hmac = createHmac("sha256", secret);
 const signature = hmac.update(payloadString).digest("hex");
 
 console.log("Payload:", payloadString);

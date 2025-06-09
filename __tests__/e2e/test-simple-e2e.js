@@ -1,11 +1,10 @@
 #!/usr/bin/env node
+import fetch from "node-fetch";
 
 /**
  * End-to-end integration test for Simple Didit KYC implementation
  * Tests the complete flow: create session -> get status -> webhook handling
  */
-
-const { spawn } = require("child_process");
 
 async function runE2ETest() {
   console.log("🧪 Starting End-to-End Didit KYC Integration Test\n");
@@ -122,11 +121,6 @@ async function testWebhook() {
   } catch (error) {
     return { success: false, error: error.message };
   }
-}
-
-// Add fetch polyfill for Node.js
-if (typeof fetch === "undefined") {
-  global.fetch = require("node-fetch");
 }
 
 runE2ETest().catch((error) => {

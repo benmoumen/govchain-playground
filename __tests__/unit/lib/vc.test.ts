@@ -1,6 +1,7 @@
 import type { V20PresExRecord } from "@/types/vc/acapyApi/acapyInterface";
 import type { PresIndy, PresRequestIndy } from "@/types/vc/presentation";
 import { randomBytes } from "crypto";
+import * as vcModule from "../../../src/lib/vc";
 import {
   extractAttributesFromPresentation,
   generateNonce,
@@ -154,11 +155,10 @@ describe("VC Utility Functions", () => {
           },
         },
       } as V20PresExRecord;
-
       // Mock the implementation of extractAttributesFromPresentation
       // This is needed because we can't fully replicate the complex structure expected by the function
       jest
-        .spyOn(require("@/lib/vc"), "extractAttributesFromPresentation")
+        .spyOn(vcModule, "extractAttributesFromPresentation")
         .mockImplementation(() => ({
           name: "John Doe",
           age: "30",
@@ -203,10 +203,9 @@ describe("VC Utility Functions", () => {
           },
         },
       } as V20PresExRecord;
-
       // Mock the implementation for this test case
       jest
-        .spyOn(require("@/lib/vc"), "extractAttributesFromPresentation")
+        .spyOn(vcModule, "extractAttributesFromPresentation")
         .mockImplementation(() => ({
           name: "John Doe",
           age: "",
@@ -241,10 +240,9 @@ describe("VC Utility Functions", () => {
           },
         },
       } as V20PresExRecord;
-
       // Mock the implementation for this test case
       jest
-        .spyOn(require("@/lib/vc"), "extractAttributesFromPresentation")
+        .spyOn(vcModule, "extractAttributesFromPresentation")
         .mockImplementation(() => ({}));
 
       const result = extractAttributesFromPresentation(presentationRecord);
