@@ -17,6 +17,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     console.log(`📝 Webhook payload:`, JSON.parse(body));
     console.log(`🔐 Signature: ${signature}`);
     console.log(`⏰ Timestamp: ${timestamp}`);
+    
+    // Debug: Check if webhook secret is configured
+    console.log(`🔑 Webhook secret configured: ${process.env.DIDIT_WEBHOOK_SECRET_KEY ? 'Yes' : 'No'}`);
 
     if (!signature) {
       console.log("❌ Missing webhook signature");

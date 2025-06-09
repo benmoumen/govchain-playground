@@ -15,5 +15,5 @@ export const SIMPLE_DIDIT_CONFIG = {
   // Required environment variables
   API_KEY: process.env.DIDIT_API_KEY,
   WORKFLOW_ID: process.env.DIDIT_WORKFLOW_ID,
-  WEBHOOK_SECRET: process.env.DIDIT_WEBHOOK_SECRET,
+  WEBHOOK_SECRET: process.env.DIDIT_WEBHOOK_SECRET_KEY,
 } as const;
