@@ -3,16 +3,16 @@
  * Only implements core functionality as per Didit API flow
  */
 
-import { SIMPLE_DIDIT_CONFIG } from "@/config/didit/simple-config";
-import { SimpleDidItSDK } from "@/lib/didit/simple-sdk";
-import type { SimpleKYCSession, UserKYCData } from "@/types/didit/simple-session";
+import { SIMPLE_DIDIT_CONFIG } from "@/config/didit/config";
+import { DiditSDK } from "@/lib/didit/sdk";
+import type { SimpleKYCSession, UserKYCData } from "@/types/didit/session";
 import { v4 as uuidv4 } from "uuid";
 
 // Simple in-memory storage for sessions
 const sessions = new Map<string, SimpleKYCSession>();
 
 // Initialize SDK
-const diditSDK = new SimpleDidItSDK({
+const diditSDK = new DiditSDK({
   apiKey: SIMPLE_DIDIT_CONFIG.API_KEY!,
   workflowId: SIMPLE_DIDIT_CONFIG.WORKFLOW_ID!,
   webhookSecret: SIMPLE_DIDIT_CONFIG.WEBHOOK_SECRET,

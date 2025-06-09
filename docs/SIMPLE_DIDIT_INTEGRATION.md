@@ -13,14 +13,14 @@ This simplified integration implements only the essential features as outlined i
 
 ## Architecture
 
-### Simple SDK (`/src/lib/didit/simple-sdk.ts`)
+### Simple SDK (`/src/lib/didit/sdk.ts`)
 
 - Minimal TypeScript SDK with only essential methods
 - Direct API calls without complex retry logic
 - Basic webhook signature verification
 - Simple error handling
 
-### Session Service (`/src/services/didit/simple-session-service.ts`)
+### Session Service (`/src/services/didit/session-service.ts`)
 
 - In-memory session storage (Map-based)
 - Basic CRUD operations
@@ -29,14 +29,14 @@ This simplified integration implements only the essential features as outlined i
 
 ### API Endpoints
 
-- **POST** `/api/didit/sessions-simple` - Create verification session
-- **GET** `/api/didit/sessions-simple/[sessionId]` - Get session status
-- **POST** `/api/didit/webhook-simple` - Handle webhook notifications
+- **POST** `/api/didit/sessions` - Create verification session
+- **GET** `/api/didit/sessions/[sessionId]` - Get session status
+- **POST** `/api/didit/webhook` - Handle webhook notifications
 
 ### Frontend Pages
 
-- `/playground/kyc/verification-simple` - Clean verification form
-- `/playground/kyc/verification-simple/results` - Simple results display
+- `/playground/kyc/verification` - Clean verification form
+- `/playground/kyc/verification/results` - Simple results display
 
 ## Key Features
 
@@ -61,7 +61,7 @@ DIDIT_WEBHOOK_SECRET=your-webhook-secret
 
    ```bash
    # Navigate to the verification page
-   /playground/kyc/verification-simple
+   /playground/kyc/verification
    ```
 
 2. **Fill Form** - Enter personal details
@@ -77,16 +77,16 @@ DIDIT_WEBHOOK_SECRET=your-webhook-secret
 ```
 src/
 ├── lib/didit/
-│   └── simple-sdk.ts              # Minimal SDK
+│   └── sdk.ts              # Minimal SDK
 ├── services/didit/
-│   └── simple-session-service.ts  # Session management
+│   └── session-service.ts  # Session management
 ├── app/api/didit/
-│   ├── sessions-simple/           # Session API endpoints
-│   └── webhook-simple/            # Webhook handler
+│   ├── sessions/           # Session API endpoints
+│   └── webhook/            # Webhook handler
 ├── app/(playground)/playground/kyc/
-│   └── verification-simple/       # Frontend pages
+│   └── verification/       # Frontend pages
 └── config/didit/
-    └── simple-config.ts           # Configuration
+    └── config.ts           # Configuration
 ```
 
 ## Differences from Complex Implementation
@@ -126,7 +126,7 @@ To enhance this implementation:
 ### Create Session
 
 ```typescript
-POST /api/didit/sessions-simple
+POST /api/didit/sessions
 Content-Type: application/json
 
 {
@@ -147,7 +147,7 @@ GET / api / didit / sessions - simple / { sessionId };
 ### Webhook Payload
 
 ```typescript
-POST /api/didit/webhook-simple
+POST /api/didit/webhook
 x-signature: sha256=...
 
 {

@@ -52,20 +52,17 @@ async function runE2ETest() {
 
 async function testCreateSession() {
   try {
-    const response = await fetch(
-      "http://localhost:3002/api/didit/sessions-simple",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          firstName: "Test",
-          lastName: "User",
-          dateOfBirth: "1990-01-01",
-          email: "test@example.com",
-          country: "USA",
-        }),
-      }
-    );
+    const response = await fetch("http://localhost:3002/api/didit/sessions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        firstName: "Test",
+        lastName: "User",
+        dateOfBirth: "1990-01-01",
+        email: "test@example.com",
+        country: "USA",
+      }),
+    });
 
     const data = await response.json();
 
@@ -82,7 +79,7 @@ async function testCreateSession() {
 async function testGetStatus(sessionId) {
   try {
     const response = await fetch(
-      `http://localhost:3002/api/didit/sessions-simple/${sessionId}`
+      `http://localhost:3002/api/didit/sessions/${sessionId}`
     );
     const data = await response.json();
 
@@ -98,21 +95,18 @@ async function testGetStatus(sessionId) {
 
 async function testWebhook() {
   try {
-    const response = await fetch(
-      "http://localhost:3002/api/didit/webhook-simple",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-didit-signature": "invalid-signature",
-        },
-        body: JSON.stringify({
-          session_id: "test",
-          status: "completed",
-          vendor_data: "test-data",
-        }),
-      }
-    );
+    const response = await fetch("http://localhost:3002/api/didit/webhook", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-didit-signature": "invalid-signature",
+      },
+      body: JSON.stringify({
+        session_id: "test",
+        status: "completed",
+        vendor_data: "test-data",
+      }),
+    });
 
     const data = await response.json();
 

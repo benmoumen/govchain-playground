@@ -3,8 +3,8 @@
  * Follows official Didit API flow
  */
 
-import { SimpleKYCService } from "@/services/didit/simple-session-service";
-import type { UserKYCData } from "@/types/didit/simple-session";
+import { SimpleKYCService } from "@/services/didit/session-service";
+import type { UserKYCData } from "@/types/didit/session";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {

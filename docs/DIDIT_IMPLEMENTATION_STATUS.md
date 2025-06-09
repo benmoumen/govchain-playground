@@ -30,15 +30,15 @@ We now have **ONE** clean implementation:
 
 1. **Get Credentials** ✅ - Environment configuration
 2. **Select Workflow** ✅ - Workflow ID configuration
-3. **Create Session** ✅ - POST `/api/didit/sessions-simple`
+3. **Create Session** ✅ - POST `/api/didit/sessions`
 4. **Handle Response** ✅ - Session management with URLs
-5. **Process Webhooks** ✅ - POST `/api/didit/webhook-simple`
-6. **Retrieve Results** ✅ - GET `/api/didit/sessions-simple/[id]`
+5. **Process Webhooks** ✅ - POST `/api/didit/webhook`
+6. **Retrieve Results** ✅ - GET `/api/didit/sessions/[id]`
 
 ### 🏛️ Clean Architecture
 
-- **Simple SDK** (`simple-sdk.ts`) - 100 lines vs 357 lines
-- **Session Service** (`simple-session-service.ts`) - In-memory Map storage
+- **Simple SDK** (`sdk.ts`) - 100 lines vs 357 lines
+- **Session Service** (`session-service.ts`) - In-memory Map storage
 - **Minimal APIs** - 3 focused endpoints vs 7+ complex ones
 - **Clean UI** - Simple verification form and results pages
 - **Type Safety** - Streamlined TypeScript definitions
@@ -75,7 +75,7 @@ Tests: 6 passed, 6 total (95% coverage)
 ### Session Creation API
 
 ```bash
-POST /api/didit/sessions-simple
+POST /api/didit/sessions
 ✅ Status: 200 OK
 ✅ Response: Session created with verification URL
 ✅ Time: ~500ms
@@ -84,7 +84,7 @@ POST /api/didit/sessions-simple
 ### Session Status API
 
 ```bash
-GET /api/didit/sessions-simple/[id]
+GET /api/didit/sessions/[id]
 ✅ Status: 200 OK
 ✅ Response: Complete session data with timestamps
 ✅ Time: ~50ms
@@ -93,7 +93,7 @@ GET /api/didit/sessions-simple/[id]
 ### Webhook API
 
 ```bash
-POST /api/didit/webhook-simple
+POST /api/didit/webhook
 ✅ Status: 400 Bad Request (expected - signature validation working)
 ✅ Response: Proper error handling
 ✅ Security: HMAC signature verification active
@@ -104,34 +104,34 @@ POST /api/didit/webhook-simple
 ```
 src/
 ├── lib/didit/
-│   ├── simple-sdk.ts              # Minimal 100-line SDK ✅
+│   ├── sdk.ts              # Minimal 100-line SDK ✅
 │   └── sdk.ts                     # Complex 357-line SDK (preserved)
 ├── services/didit/
-│   ├── simple-session-service.ts  # In-memory session storage ✅
+│   ├── session-service.ts  # In-memory session storage ✅
 │   ├── kyc-session-service.ts     # Database service (preserved)
 │   └── enhanced-session-service.ts # Analytics service (preserved)
 ├── app/api/didit/
-│   ├── sessions-simple/           # 3 minimal endpoints ✅
+│   ├── sessions/           # 3 minimal endpoints ✅
 │   │   ├── route.ts              # Create sessions
 │   │   └── [sessionId]/route.ts  # Get session status
-│   ├── webhook-simple/route.ts    # Handle webhooks ✅
+│   ├── webhook/route.ts    # Handle webhooks ✅
 │   ├── enhanced/                  # Complex endpoints (preserved)
 │   ├── performance/               # Analytics endpoints (preserved)
 │   └── sdk/                       # SDK endpoints (preserved)
 ├── app/(playground)/playground/kyc/
-│   ├── verification-simple/       # Clean UI pages ✅
+│   ├── verification/       # Clean UI pages ✅
 │   │   ├── page.tsx              # Verification form
 │   │   └── results/page.tsx      # Results display
 │   ├── verification/              # Complex UI (preserved)
 │   └── dashboard/                 # Analytics dashboard (preserved)
 ├── types/didit/
-│   ├── simple-session.ts         # Streamlined types ✅
+│   ├── session.ts         # Streamlined types ✅
 │   └── session.ts                # Complex types (preserved)
 ├── config/didit/
-│   ├── simple-config.ts          # Minimal config ✅
+│   ├── config.ts          # Minimal config ✅
 │   └── session.ts                # Complex config (preserved)
 └── tests/
-    ├── simple-didit-integration.test.ts # Simple tests ✅
+    ├── didit-integration.test.ts # Simple tests ✅
     └── didit-integration.test.ts # Complex tests (preserved)
 ```
 
@@ -139,7 +139,7 @@ src/
 
 ### Simple KYC Flow
 
-1. **Navigate** → `/playground/kyc/verification-simple`
+1. **Navigate** → `/playground/kyc/verification`
 2. **Fill Form** → Personal details (firstName, lastName, dateOfBirth, email, country)
 3. **Submit** → Creates Didit session automatically
 4. **Redirect** → Sent to Didit verification portal
@@ -150,8 +150,8 @@ src/
 ### Navigation
 
 - **Main Playground** → `http://localhost:3002/playground`
-- **Simple KYC** → `http://localhost:3002/playground/kyc/verification-simple`
-- **Results Page** → `http://localhost:3002/playground/kyc/verification-simple/results`
+- **Simple KYC** → `http://localhost:3002/playground/kyc/verification`
+- **Results Page** → `http://localhost:3002/playground/kyc/verification/results`
 
 ## 🔐 Security Features
 

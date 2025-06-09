@@ -3,7 +3,7 @@
  * Returns session status with optional API fallback
  */
 
-import { SimpleKYCService } from "@/services/didit/simple-session-service";
+import { SimpleKYCService } from "@/services/didit/session-service";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(

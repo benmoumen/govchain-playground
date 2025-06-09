@@ -9,7 +9,13 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { AlertCircle, CheckCircle, Clock, RefreshCw, Shield } from "lucide-react";
+import {
+  AlertCircle,
+  CheckCircle,
+  Clock,
+  RefreshCw,
+  Shield,
+} from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useState } from "react";
@@ -33,7 +39,16 @@ interface SessionData {
 
 export default function SimpleKYCResultsPage() {
   return (
-    <Suspense fallback={<div className="container mx-auto max-w-4xl px-4 py-8"><div className="flex items-center justify-center"><RefreshCw className="h-6 w-6 animate-spin" /><span className="ml-2">Loading session...</span></div></div>}>
+    <Suspense
+      fallback={
+        <div className="container mx-auto max-w-4xl px-4 py-8">
+          <div className="flex items-center justify-center">
+            <RefreshCw className="h-6 w-6 animate-spin" />
+            <span className="ml-2">Loading session...</span>
+          </div>
+        </div>
+      }
+    >
       <SimpleKYCResultsContent />
     </Suspense>
   );
@@ -42,7 +57,7 @@ export default function SimpleKYCResultsPage() {
 function SimpleKYCResultsContent() {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("sessionId");
-  
+
   const [session, setSession] = useState<SessionData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>("");
@@ -56,14 +71,14 @@ function SimpleKYCResultsContent() {
 
     try {
       setLoading(true);
-      const response = await fetch(`/api/didit/sessions-simple/${sessionId}`);
-      
+      const response = await fetch(`/api/didit/sessions/${sessionId}`);
+
       if (!response.ok) {
         throw new Error("Failed to fetch session");
       }
 
       const data = await response.json();
-      
+
       if (!data.success) {
         throw new Error(data.error || "Session not found");
       }
@@ -100,7 +115,9 @@ function SimpleKYCResultsContent() {
     }
   };
 
-  const getStatusVariant = (status: string): "default" | "secondary" | "destructive" | "outline" => {
+  const getStatusVariant = (
+    status: string
+  ): "default" | "secondary" | "destructive" | "outline" => {
     switch (status?.toLowerCase()) {
       case "completed":
       case "approved":
@@ -137,7 +154,7 @@ function SimpleKYCResultsContent() {
           <AlertDescription>{error}</AlertDescription>
         </Alert>
         <div className="mt-4">
-          <Link href="/playground/kyc/verification-simple">
+          <Link href="/playground/kyc/verification">
             <Button variant="outline">Start New Verification</Button>
           </Link>
         </div>
@@ -160,9 +177,7 @@ function SimpleKYCResultsContent() {
     <div className="container mx-auto max-w-4xl px-4 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold">Verification Results</h1>
-        <p className="text-muted-foreground">
-          Session ID: {session.id}
-        </p>
+        <p className="text-muted-foreground">Session ID: {session.id}</p>
       </div>
 
       <div className="space-y-6">
@@ -176,7 +191,10 @@ function SimpleKYCResultsContent() {
           </CardHeader>
           <CardContent>
             <div className="flex items-center justify-between">
-              <Badge variant={getStatusVariant(session.status)} className="text-sm">
+              <Badge
+                variant={getStatusVariant(session.status)}
+                className="text-sm"
+              >
                 {session.status.toUpperCase()}
               </Badge>
               <Button
@@ -185,11 +203,13 @@ function SimpleKYCResultsContent() {
                 onClick={fetchSession}
                 disabled={loading}
               >
-                <RefreshCw className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`} />
+                <RefreshCw
+                  className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`}
+                />
                 Refresh
               </Button>
             </div>
-            
+
             {session.error && (
               <Alert variant="destructive" className="mt-4">
                 <AlertCircle className="h-4 w-4" />
@@ -229,16 +249,22 @@ function SimpleKYCResultsContent() {
               </div>
               <div>
                 <span className="font-medium">Email:</span>
-                <p className="text-muted-foreground">{session.userData.email}</p>
+                <p className="text-muted-foreground">
+                  {session.userData.email}
+                </p>
               </div>
               <div>
                 <span className="font-medium">Date of Birth:</span>
-                <p className="text-muted-foreground">{session.userData.dateOfBirth}</p>
+                <p className="text-muted-foreground">
+                  {session.userData.dateOfBirth}
+                </p>
               </div>
               {session.userData.country && (
                 <div>
                   <span className="font-medium">Country:</span>
-                  <p className="text-muted-foreground">{session.userData.country}</p>
+                  <p className="text-muted-foreground">
+                    {session.userData.country}
+                  </p>
                 </div>
               )}
             </div>
@@ -261,12 +287,16 @@ function SimpleKYCResultsContent() {
 
         {/* Actions */}
         <div className="flex gap-4">
-          <Link href="/playground/kyc/verification-simple">
+          <Link href="/playground/kyc/verification">
             <Button variant="outline">Start New Verification</Button>
           </Link>
           {session.verificationUrl && session.status !== "completed" && (
             <Button asChild>
-              <a href={session.verificationUrl} target="_blank" rel="noopener noreferrer">
+              <a
+                href={session.verificationUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Continue Verification
               </a>
             </Button>

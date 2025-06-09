@@ -3,7 +3,7 @@
  * Based on: https://docs.didit.me/reference/webhooks
  */
 
-export interface DidItWebhookPayload {
+export interface DiditWebhookPayload {
   session_id: string;
   status:
     | "Not Started"
@@ -21,10 +21,10 @@ export interface DidItWebhookPayload {
     account_id?: string;
     [key: string]: unknown;
   };
-  decision?: DidItDecision;
+  decision?: DiditDecision;
 }
 
-export interface DidItDecision {
+export interface DiditDecision {
   session_id: string;
   session_number: number;
   session_url: string;
@@ -38,12 +38,12 @@ export interface DidItDecision {
     [key: string]: unknown;
   };
   callback: string;
-  id_verification?: DidItIdVerification;
-  reviews?: DidItReview[];
+  id_verification?: DiditIdVerification;
+  reviews?: DiditReview[];
   created_at: string;
 }
 
-export interface DidItIdVerification {
+export interface DiditIdVerification {
   status: string;
   document_type: string;
   document_number: string;
@@ -70,12 +70,12 @@ export interface DidItIdVerification {
   place_of_birth: string;
   marital_status: string;
   nationality: string;
-  parsed_address?: DidItParsedAddress;
+  parsed_address?: DiditParsedAddress;
   extra_files?: string[];
-  warnings?: DidItWarning[];
+  warnings?: DiditWarning[];
 }
 
-export interface DidItParsedAddress {
+export interface DiditParsedAddress {
   id: string;
   city: string;
   label: string;
@@ -104,7 +104,7 @@ export interface DidItParsedAddress {
   };
 }
 
-export interface DidItWarning {
+export interface DiditWarning {
   risk: string;
   additional_data?: unknown;
   log_type: string;
@@ -112,18 +112,18 @@ export interface DidItWarning {
   long_description: string;
 }
 
-export interface DidItReview {
+export interface DiditReview {
   user: string;
   new_status: string;
   comment: string;
   created_at: string;
 }
 
-export interface DidItWebhookHeaders {
+export interface DiditWebhookHeaders {
   "X-Signature": string;
   "X-Timestamp": string;
 }
 
-export interface DidItWebhookResponse {
+export interface DiditWebhookResponse {
   message: string;
 }

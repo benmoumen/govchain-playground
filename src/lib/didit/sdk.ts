@@ -8,10 +8,10 @@ import type {
   DidItSessionRequest,
   DidItSessionResponse,
   UserKYCData,
-} from "@/types/didit/simple-session";
+} from "@/types/didit/session";
 import { createHmac } from "crypto";
 
-export interface SimpleDidItConfig {
+export interface DiditConfig {
   apiKey: string;
   workflowId: string;
   webhookSecret?: string;
@@ -30,10 +30,10 @@ export interface SessionDecision {
   };
 }
 
-export class SimpleDidItSDK {
-  private config: Required<SimpleDidItConfig>;
+export class DiditSDK {
+  private config: Required<DiditConfig>;
 
-  constructor(config: SimpleDidItConfig) {
+  constructor(config: DiditConfig) {
     this.config = {
       baseUrl: "https://verification.didit.me",
       webhookSecret: "",

@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-import type { DidItWebhookPayload } from "@/types/didit/webhook";
+import type { DiditWebhookPayload } from "@/types/didit/webhook";
 import { createHmac } from "crypto";
 
 // Mock environment variable
@@ -57,8 +57,8 @@ describe("Didit Webhook Logic", () => {
   };
 
   const createWebhookPayload = (
-    overrides: Partial<DidItWebhookPayload> = {}
-  ): DidItWebhookPayload => ({
+    overrides: Partial<DiditWebhookPayload> = {}
+  ): DiditWebhookPayload => ({
     session_id: "test-session-123",
     status: "Approved",
     created_at: Math.floor(Date.now() / 1000),
@@ -72,7 +72,7 @@ describe("Didit Webhook Logic", () => {
     ...overrides,
   });
 
-  const setupValidWebhookRequest = (payload: DidItWebhookPayload) => {
+  const setupValidWebhookRequest = (payload: DiditWebhookPayload) => {
     const body = JSON.stringify(payload);
     const signature = createSignature(body, mockWebhookSecret);
 

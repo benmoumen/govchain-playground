@@ -3,8 +3,8 @@
  * Step 5: Handle webhook notifications for verification status
  */
 
-import { SimpleKYCService } from "@/services/didit/simple-session-service";
-import type { DidItWebhookPayload } from "@/types/didit/webhook";
+import { SimpleKYCService } from "@/services/didit/session-service";
+import type { DiditWebhookPayload } from "@/types/didit/webhook";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
@@ -27,11 +27,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    const payload: DidItWebhookPayload = JSON.parse(body);
-    
+    const payload: DiditWebhookPayload = JSON.parse(body);
+
     // Find session by vendor_data (our internal session ID)
     const session = SimpleKYCService.getSession(payload.vendor_data);
-    
+
     if (session) {
       // Update session status
       SimpleKYCService.updateSessionStatus(
@@ -39,10 +39,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         payload.status,
         payload as unknown as Record<string, unknown>
       );
-      
-      console.log(`✅ Updated session ${payload.vendor_data} to status: ${payload.status}`);
+
+      console.log(
+        `✅ Updated session ${payload.vendor_data} to status: ${payload.status}`
+      );
     } else {
-      console.log(`⚠️ Session not found for vendor_data: ${payload.vendor_data}`);
+      console.log(
+        `⚠️ Session not found for vendor_data: ${payload.vendor_data}`
+      );
     }
 
     return NextResponse.json({ success: true });

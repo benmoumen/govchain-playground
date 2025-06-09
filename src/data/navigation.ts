@@ -19,15 +19,15 @@ export const navMain = [
   },
   {
     title: "KYC Verification",
-    url: "/playground/kyc/verification-simple",
+    url: "/playground/kyc/verification",
     items: [
       {
         title: "Start Verification",
-        url: "/playground/kyc/verification-simple",
+        url: "/playground/kyc/verification",
       },
       {
         title: "View Results",
-        url: "/playground/kyc/verification-simple/results",
+        url: "/playground/kyc/verification/results",
       },
     ],
   },
