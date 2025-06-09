@@ -1,9 +1,9 @@
 /**
- * Simplified Didit Session Configuration
+ * Didit Session Configuration
  * Following minimal API flow requirements
  */
 
-export const SIMPLE_DIDIT_CONFIG = {
+export const DIDIT_CONFIG = {
   API_BASE_URL: "https://verification.didit.me",
 
   // Webhook endpoint for receiving status updates

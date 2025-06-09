@@ -4,30 +4,30 @@
  * Enhanced with Didit API fallback for resilience
  */
 
-import { SIMPLE_DIDIT_CONFIG } from "@/config/didit/config";
+import { DIDIT_CONFIG } from "@/config/didit/config";
 import { DiditSDK } from "@/lib/didit/sdk";
-import type { SimpleKYCSession, UserKYCData } from "@/types/didit/session";
+import type { KYCSession, UserKYCData } from "@/types/didit/session";
 import { v4 as uuidv4 } from "uuid";
 
 // Simple in-memory storage for sessions
-const sessions = new Map<string, SimpleKYCSession>();
+const sessions = new Map<string, KYCSession>();
 
 // Initialize SDK
 const diditSDK = new DiditSDK({
-  apiKey: SIMPLE_DIDIT_CONFIG.API_KEY!,
-  workflowId: SIMPLE_DIDIT_CONFIG.WORKFLOW_ID!,
-  webhookSecret: SIMPLE_DIDIT_CONFIG.WEBHOOK_SECRET,
+  apiKey: DIDIT_CONFIG.API_KEY!,
+  workflowId: DIDIT_CONFIG.WORKFLOW_ID!,
+  webhookSecret: DIDIT_CONFIG.WEBHOOK_SECRET,
 });
 
-export class SimpleKYCService {
+export class KYCService {
   /**
    * Create new verification session
    */
-  static async createSession(userData: UserKYCData): Promise<SimpleKYCSession> {
+  static async createSession(userData: UserKYCData): Promise<KYCSession> {
     const sessionId = uuidv4();
 
     // Create local session
-    const session: SimpleKYCSession = {
+    const session: KYCSession = {
       id: sessionId,
       userData,
       status: "pending",
@@ -42,7 +42,7 @@ export class SimpleKYCService {
       const diditSession = await diditSDK.createSession(
         userData,
         sessionId,
-        SIMPLE_DIDIT_CONFIG.CALLBACK_URL
+        DIDIT_CONFIG.CALLBACK_URL
       );
 
       // Update local session with Didit data
@@ -67,7 +67,7 @@ export class SimpleKYCService {
   /**
    * Get session by ID (with Didit API fallback for resilience)
    */
-  static async getSession(sessionId: string): Promise<SimpleKYCSession | null> {
+  static async getSession(sessionId: string): Promise<KYCSession | null> {
     // Try memory first
     const memorySession = sessions.get(sessionId);
     if (memorySession) {
@@ -80,7 +80,7 @@ export class SimpleKYCService {
       const diditData = await this.getSessionStatus(sessionId);
       
       // Create a minimal session from Didit data
-      const session: SimpleKYCSession = {
+      const session: KYCSession = {
         id: sessionId,
         userData: {
           firstName: "",
@@ -129,7 +129,7 @@ export class SimpleKYCService {
   /**
    * Find session by Didit session ID
    */
-  static findByDiditId(diditSessionId: string): SimpleKYCSession | undefined {
+  static findByDiditId(diditSessionId: string): KYCSession | undefined {
     for (const [, session] of sessions) {
       if (session.sessionId === diditSessionId) {
         return session;
@@ -172,14 +172,14 @@ export class SimpleKYCService {
   /**
    * Get all sessions (for debugging)
    */
-  static getAllSessions(): SimpleKYCSession[] {
+  static getAllSessions(): KYCSession[] {
     return Array.from(sessions.values());
   }
 
   /**
    * Map Didit status to our simplified status enum
    */
-  private static mapDiditStatusToSimple(diditStatus: string): SimpleKYCSession["status"] {
+  private static mapDiditStatusToSimple(diditStatus: string): KYCSession["status"] {
     const status = diditStatus.toLowerCase();
 
     if (
@@ -211,7 +211,7 @@ export class SimpleKYCService {
 /**
  * Map Didit status to our simplified status enum
  */
-function mapDiditStatus(diditStatus: string): SimpleKYCSession["status"] {
+function mapDiditStatus(diditStatus: string): KYCSession["status"] {
   const status = diditStatus.toLowerCase();
 
   if (

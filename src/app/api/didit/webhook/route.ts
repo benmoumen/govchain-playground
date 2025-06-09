@@ -3,7 +3,7 @@
  * Step 5: Handle webhook notifications for verification status
  */
 
-import { SimpleKYCService } from "@/services/didit/session-service";
+import { KYCService } from "@/services/didit/session-service";
 import type { DiditWebhookPayload } from "@/types/didit/webhook";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     // Verify webhook signature
     try {
-      if (!SimpleKYCService.verifyWebhook(body, signature)) {
+      if (!KYCService.verifyWebhook(body, signature)) {
         console.log("❌ Invalid webhook signature");
         return NextResponse.json(
           { error: "Invalid webhook signature" },
@@ -50,16 +50,16 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const payload: DiditWebhookPayload = JSON.parse(body);
 
     // Debug: Log all available sessions
-    const allSessions = SimpleKYCService.getAllSessions();
+    const allSessions = KYCService.getAllSessions();
     console.log(`📋 Available sessions: ${allSessions.length}`);
     allSessions.forEach(s => console.log(`  - ${s.id} (vendor_data in session: ${s.id})`));
 
-    // Find session by vendor_data (our internal session ID)
-    const session = SimpleKYCService.getSession(payload.vendor_data);
+    // Find session by vendor_data (our internal session ID) - now async
+    const session = await KYCService.getSession(payload.vendor_data);
 
     if (session) {
       // Update session status
-      SimpleKYCService.updateSessionStatus(
+      KYCService.updateSessionStatus(
         payload.vendor_data,
         payload.status,
         payload as unknown as Record<string, unknown>
@@ -74,10 +74,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
       
       // Also try to find by Didit session ID
-      const sessionByDiditId = SimpleKYCService.findByDiditId(payload.session_id);
+      const sessionByDiditId = KYCService.findByDiditId(payload.session_id);
       if (sessionByDiditId) {
         console.log(`✅ Found session by Didit ID: ${sessionByDiditId.id}`);
-        SimpleKYCService.updateSessionStatus(
+        KYCService.updateSessionStatus(
           sessionByDiditId.id,
           payload.status,
           payload as unknown as Record<string, unknown>

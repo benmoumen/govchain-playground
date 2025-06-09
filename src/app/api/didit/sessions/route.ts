@@ -3,7 +3,7 @@
  * Follows official Didit API flow
  */
 
-import { SimpleKYCService } from "@/services/didit/session-service";
+import { KYCService } from "@/services/didit/session-service";
 import type { UserKYCData } from "@/types/didit/session";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -20,7 +20,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     // Create session using simple service
-    const session = await SimpleKYCService.createSession(userData);
+    const session = await KYCService.createSession(userData);
 
     return NextResponse.json({
       success: true,

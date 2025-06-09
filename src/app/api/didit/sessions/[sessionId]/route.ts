@@ -3,7 +3,7 @@
  * Returns session status with optional API fallback
  */
 
-import { SimpleKYCService } from "@/services/didit/session-service";
+import { KYCService } from "@/services/didit/session-service";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
@@ -23,10 +23,10 @@ export async function GET(
     console.log(`🔍 Looking for session: ${sessionId}`);
 
     // Get session (memory first, then Didit API fallback)
-    const session = await SimpleKYCService.getSession(sessionId);
+    const session = await KYCService.getSession(sessionId);
 
     // Debug: Log all existing session IDs in memory
-    const allSessions = SimpleKYCService.getAllSessions();
+    const allSessions = KYCService.getAllSessions();
     console.log(`📋 Available sessions in memory: ${allSessions.length}`);
     allSessions.forEach((s) =>
       console.log(`  - ${s.id} (status: ${s.status})`)
@@ -46,7 +46,7 @@ export async function GET(
     // If session is completed, optionally fetch latest decision from Didit API
     if (session.status === "completed" && session.sessionId) {
       try {
-        const decision = await SimpleKYCService.getSessionDecision(
+        const decision = await KYCService.getSessionDecision(
           session.sessionId
         );
         session.diditData = decision;
