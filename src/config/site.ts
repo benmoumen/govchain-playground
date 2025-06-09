@@ -1,7 +1,7 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "Digital Wallet Playground",
+  name: "Digital Experiments",
   description:
     "An interactive platform showcasing real-world use cases of digital wallets, Verifiable Credentials, and blockchain technology.",
   theme: "dark" as "dark" | "light",

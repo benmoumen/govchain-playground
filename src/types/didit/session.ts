@@ -1,8 +1,8 @@
 /**
- * Types for minimal Didit KYC implementation
+ * Simple types for minimal Didit KYC implementation
  */
 
-export interface KYCSession {
+export interface SimpleKYCSession {
   id: string;
   sessionId?: string; // Didit session ID
   sessionToken?: string; // Didit session token
