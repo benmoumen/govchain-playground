@@ -33,8 +33,57 @@ export async function GET(
     );
 
     if (!session) {
-      console.log(`❌ Session ${sessionId} not found`);
-      return NextResponse.json({ error: "Session not found" }, { status: 404 });
+      console.log(`❌ Session ${sessionId} not found locally`);
+      
+      // Fallback: Try to query Didit API directly using the sessionId as Didit session ID
+      console.log(`🔄 Attempting to fetch session data from Didit API...`);
+      try {
+        const diditData = await SimpleKYCService.getSessionStatus(sessionId);
+        console.log(`✅ Found session in Didit API: ${sessionId}`);
+        
+        // Map Didit status to our simplified status
+        const mapDiditStatus = (status: unknown): string => {
+          if (typeof status !== 'string') return 'unknown';
+          const statusLower = status.toLowerCase();
+          
+          if (statusLower.includes('complete') || statusLower.includes('success') || statusLower.includes('approve')) {
+            return 'completed';
+          }
+          if (statusLower.includes('progress') || statusLower.includes('processing')) {
+            return 'in_progress';
+          }
+          if (statusLower.includes('fail') || statusLower.includes('reject') || statusLower.includes('error')) {
+            return 'failed';
+          }
+          if (statusLower.includes('pending') || statusLower.includes('waiting')) {
+            return 'pending';
+          }
+          
+          return 'unknown';
+        };
+        
+        // Return the Didit data wrapped in our response format
+        return NextResponse.json({
+          success: true,
+          session: {
+            id: sessionId,
+            status: mapDiditStatus(diditData.status),
+            diditData,
+            // Note: Local session data not available
+            verificationUrl: null,
+            createdAt: null,
+            updatedAt: new Date(),
+            userData: null,
+            error: null,
+          },
+          source: 'didit_api', // Indicate this came from Didit API, not local storage
+        });
+      } catch (diditError) {
+        console.log(`❌ Session ${sessionId} not found in Didit API either:`, diditError);
+        return NextResponse.json({ 
+          error: "Session not found in local storage or Didit API" 
+        }, { status: 404 });
+      }
     }
 
     console.log(`✅ Found session: ${session.id} (status: ${session.status})`);
@@ -63,6 +112,7 @@ export async function GET(
         diditData: session.diditData,
         error: session.error,
       },
+      source: 'local_storage', // Indicate this came from local storage
     });
   } catch (error) {
     console.error("Session status error:", error);

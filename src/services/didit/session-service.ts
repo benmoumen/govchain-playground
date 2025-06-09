@@ -116,6 +116,13 @@ export class SimpleKYCService {
   }
 
   /**
+   * Get session status from Didit API (for any session)
+   */
+  static async getSessionStatus(sessionId: string): Promise<Record<string, unknown>> {
+    return diditSDK.getSessionStatus(sessionId) as unknown as Record<string, unknown>;
+  }
+
+  /**
    * Verify webhook signature
    */
   static verifyWebhook(payload: string, signature: string): boolean {

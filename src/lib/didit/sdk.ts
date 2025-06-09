@@ -108,6 +108,34 @@ export class DiditSDK {
   }
 
   /**
+   * Get general session status from Didit API
+   * This can be used to query any session, not just completed ones
+   */
+  async getSessionStatus(sessionId: string): Promise<{
+    session_id: string;
+    status: string;
+    workflow_id: string;
+    vendor_data?: string;
+    metadata?: unknown;
+  }> {
+    const response = await fetch(
+      `${this.config.baseUrl}/v2/session/${sessionId}/`,
+      {
+        headers: {
+          "X-Api-Key": this.config.apiKey,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(`Didit API error: ${response.status} - ${error}`);
+    }
+
+    return response.json();
+  }
+
+  /**
    * Step 5: Verify webhook signature
    */
   verifyWebhookSignature(payload: string, signature: string): boolean {
