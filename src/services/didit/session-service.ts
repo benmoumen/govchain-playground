@@ -9,7 +9,7 @@ import { DiditSDK } from "@/lib/didit/sdk";
 import type { KYCSession, UserKYCData } from "@/types/didit/session";
 import { v4 as uuidv4 } from "uuid";
 
-// Simple in-memory storage for sessions
+// in-memory storage for sessions
 const sessions = new Map<string, KYCSession>();
 
 // Initialize SDK
@@ -78,7 +78,7 @@ export class KYCService {
     try {
       console.log(`🔄 Session ${sessionId} not in memory, trying Didit API...`);
       const diditData = await this.getSessionStatus(sessionId);
-      
+
       // Create a minimal session from Didit data
       const session: KYCSession = {
         id: sessionId,
@@ -88,13 +88,13 @@ export class KYCService {
           email: "",
           dateOfBirth: "",
         },
-        status: this.mapDiditStatusToSimple(diditData.status as string),
+        status: this.mapDiditStatus(diditData.status as string),
         createdAt: new Date(),
         updatedAt: new Date(),
         sessionId: sessionId,
         diditData: diditData,
       };
-      
+
       // Cache in memory for next time
       sessions.set(sessionId, session);
       console.log(`✅ Retrieved session ${sessionId} from Didit API`);
@@ -179,7 +179,7 @@ export class KYCService {
   /**
    * Map Didit status to our simplified status enum
    */
-  private static mapDiditStatusToSimple(diditStatus: string): KYCSession["status"] {
+  private static mapDiditStatus(diditStatus: string): KYCSession["status"] {
     const status = diditStatus.toLowerCase();
 
     if (

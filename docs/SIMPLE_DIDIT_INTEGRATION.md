@@ -1,4 +1,4 @@
-# Simple Didit KYC Integration
+# Didit KYC Integration
 
 A minimal implementation of Didit KYC following the official API documentation and YAGNI/KISS principles.
 
@@ -88,27 +88,6 @@ src/
 └── config/didit/
     └── config.ts           # Configuration
 ```
-
-## Differences from Complex Implementation
-
-| Feature                | Complex          | Simple            |
-| ---------------------- | ---------------- | ----------------- |
-| SDK                    | 350+ lines       | ~100 lines        |
-| Retry Logic            | ✅ Advanced      | ❌ None           |
-| Database               | ✅ Prisma        | ❌ In-memory      |
-| Analytics              | ✅ Comprehensive | ❌ Basic logging  |
-| Bulk Operations        | ✅ Yes           | ❌ No             |
-| Performance Monitoring | ✅ Yes           | ❌ No             |
-| Enhanced Dashboard     | ✅ Yes           | ❌ Simple results |
-| Testing Suite          | ✅ Comprehensive | ❌ Basic          |
-
-## Benefits
-
-- **Fast Development** - Quick to implement and understand
-- **Low Maintenance** - Fewer moving parts to break
-- **Easy Debugging** - Simple, linear flow
-- **Clear Code** - Following KISS principles
-- **Production Ready** - Handles core requirements
 
 ## Next Steps
 

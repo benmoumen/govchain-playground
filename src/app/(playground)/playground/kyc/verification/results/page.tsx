@@ -1,5 +1,5 @@
 /**
- * Simple KYC Results Page
+ * KYC Results Page
  * Shows verification status and basic session info
  */
 
@@ -37,7 +37,7 @@ interface SessionData {
   error?: string;
 }
 
-export default function SimpleKYCResultsPage() {
+export default function KYCResultsPage() {
   return (
     <Suspense
       fallback={
@@ -49,12 +49,12 @@ export default function SimpleKYCResultsPage() {
         </div>
       }
     >
-      <SimpleKYCResultsContent />
+      <KYCResultsContent />
     </Suspense>
   );
 }
 
-function SimpleKYCResultsContent() {
+function KYCResultsContent() {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("sessionId");
 

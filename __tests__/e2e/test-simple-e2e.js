@@ -2,7 +2,7 @@
 import fetch from "node-fetch";
 
 /**
- * End-to-end integration test for Simple Didit KYC implementation
+ * End-to-end integration test for Didit KYC implementation
  * Tests the complete flow: create session -> get status -> webhook handling
  */
 
@@ -37,7 +37,7 @@ async function runE2ETest() {
   console.log("✅ Webhook validation working");
 
   console.log(
-    "\n🎉 All tests passed! Simple Didit KYC integration is working correctly.\n"
+    "\n🎉 All tests passed! Didit KYC integration is working correctly.\n"
   );
 
   // Summary

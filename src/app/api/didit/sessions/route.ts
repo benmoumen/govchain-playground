@@ -12,14 +12,22 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const userData: UserKYCData = await request.json();
 
     // Basic validation
-    if (!userData.firstName || !userData.lastName || !userData.email || !userData.dateOfBirth) {
+    if (
+      !userData.firstName ||
+      !userData.lastName ||
+      !userData.email ||
+      !userData.dateOfBirth
+    ) {
       return NextResponse.json(
-        { error: "Missing required fields: firstName, lastName, email, dateOfBirth" },
+        {
+          error:
+            "Missing required fields: firstName, lastName, email, dateOfBirth",
+        },
         { status: 400 }
       );
     }
 
-    // Create session using simple service
+    // Create session using didit service
     const session = await KYCService.createSession(userData);
 
     return NextResponse.json({
@@ -33,7 +41,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   } catch (error) {
     console.error("Session creation error:", error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Failed to create session" },
+      {
+        error:
+          error instanceof Error ? error.message : "Failed to create session",
+      },
       { status: 500 }
     );
   }

@@ -1,9 +1,9 @@
 /**
- * Simple test for minimal Didit KYC implementation
+ * Test for minimal Didit KYC implementation
  * Tests core functionality without complex dependencies
  */
 
-describe("Simple Didit KYC Integration", () => {
+describe("Didit KYC Integration", () => {
   describe("Configuration Validation", () => {
     it("should validate required environment variables", () => {
       const requiredEnvVars = [

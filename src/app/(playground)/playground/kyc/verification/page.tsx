@@ -7,10 +7,22 @@
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { COUNTRIES } from "@/data/countries";
 import type { UserKYCData } from "@/types/didit/session";
 import { AlertCircle, ShieldCheck } from "lucide-react";
@@ -26,7 +38,7 @@ interface FormData {
   country: string;
 }
 
-export default function SimpleKYCVerificationPage() {
+export default function KYCVerificationPage() {
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
@@ -39,7 +51,7 @@ export default function SimpleKYCVerificationPage() {
   const [error, setError] = useState<string>("");
 
   const handleInputChange = (field: keyof FormData, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
     if (error) setError("");
   };
 
@@ -65,7 +77,7 @@ export default function SimpleKYCVerificationPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
 
     setIsLoading(true);
@@ -89,7 +101,9 @@ export default function SimpleKYCVerificationPage() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to create verification session");
+        throw new Error(
+          errorData.error || "Failed to create verification session"
+        );
       }
 
       const { session } = await response.json();
@@ -99,13 +113,14 @@ export default function SimpleKYCVerificationPage() {
       }
 
       toast.success("Verification session created successfully!");
-      
+
       // Redirect to Didit verification
       window.location.href = session.verificationUrl;
-      
     } catch (error) {
       console.error("Verification error:", error);
-      setError(error instanceof Error ? error.message : "Failed to start verification");
+      setError(
+        error instanceof Error ? error.message : "Failed to start verification"
+      );
       toast.error("Failed to start verification");
     } finally {
       setIsLoading(false);
@@ -140,7 +155,9 @@ export default function SimpleKYCVerificationPage() {
                   id="firstName"
                   type="text"
                   value={formData.firstName}
-                  onChange={(e) => handleInputChange("firstName", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("firstName", e.target.value)
+                  }
                   placeholder="Enter first name"
                   required
                 />
@@ -151,7 +168,9 @@ export default function SimpleKYCVerificationPage() {
                   id="lastName"
                   type="text"
                   value={formData.lastName}
-                  onChange={(e) => handleInputChange("lastName", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("lastName", e.target.value)
+                  }
                   placeholder="Enter last name"
                   required
                 />
@@ -164,7 +183,9 @@ export default function SimpleKYCVerificationPage() {
                 id="dateOfBirth"
                 type="date"
                 value={formData.dateOfBirth}
-                onChange={(e) => handleInputChange("dateOfBirth", e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("dateOfBirth", e.target.value)
+                }
                 required
               />
             </div>
@@ -187,14 +208,19 @@ export default function SimpleKYCVerificationPage() {
                 id="phoneNumber"
                 type="tel"
                 value={formData.phoneNumber}
-                onChange={(e) => handleInputChange("phoneNumber", e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("phoneNumber", e.target.value)
+                }
                 placeholder="Enter phone number (optional)"
               />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="country">Country *</Label>
-              <Select value={formData.country} onValueChange={(value) => handleInputChange("country", value)}>
+              <Select
+                value={formData.country}
+                onValueChange={(value) => handleInputChange("country", value)}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Select country" />
                 </SelectTrigger>
@@ -225,7 +251,10 @@ export default function SimpleKYCVerificationPage() {
       <div className="mt-8 rounded-lg border bg-muted/50 p-4">
         <h3 className="font-semibold">What happens next?</h3>
         <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
-          <li>          • You&apos;ll be redirected to the secure verification portal</li>
+          <li>
+            {" "}
+            • You&apos;ll be redirected to the secure verification portal
+          </li>
           <li>• Follow the instructions to upload your ID document</li>
           <li>• Complete any additional verification steps</li>
           <li>• Return here once verification is complete</li>
