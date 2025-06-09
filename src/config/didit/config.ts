@@ -10,7 +10,7 @@ export const DIDIT_CONFIG = {
   WEBHOOK_URL: `${process.env.NEXT_PUBLIC_BASE_URL}/api/didit/webhook`,
 
   // Callback URL where users return after verification
-  CALLBACK_URL: `${process.env.NEXT_PUBLIC_BASE_URL}/playground/kyc/verification/results`,
+  CALLBACK_URL: `${process.env.NEXT_PUBLIC_BASE_URL}/playground/kyc/results`,
 
   // Required environment variables
   API_KEY: process.env.DIDIT_API_KEY,

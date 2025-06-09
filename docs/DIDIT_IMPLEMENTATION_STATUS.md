@@ -95,7 +95,7 @@ POST /api/didit/webhook
 
 ### KYC Flow
 
-1. **Navigate** → `/playground/kyc/verification`
+1. **Navigate** → `/playground/kyc`
 2. **Fill Form** → Personal details (firstName, lastName, dateOfBirth, email, country)
 3. **Submit** → Creates Didit session automatically
 4. **Redirect** → Sent to Didit verification portal
@@ -105,8 +105,8 @@ POST /api/didit/webhook
 
 ### Navigation
 
-- **KYC** → `/playground/kyc/verification`
-- **Results Page** → `/playground/kyc/verification/results`
+- **KYC** → `/playground/kyc`
+- **Results Page** → `/playground/kyc/results`
 
 ## 🔐 Security Features
 

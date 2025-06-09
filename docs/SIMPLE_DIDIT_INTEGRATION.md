@@ -35,8 +35,8 @@ This simplified integration implements only the essential features as outlined i
 
 ### Frontend Pages
 
-- `/playground/kyc/verification` - Clean verification form
-- `/playground/kyc/verification/results` - Simple results display
+- `/playground/kyc` - Clean verification form
+- `/playground/kyc/results` - Simple results display
 
 ## Key Features
 
@@ -61,7 +61,7 @@ DIDIT_WEBHOOK_SECRET=your-webhook-secret
 
    ```bash
    # Navigate to the verification page
-   /playground/kyc/verification
+   /playground/kyc
    ```
 
 2. **Fill Form** - Enter personal details
