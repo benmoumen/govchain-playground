@@ -1,14 +1,20 @@
 /**
- * Simple types for minimal Didit KYC implementation
+ * Types for minimal Didit KYC implementation
  */
 
-export interface SimpleKYCSession {
+export interface KYCSession {
   id: string;
   sessionId?: string; // Didit session ID
   sessionToken?: string; // Didit session token
   verificationUrl?: string; // Didit verification URL
   userData: UserKYCData;
-  status: "pending" | "created" | "in_progress" | "completed" | "failed" | "error";
+  status:
+    | "pending"
+    | "created"
+    | "in_progress"
+    | "completed"
+    | "failed"
+    | "error";
   createdAt: Date;
   updatedAt: Date;
   diditData?: Record<string, unknown>; // Raw Didit webhook/API data
