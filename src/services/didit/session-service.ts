@@ -1,6 +1,7 @@
 /**
  * Minimal KYC Session Service following YAGNI principles
  * Only implements core functionality as per Didit API flow
+ * Enhanced with Didit API fallback for resilience
  */
 
 import { SIMPLE_DIDIT_CONFIG } from "@/config/didit/config";
@@ -64,10 +65,44 @@ export class SimpleKYCService {
   }
 
   /**
-   * Get session by ID
+   * Get session by ID (with Didit API fallback for resilience)
    */
-  static getSession(sessionId: string): SimpleKYCSession | undefined {
-    return sessions.get(sessionId);
+  static async getSession(sessionId: string): Promise<SimpleKYCSession | null> {
+    // Try memory first
+    const memorySession = sessions.get(sessionId);
+    if (memorySession) {
+      return memorySession;
+    }
+
+    // Fallback to Didit API (for sessions not in memory due to server restart)
+    try {
+      console.log(`🔄 Session ${sessionId} not in memory, trying Didit API...`);
+      const diditData = await this.getSessionStatus(sessionId);
+      
+      // Create a minimal session from Didit data
+      const session: SimpleKYCSession = {
+        id: sessionId,
+        userData: {
+          firstName: "",
+          lastName: "",
+          email: "",
+          dateOfBirth: "",
+        },
+        status: this.mapDiditStatusToSimple(diditData.status as string),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        sessionId: sessionId,
+        diditData: diditData,
+      };
+      
+      // Cache in memory for next time
+      sessions.set(sessionId, session);
+      console.log(`✅ Retrieved session ${sessionId} from Didit API`);
+      return session;
+    } catch {
+      console.log(`❌ Session ${sessionId} not found in memory or Didit API`);
+      return null;
+    }
   }
 
   /**
@@ -139,6 +174,37 @@ export class SimpleKYCService {
    */
   static getAllSessions(): SimpleKYCSession[] {
     return Array.from(sessions.values());
+  }
+
+  /**
+   * Map Didit status to our simplified status enum
+   */
+  private static mapDiditStatusToSimple(diditStatus: string): SimpleKYCSession["status"] {
+    const status = diditStatus.toLowerCase();
+
+    if (
+      status.includes("complete") ||
+      status.includes("success") ||
+      status.includes("approve")
+    ) {
+      return "completed";
+    }
+    if (status.includes("progress") || status.includes("processing")) {
+      return "in_progress";
+    }
+    if (
+      status.includes("fail") ||
+      status.includes("reject") ||
+      status.includes("error")
+    ) {
+      return "failed";
+    }
+    if (status.includes("pending") || status.includes("waiting")) {
+      return "pending";
+    }
+
+    // Default to in_progress for unknown statuses
+    return "in_progress";
   }
 }
 
