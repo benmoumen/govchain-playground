@@ -106,8 +106,13 @@ export class SimpleKYCService {
   /**
    * Get session decision from Didit API
    */
-  static async getSessionDecision(sessionId: string): Promise<Record<string, unknown>> {
-    return diditSDK.getSessionDecision(sessionId) as unknown as Record<string, unknown>;
+  static async getSessionDecision(
+    sessionId: string
+  ): Promise<Record<string, unknown>> {
+    return diditSDK.getSessionDecision(sessionId) as unknown as Record<
+      string,
+      unknown
+    >;
   }
 
   /**
@@ -116,27 +121,42 @@ export class SimpleKYCService {
   static verifyWebhook(payload: string, signature: string): boolean {
     return diditSDK.verifyWebhookSignature(payload, signature);
   }
+
+  /**
+   * Get all sessions (for debugging)
+   */
+  static getAllSessions(): SimpleKYCSession[] {
+    return Array.from(sessions.values());
+  }
 }
 
 /**
  * Map Didit status to our simplified status enum
  */
-function mapDiditStatus(diditStatus: string): SimpleKYCSession['status'] {
+function mapDiditStatus(diditStatus: string): SimpleKYCSession["status"] {
   const status = diditStatus.toLowerCase();
-  
-  if (status.includes('complete') || status.includes('success') || status.includes('approve')) {
-    return 'completed';
+
+  if (
+    status.includes("complete") ||
+    status.includes("success") ||
+    status.includes("approve")
+  ) {
+    return "completed";
   }
-  if (status.includes('progress') || status.includes('processing')) {
-    return 'in_progress';
+  if (status.includes("progress") || status.includes("processing")) {
+    return "in_progress";
   }
-  if (status.includes('fail') || status.includes('reject') || status.includes('error')) {
-    return 'failed';
+  if (
+    status.includes("fail") ||
+    status.includes("reject") ||
+    status.includes("error")
+  ) {
+    return "failed";
   }
-  if (status.includes('pending') || status.includes('waiting')) {
-    return 'pending';
+  if (status.includes("pending") || status.includes("waiting")) {
+    return "pending";
   }
-  
+
   // Default to in_progress for unknown statuses
-  return 'in_progress';
+  return "in_progress";
 }

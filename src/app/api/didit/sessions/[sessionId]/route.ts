@@ -20,20 +20,31 @@ export async function GET(
       );
     }
 
+    console.log(`🔍 Looking for session: ${sessionId}`);
+
     // Get local session
     const session = SimpleKYCService.getSession(sessionId);
 
+    // Debug: Log all existing session IDs
+    const allSessions = SimpleKYCService.getAllSessions();
+    console.log(`📋 Available sessions: ${allSessions.length}`);
+    allSessions.forEach((s) =>
+      console.log(`  - ${s.id} (status: ${s.status})`)
+    );
+
     if (!session) {
-      return NextResponse.json(
-        { error: "Session not found" },
-        { status: 404 }
-      );
+      console.log(`❌ Session ${sessionId} not found`);
+      return NextResponse.json({ error: "Session not found" }, { status: 404 });
     }
+
+    console.log(`✅ Found session: ${session.id} (status: ${session.status})`);
 
     // If session is completed, optionally fetch latest decision from Didit API
     if (session.status === "completed" && session.sessionId) {
       try {
-        const decision = await SimpleKYCService.getSessionDecision(session.sessionId);
+        const decision = await SimpleKYCService.getSessionDecision(
+          session.sessionId
+        );
         session.diditData = decision;
       } catch (error) {
         console.warn("Failed to fetch decision from Didit API:", error);
