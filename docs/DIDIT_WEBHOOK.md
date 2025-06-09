@@ -19,7 +19,7 @@ The webhook endpoint (`/api/didit/webhook`) follows the [Didit webhook documenta
 Set the following environment variable in your `.env` file:
 
 ```bash
-WEBHOOK_SECRET_KEY="your-webhook-secret-from-didit"
+DIDIT_WEBHOOK_SECRET_KEY="your-webhook-secret-from-didit"
 ```
 
 This secret is provided by Didit when you configure your webhook URL in their dashboard.
@@ -136,7 +136,7 @@ The test suite covers:
 
 ## Integration Checklist
 
-- [ ] Set `WEBHOOK_SECRET_KEY` environment variable
+- [ ] Set `DIDIT_WEBHOOK_SECRET_KEY` environment variable
 - [ ] Configure webhook URL in Didit dashboard
 - [ ] Whitelist Didit IP if using Cloudflare
 - [ ] Implement business logic for approved/declined verifications

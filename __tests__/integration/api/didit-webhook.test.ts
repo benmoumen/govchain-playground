@@ -1,40 +1,43 @@
 /**
  * @jest-environment node
  */
-import { describe, it, expect, jest, beforeEach } from "@jest/globals";
-import { createHmac } from "crypto";
 import type { DidItWebhookPayload } from "@/types/didit/webhook";
+import { createHmac } from "crypto";
 
 // Mock environment variable
 const mockWebhookSecret = "test-webhook-secret";
-process.env.WEBHOOK_SECRET_KEY = mockWebhookSecret;
+process.env.DIDIT_WEBHOOK_SECRET_KEY = mockWebhookSecret;
 
 // Mock NextRequest and NextResponse
 const mockJson = jest.fn();
 const mockText = jest.fn();
 const mockHeaders = new Map<string, string>();
 
-const MockNextRequest = jest.fn().mockImplementation((url: string, init: { method: string }) => ({
-  url,
-  method: init.method,
-  headers: {
-    get: (key: string) => mockHeaders.get(key.toLowerCase())
-  },
-  text: mockText,
-  json: mockJson
-}));
+const MockNextRequest = jest
+  .fn()
+  .mockImplementation((url: string, init: { method: string }) => ({
+    url,
+    method: init.method,
+    headers: {
+      get: (key: string) => mockHeaders.get(key.toLowerCase()),
+    },
+    text: mockText,
+    json: mockJson,
+  }));
 
 const MockNextResponse = {
-  json: jest.fn().mockImplementation((data: unknown, init?: { status?: number }) => ({
-    status: init?.status || 200,
-    json: async () => data
-  }))
+  json: jest
+    .fn()
+    .mockImplementation((data: unknown, init?: { status?: number }) => ({
+      status: init?.status || 200,
+      json: async () => data,
+    })),
 };
 
 // Mock the modules
 jest.mock("next/server", () => ({
   NextRequest: MockNextRequest,
-  NextResponse: MockNextResponse
+  NextResponse: MockNextResponse,
 }));
 
 // Import after mocking
@@ -53,7 +56,9 @@ describe("Didit Webhook Logic", () => {
     return hmac.update(body).digest("hex");
   };
 
-  const createWebhookPayload = (overrides: Partial<DidItWebhookPayload> = {}): DidItWebhookPayload => ({
+  const createWebhookPayload = (
+    overrides: Partial<DidItWebhookPayload> = {}
+  ): DidItWebhookPayload => ({
     session_id: "test-session-123",
     status: "Approved",
     created_at: Math.floor(Date.now() / 1000),
@@ -62,19 +67,19 @@ describe("Didit Webhook Logic", () => {
     vendor_data: "test-vendor-data",
     metadata: {
       user_type: "premium",
-      account_id: "ABC123"
+      account_id: "ABC123",
     },
-    ...overrides
+    ...overrides,
   });
 
   const setupValidWebhookRequest = (payload: DidItWebhookPayload) => {
     const body = JSON.stringify(payload);
     const signature = createSignature(body, mockWebhookSecret);
-    
+
     mockHeaders.set("x-signature", signature);
     mockHeaders.set("x-timestamp", payload.timestamp.toString());
     mockText.mockResolvedValue(body);
-    
+
     return body;
   };
 
@@ -89,7 +94,7 @@ describe("Didit Webhook Logic", () => {
 
   it("should validate webhook payload structure", () => {
     const payload = createWebhookPayload();
-    
+
     expect(payload.session_id).toBeTruthy();
     expect(payload.status).toBeTruthy();
     expect(payload.workflow_id).toBeTruthy();
@@ -133,24 +138,31 @@ describe("Didit Webhook Logic", () => {
           formatted_address: "Avda de Madrid 34, Madrid, Madrid 28822, Spain",
           place_of_birth: "Madrid",
           marital_status: "Single",
-          nationality: "ESP"
+          nationality: "ESP",
         },
-        created_at: "2024-07-24T08:54:25.443172Z"
-      }
+        created_at: "2024-07-24T08:54:25.443172Z",
+      },
     });
 
     setupValidWebhookRequest(payload);
-    
-    const mockRequest = new MockNextRequest("https://example.com/api/didit/webhook", {
-      method: "POST"
-    });
+
+    const mockRequest = new MockNextRequest(
+      "https://example.com/api/didit/webhook",
+      {
+        method: "POST",
+      }
+    );
 
     const response = await POST(mockRequest);
-    
+
     expect(response.status).toBe(200);
     expect(payload.decision?.id_verification).toBeTruthy();
-    expect(payload.decision?.id_verification?.full_name).toBe("Carmen Española");
-    expect(payload.decision?.id_verification?.document_type).toBe("Identity Card");
+    expect(payload.decision?.id_verification?.full_name).toBe(
+      "Carmen Española"
+    );
+    expect(payload.decision?.id_verification?.document_type).toBe(
+      "Identity Card"
+    );
   });
 
   it("should handle declined verification with review comments", () => {
@@ -170,32 +182,37 @@ describe("Didit Webhook Logic", () => {
             user: "admin@example.com",
             new_status: "Declined",
             comment: "Document appears to be altered",
-            created_at: "2024-07-18T13:29:00.366811Z"
-          }
+            created_at: "2024-07-18T13:29:00.366811Z",
+          },
         ],
-        created_at: "2024-07-24T08:54:25.443172Z"
-      }
+        created_at: "2024-07-24T08:54:25.443172Z",
+      },
     });
 
     expect(payload.decision?.reviews).toBeTruthy();
-    expect(payload.decision?.reviews?.[0]?.comment).toBe("Document appears to be altered");
+    expect(payload.decision?.reviews?.[0]?.comment).toBe(
+      "Document appears to be altered"
+    );
   });
 
   it("should reject requests with invalid signature", async () => {
     const payload = createWebhookPayload();
     const body = JSON.stringify(payload);
-    
+
     // Set invalid signature
     mockHeaders.set("x-signature", "invalid-signature");
     mockHeaders.set("x-timestamp", payload.timestamp.toString());
     mockText.mockResolvedValue(body);
-    
-    const mockRequest = new MockNextRequest("https://example.com/api/didit/webhook", {
-      method: "POST"
-    });
+
+    const mockRequest = new MockNextRequest(
+      "https://example.com/api/didit/webhook",
+      {
+        method: "POST",
+      }
+    );
 
     const response = await POST(mockRequest);
-    
+
     expect(response.status).toBe(401);
   });
 
@@ -204,17 +221,20 @@ describe("Didit Webhook Logic", () => {
     const payload = createWebhookPayload({ timestamp: staleTimestamp });
     const body = JSON.stringify(payload);
     const signature = createSignature(body, mockWebhookSecret);
-    
+
     mockHeaders.set("x-signature", signature);
     mockHeaders.set("x-timestamp", staleTimestamp.toString());
     mockText.mockResolvedValue(body);
-    
-    const mockRequest = new MockNextRequest("https://example.com/api/didit/webhook", {
-      method: "POST"
-    });
+
+    const mockRequest = new MockNextRequest(
+      "https://example.com/api/didit/webhook",
+      {
+        method: "POST",
+      }
+    );
 
     const response = await POST(mockRequest);
-    
+
     expect(response.status).toBe(401);
   });
 
@@ -232,21 +252,24 @@ describe("Didit Webhook Logic", () => {
 
   it("should handle missing webhook secret configuration", async () => {
     // Temporarily remove webhook secret
-    const originalSecret = process.env.WEBHOOK_SECRET_KEY;
-    delete process.env.WEBHOOK_SECRET_KEY;
-    
+    const originalSecret = process.env.DIDIT_WEBHOOK_SECRET_KEY;
+    delete process.env.DIDIT_WEBHOOK_SECRET_KEY;
+
     const payload = createWebhookPayload();
     setupValidWebhookRequest(payload);
-    
-    const mockRequest = new MockNextRequest("https://example.com/api/didit/webhook", {
-      method: "POST"
-    });
+
+    const mockRequest = new MockNextRequest(
+      "https://example.com/api/didit/webhook",
+      {
+        method: "POST",
+      }
+    );
 
     const response = await POST(mockRequest);
-    
+
     expect(response.status).toBe(500);
-    
+
     // Restore webhook secret
-    process.env.WEBHOOK_SECRET_KEY = originalSecret;
+    process.env.DIDIT_WEBHOOK_SECRET_KEY = originalSecret;
   });
 });

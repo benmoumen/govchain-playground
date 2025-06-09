@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+const crypto = require("crypto");
 
 // Test payload
 const payload = {
@@ -16,22 +16,22 @@ const payload = {
       document_type: "Identity Card",
       first_name: "John",
       last_name: "Doe",
-      date_of_birth: "1990-01-01"
-    }
-  }
+      date_of_birth: "1990-01-01",
+    },
+  },
 };
 
 const payloadString = JSON.stringify(payload);
-const secret = 'test-secret-key-12345';
+const secret = "test-secret-key-12345";
 const timestamp = Math.floor(Date.now() / 1000);
 
 // Generate signature
-const hmac = crypto.createHmac('sha256', secret);
-const signature = hmac.update(payloadString).digest('hex');
+const hmac = crypto.createHmac("sha256", secret);
+const signature = hmac.update(payloadString).digest("hex");
 
-console.log('Payload:', payloadString);
-console.log('Signature:', signature);
-console.log('Timestamp:', timestamp);
+console.log("Payload:", payloadString);
+console.log("Signature:", signature);
+console.log("Timestamp:", timestamp);
 
 // Create curl command
 const curlCommand = `curl -X POST http://localhost:3000/api/didit/webhook \\
@@ -40,5 +40,5 @@ const curlCommand = `curl -X POST http://localhost:3000/api/didit/webhook \\
   -H "X-Timestamp: ${timestamp}" \\
   -d '${payloadString.replace(/'/g, "'\"'\"'")}'`;
 
-console.log('\nCurl command:');
+console.log("\nCurl command:");
 console.log(curlCommand);
