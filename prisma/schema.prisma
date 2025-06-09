@@ -16,3 +16,29 @@ model TenantAuth {
   tenantId   String   @id
   accessToken String
 }
+
+// Didit KYC Session table for persistent storage
+model DidItKYCSession {
+  id              String   @id @default(uuid())
+  sessionId       String?  @unique // Didit session ID
+  sessionUrl      String?
+  status          String   @default("pending")
+  
+  // User data
+  userData        Json
+  
+  // Didit response
+  webhookData     Json?
+  comparisonResults Json?
+  diditMetadata   Json?
+  
+  // Timestamps
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  // Analytics fields
+  verificationDuration Int? // in minutes
+  completionRate      Float?
+  
+  @@map("didit_kyc_sessions")
+}

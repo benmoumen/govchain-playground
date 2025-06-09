@@ -5,7 +5,13 @@
 
 export interface DidItWebhookPayload {
   session_id: string;
-  status: "Not Started" | "In Progress" | "Approved" | "Declined" | "In Review" | "Abandoned";
+  status:
+    | "Not Started"
+    | "In Progress"
+    | "Approved"
+    | "Declined"
+    | "In Review"
+    | "Abandoned";
   created_at: number;
   timestamp: number;
   workflow_id: string;

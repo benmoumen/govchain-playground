@@ -17,4 +17,18 @@ export const navMain = [
       },
     ],
   },
+  {
+    title: "KYC Verification",
+    url: "/playground/kyc/verification-simple",
+    items: [
+      {
+        title: "Start Verification",
+        url: "/playground/kyc/verification-simple",
+      },
+      {
+        title: "View Results",
+        url: "/playground/kyc/verification-simple/results",
+      },
+    ],
+  },
 ];

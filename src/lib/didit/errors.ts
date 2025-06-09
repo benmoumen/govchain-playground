@@ -45,7 +45,6 @@ export class DidItProcessingError extends DidItWebhookError {
  * Utility functions for webhook error handling
  */
 export class DidItWebhookErrorHandler {
-  
   /**
    * Log webhook error with context
    */
@@ -54,7 +53,7 @@ export class DidItWebhookErrorHandler {
       name: error.name,
       message: error.message,
       stack: error.stack,
-      context
+      context,
     });
   }
 
@@ -66,7 +65,7 @@ export class DidItWebhookErrorHandler {
       return {
         message: error.message,
         code: error.code,
-        statusCode: error.statusCode
+        statusCode: error.statusCode,
       };
     }
 
@@ -74,7 +73,7 @@ export class DidItWebhookErrorHandler {
     return {
       message: "Internal server error",
       code: "INTERNAL_ERROR",
-      statusCode: 500
+      statusCode: 500,
     };
   }
 
@@ -97,8 +96,9 @@ export class DidItWebhookErrorHandler {
 
     const currentTime = Math.floor(Date.now() / 1000);
     const timeDiff = Math.abs(currentTime - timestampNum);
-    
-    if (timeDiff > 300) { // 5 minutes
+
+    if (timeDiff > 300) {
+      // 5 minutes
       throw new DidItTimestampError(
         `Request timestamp is too old: ${timeDiff} seconds`
       );
@@ -108,7 +108,9 @@ export class DidItWebhookErrorHandler {
   /**
    * Validate webhook payload structure
    */
-  static validatePayload(payload: unknown): asserts payload is Record<string, unknown> {
+  static validatePayload(
+    payload: unknown
+  ): asserts payload is Record<string, unknown> {
     if (!payload || typeof payload !== "object") {
       throw new DidItPayloadError("Payload must be an object");
     }
@@ -125,11 +127,11 @@ export class DidItWebhookErrorHandler {
     // Validate status
     const validStatuses = [
       "Not Started",
-      "In Progress", 
+      "In Progress",
       "Approved",
       "Declined",
       "In Review",
-      "Abandoned"
+      "Abandoned",
     ];
 
     if (!validStatuses.includes(payloadObj.status as string)) {

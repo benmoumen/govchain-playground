@@ -143,7 +143,8 @@ export default function DidItWebhookTestPage() {
         throw new Error(errorData.error || "Failed to generate signature");
       }
 
-      const { signature, timestamp, updatedPayload } = await signatureResponse.json();
+      const { signature, timestamp, updatedPayload } =
+        await signatureResponse.json();
 
       // Send the webhook with the generated signature
       const result = await fetch("/api/didit/webhook", {
