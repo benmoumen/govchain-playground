@@ -19,6 +19,14 @@ export default async function MainMenu() {
     <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem>
+          <NavigationMenuLink
+            href="/playground/kyc"
+            className={navigationMenuTriggerStyle()}
+          >
+            KYC
+          </NavigationMenuLink>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
           <NavigationMenuTrigger>Digital Proofs</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid gap-3 p-4 w-72">
