@@ -46,12 +46,15 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Prisma
+# Prisma schema and migrations
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+# Copy pnpm node_modules (includes prisma client and CLI)
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
+
+# Create data directory for SQLite database
+RUN mkdir -p /app/data && chown nextjs:nodejs /app/data
 
 USER nextjs
-
-RUN npx prisma migrate deploy
 
 EXPOSE 3000
 
@@ -60,4 +63,6 @@ ENV PORT=3000
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/config/next-config-js/output
 ENV HOSTNAME="0.0.0.0"
-CMD ["node", "server.js"]
+
+# Run migrations at startup then start the server
+CMD ["sh", "-c", "npx prisma migrate deploy && node server.js"]

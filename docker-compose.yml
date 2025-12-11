@@ -8,3 +8,10 @@ services:
     image: app
     ports:
       - 3333:3000
+    environment:
+      - DATABASE_URL=file:/app/data/dev.db
+    volumes:
+      - playground-data:/app/data
+
+volumes:
+  playground-data:
